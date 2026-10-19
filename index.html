@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -12,7 +12,7 @@
 <style>
 :root{--bg:#f3f1ec;--card:#fff;--ink:#1d1d1b;--mut:#6b6a66;--line:#e4e1da;--chip:#f1efea;--acc:#2f6b4f;--acc2:#e6f0ea;--warn:#b7791f;--warnbg:#fff6e5;--bad:#b42318;--badbg:#fdecea;--new:#5b3fd1;--newbg:#efebff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;overflow-x:hidden;max-width:100%;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+html,body{margin:0;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;max-width:100%;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
 body{padding:env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom))}
 header{display:flex;align-items:flex-end;justify-content:space-between;padding:14px 16px 6px}
 header h1{margin:0;font-size:26px;letter-spacing:-.5px}
@@ -128,8 +128,21 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 .demo-cr{margin-bottom:6px;font-size:11px}
 .checkin{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 12px}
 .checkin .ci{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;margin:0}
-.checkin select{font:inherit;font-weight:600;padding:6px 8px;border-radius:10px;border:1px solid #d8d3c7;background:var(--chip,#eee);color:inherit;max-width:150px}
+.checkin select{font:inherit;font-size:16px;font-weight:600;padding:6px 8px;border-radius:10px;border:1px solid #d8d3c7;background:var(--chip,#eee);color:inherit;max-width:150px}
 .checkin .ci-w{flex-basis:100%;margin-top:-2px}
+button,a,select,input,textarea,label,[data-act]{touch-action:manipulation}
+input,textarea,select{font-size:16px!important}
+.stp button,.ok,.chip,.btn,nav.tabs button,.iconbtn{-webkit-user-select:none;user-select:none}
+#rotate{display:none}
+@media (orientation:landscape) and (max-height:500px){
+ #rotate{display:flex;position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--ink);flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px calc(20px + env(safe-area-inset-right)) 20px calc(20px + env(safe-area-inset-left))}
+ #rotate .ph{font-size:56px;animation:rotHint 2.4s ease-in-out infinite}
+ #rotate b{font-size:22px}
+ body.rot-lock{overflow:hidden}
+}
+@keyframes rotHint{0%,30%{transform:rotate(-90deg)}60%,100%{transform:rotate(0)}}
+.cfg textarea{min-height:90px;font-family:ui-monospace,Menlo,monospace}
+.cfg .res{margin-top:8px}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -141,6 +154,7 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 <div id="timer"><div class="tl"><span id="tTitle"></span><span id="tKind"></span></div><div class="tt" id="tTime">0:00</div><div class="bar"><i id="tBar"></i></div><div class="nx" id="tNext"></div><div class="tb"><button id="tPlus">+15 s</button><button id="tPause">Pause</button><button id="tSkip">Skip</button></div><button id="tStop" style="display:block;margin:8px auto 0;background:none;border:0;color:#fff;opacity:.7;font-size:14px">Timer schließen</button></div>
 <div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
 <div class="toast" id="toast"></div>
+<div id="rotate" role="alert"><div class="ph">📱</div><b>Bitte Handy hochkant halten</b><div class="mut">Sportify ist nur fürs Hochformat gebaut.<br>Tipp: Ausrichtungssperre im Kontrollzentrum einschalten.</div></div>
 <nav class="tabs"><button data-tab="training"><b>🏋️</b>Training</button><button data-tab="kalender"><b>📅</b>Kalender</button><button data-tab="fortschritt"><b>📈</b>Fortschritt</button><button data-tab="garmin"><b>⌚</b>Garmin</button><button data-tab="ernaehrung"><b>🥗</b>Ernährung</button></nav>
 <script>
 const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}};
@@ -446,7 +460,7 @@ function drawTimer(){
 }
 
 // ===== Training-Tab =====
-let FOCUS=null;
+let FOCUS=null,SCROLL_FOCUS=false,KEEP_SCROLL=true;
 const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="minus">−</button><div class="v" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="plus">+</button></div>`;
 function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:PLAN.goal.start}
 function stepsFor(d){return GARMIN?GARMIN.days.find(x=>x.date===d):null}
@@ -493,7 +507,8 @@ function renderTraining(){
   h+=`<div class="card"><div class="lbl">Notiz (optional)</div><textarea data-act="note" placeholder="z. B. Fußspitzen 12 kg, Gerät besetzt …">${esc(dy.note||'')}</textarea></div>`;
   h+=renderFeedback(d);
   $('#view').innerHTML=h;
-  if(FOCUS){const el=document.querySelector(`[data-set="${FOCUS.ex}-${FOCUS.i}"]`);if(el)el.scrollIntoView({block:'center',behavior:'smooth'})}
+  // Nur direkt nach „Satz erledigt“ zum nächsten Satz scrollen – und nur, wenn er nicht schon sichtbar ist.
+  if(FOCUS&&SCROLL_FOCUS){SCROLL_FOCUS=false;const el=document.querySelector(`[data-set="${FOCUS.ex}-${FOCUS.i}"]`);if(el){const r=el.getBoundingClientRect(),bot=innerHeight-(RUN?300:90);if(r.top<60||r.bottom>bot)KEEP_SCROLL=false,setTimeout(()=>el.scrollIntoView({block:'center',behavior:'smooth'}),0)}}
 }
 function exCard(it,d,idx){
   const ex=EX[it.ex],dy=peek(d),p=planned(it,d),stored=(dy.sets&&dy.sets[it.ex])||[];
@@ -609,7 +624,8 @@ function renderFeedback(d){
   <div class="lbl">Rücken nach dem Training</div><div class="chips">${Object.entries(BACK).map(([k,v])=>`<button class="chip sm ${k==='stich'?'bad':''} ${f.back===k?'on':''}" data-act="fb" data-f="back" data-v="${k}">${v}</button>`).join('')}</div>
   <div class="lbl">Energie</div><div class="chips">${Object.entries(ENERGY).map(([k,v])=>`<button class="chip sm ${f.energy===k?'on':''}" data-act="fb" data-f="energy" data-v="${k}">${v}</button>`).join('')}</div>
   <div class="lbl">Kurze Notiz (optional)</div><input data-act="fbnote" value="${esc(f.note||'')}" placeholder="z. B. Knie ok, Hip Thrust leicht">
-  <button class="btn big" style="margin-top:12px" data-act="share">📤 Feedback an Sporty senden</button>
+  ${(()=>{const dy=peek(d),pend=dy.sid&&outbox()[dy.sid];return `<button class="btn big" style="margin-top:12px" data-act="savesend">💾 Speichern${hookCfg()?" & an Sporty senden":""}</button><div class="mut small" style="margin-top:4px;text-align:center">${pend?"⏳ Noch nicht gesendet – wird automatisch erneut versucht":dy.sentAt?"✓ An Sporty gesendet "+new Date(dy.sentAt).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})+(dy.sentRev>1?" (Update "+dy.sentRev+")":"")+" – erneut speichern schickt ein Update":hookCfg()?"Schickt die Einheit automatisch an Sporty.":"Sporty-Empfang im Menü (⋯) einrichten, dann geht es automatisch."}</div>`})()}
+  <button class="btn sec" style="margin-top:8px" data-act="share">📤 Teilen</button>
   <button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren</button></div>`;
 }
 function setStr(s,unit){if(unit==='s')return s.r+' s';if(s.w==null)return s.r+(s.rir!=null?' (RIR '+(s.rir===4?'4+':s.rir)+')':'');return(s.w==null?'':nf(s.w)+'×')+s.r+(s.rir!=null?' (RIR '+(s.rir===4?'4+':s.rir)+')':'')}
@@ -748,7 +764,7 @@ function renderFortschritt(){
   h+=dataCard();
   $('#view').innerHTML=h;
 }
-function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn" style="margin-top:8px" data-act="paste">⇩ Update von Sporty einfügen</button><div class="mut small" style="margin-top:4px">Sporty schickt dir im Chat einen Update-Code (Garmin: Waage, Schlaf, Schritte, Aktivitäten). Code kopieren, hier tippen – fertig.${S&&S.lastUpdate?' Letztes Update: '+de(S.lastUpdate,false)+'.':''}</div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
+function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn" style="margin-top:8px" data-act="paste">⇩ Update von Sporty einfügen</button><button class="btn sec" style="margin-top:8px" data-act="hookcfg">📡 Sporty-Empfang einrichten${hookCfg()?" ✓":""}</button><div class="mut small" style="margin-top:4px">Sporty schickt dir im Chat einen Update-Code (Garmin: Waage, Schlaf, Schritte, Aktivitäten). Code kopieren, hier tippen – fertig.${S&&S.lastUpdate?' Letztes Update: '+de(S.lastUpdate,false)+'.':''}</div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
 // ===== Garmin =====
 function renderGarmin(){
   if(!GARMIN){$('#view').innerHTML='<div class="card">Keine Garmin-Daten importiert.</div>'+dataCard();return}
@@ -810,18 +826,35 @@ async function applyUpdate(txt){const data=await decodeUpdate(txt);if(!data||(da
   closeSheet();render();toast('Update übernommen'+(p.length?': '+p.join(', '):''))}
 async function pasteUpdate(){let txt='';try{if(navigator.clipboard&&navigator.clipboard.readText)txt=await navigator.clipboard.readText()}catch(e){}
   if(txt&&/SPY1\.|#sync=|"sportify-update"/.test(txt)){try{await applyUpdate(txt);return}catch(e){alert('Update fehlgeschlagen: '+e.message);return}}
-  openSheet(`<h2>Update einfügen</h2><div class="mut small">Code von Sporty hier einfügen (lange tippen → Einsetzen).</div><textarea id="updTxt" rows="5" style="width:100%;margin-top:8px;font-size:14px" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea><button class="btn big" style="margin-top:8px" data-act="pasteok">Übernehmen</button>`);setTimeout(()=>{const t=$('#updTxt');t&&t.focus()},50)}
+  openSheet(`<h2>Update einfügen</h2><div class="mut small">Code von Sporty hier einfügen (lange tippen → Einsetzen).</div><textarea id="updTxt" rows="5" style="width:100%;margin-top:8px;font-size:16px" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea><button class="btn big" style="margin-top:8px" data-act="pasteok">Übernehmen</button>`);setTimeout(()=>{const t=$('#updTxt');t&&t.focus()},50)}
 async function hashUpdate(){if(!location.hash.startsWith('#sync='))return;const h=location.hash;window.history.replaceState(null,'',location.pathname+location.search);
   try{await applyUpdate(h)}catch(e){alert('Update fehlgeschlagen: '+e.message)}}
 // ===== Navigation =====
 let TAB='training';
+// render() ersetzt #view komplett – Scroll-Position sichern und wiederherstellen (iOS springt sonst nach oben).
 function render(){
+  const y=window.scrollY,sh=$('#sheetIn').scrollTop;KEEP_SCROLL=true;
+  renderView();
+  if(KEEP_SCROLL&&Math.abs(window.scrollY-y)>1)window.scrollTo(0,y);
+  $('#sheetIn').scrollTop=sh;
+}
+// Gezielt nur eine Übungskarte neu zeichnen (Stepper/RIR) – kein Neuaufbau der Seite.
+function renderCard(exId){
+  const d=CUR,t=typeOf(d);if(TAB!=='training'||peek(d).back==='stich')return render();
+  const els=document.querySelectorAll('#ex-'+CSS.escape(exId));if(els.length!==1)return render();
+  let it=null,idx=0;
+  if(isStrength(t)){const k=PLAN.sessions[t].items.findIndex(x=>x.ex===exId);if(k>=0){it=PLAN.sessions[t].items[k];idx=k}}
+  if(!it)for(const x of(peek(d).extras||[])){const b=PLAN.extras[x];if(!b||!b.items)continue;const k=b.items.findIndex(z=>z.ex===exId);if(k>=0){it=b.items[k];idx=k;break}}
+  if(!it)return render();
+  const y=window.scrollY;els[0].outerHTML=exCard(it,d,idx);if(Math.abs(window.scrollY-y)>1)window.scrollTo(0,y);
+}
+function renderView(){
   $('#hdrSub').textContent=WDL[parse(TODAY).getDay()]+', '+parse(TODAY).getDate()+'. '+MON[parse(TODAY).getMonth()];
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===TAB));
   if(!PLAN){$('#view').innerHTML=`<div class="card"><h2>Willkommen bei Sportify</h2><p>Diese App enthält keine persönlichen Daten. Importiere einmalig deine Datei <b>sportify-daten.json</b> (Plan, Log, Gewicht, Garmin-Snapshot) – sie bleibt nur auf diesem Gerät gespeichert.</p><button class="btn big" data-act="import">⤒ Datei importieren</button><p class="mut small">Du hast die Datei von Sporty im Chat bekommen. In der Dateien-App speichern, dann hier auswählen.</p></div>`;return}
   ({training:renderTraining,kalender:renderKalender,fortschritt:renderFortschritt,garmin:renderGarmin,ernaehrung:renderErnaehrung})[TAB]();
 }
-function setTab(t){TAB=t;FOCUS=null;render();window.scrollTo(0,0)}
+function setTab(t){TAB=t;FOCUS=null;renderView();window.scrollTo(0,0)}
 // ===== Events =====
 function num(v){if(v==null)return null;const x=parseFloat(String(v).replace(',','.'));return isNaN(x)?null:x}
 function setVal(exId,i,patch,d){const dy=day(d);dy.sets=dy.sets||{};const arr=dy.sets[exId]=dy.sets[exId]||[];
@@ -831,16 +864,16 @@ function getSet(exId,i,d){const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId
 function onSetDone(exId,i){
   const d=CUR,g=getSet(exId,i,d),it=g.it;
   if(g.done){setVal(exId,i,{done:false},d);render();return}
-  setVal(exId,i,{w:g.w,r:g.r,rir:g.rir,done:true},d);
+  setVal(exId,i,{w:g.w,r:g.r,rir:g.rir,done:true,at:Date.now()},d);
   const dy=day(d);if(mods(d).tags.length)dy.modded=true;save();
   const items=sessionItems(typeOf(d),d);const n=planned(it,d).sets.length;
   const noSS=!!peek(d).noSS;
   if(it.ss&&!noSS){const p=items.find(x=>x.ex===it.ss);const pn=p?planned(p,d).sets.length:0;const ps=p&&i<pn?getSet(p.ex,i,d):null;
-    if(ps&&!ps.done){FOCUS={ex:p.ex,i};render();toast('Supersatz → '+EX[p.ex].n+' Satz '+(i+1));vib(40);return}}
+    if(ps&&!ps.done){FOCUS={ex:p.ex,i};SCROLL_FOCUS=true;render();toast('Supersatz → '+EX[p.ex].n+' Satz '+(i+1));vib(40);return}}
   let next='';
   if(it.ssOf&&!noSS){const a=items.find(x=>x.ex===it.ssOf);if(a&&i+1<planned(a,d).sets.length){FOCUS={ex:a.ex,i:i+1};next=EX[a.ex].n+' Satz '+(i+2)}}
   if(!next){if(i+1<n){FOCUS={ex:exId,i:i+1};next=EX[exId].n+' Satz '+(i+2)}else{const idx=items.indexOf(it);const nx=items.slice(idx+1).find(x=>!x.ssOf||x.ssOf!==exId);if(nx){FOCUS={ex:nx.ex,i:0};next=EX[nx.ex].n}else FOCUS=null}}
-  render();if(!it.rest){if(next)toast('Weiter: '+next);return}startRest(it.rest,'Pause · '+EX[exId].n,next||'Einheit fertig – Feedback an Sporty');
+  SCROLL_FOCUS=!!FOCUS;render();if(!it.rest){if(next)toast('Weiter: '+next);return}startRest(it.rest,'Pause · '+EX[exId].n,next||'Einheit fertig – Feedback an Sporty');
 }
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,v=t.dataset.v,dd=t.dataset.d;
@@ -861,8 +894,8 @@ document.addEventListener('click',e=>{
     case 'w':case 'r':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);let x=a==='w'?g.w:g.r;
       if(dd==='edit'){const y=num(prompt(a==='w'?'Gewicht (kg)':(g.it.unit==='s'?'Sekunden':'Wiederholungen'),x??''));if(y==null)return;x=y}
       else if(a==='w')x=+dd>0?wUp(x):wDn(x);else x=Math.max(0,(x||0)+(+dd)*(g.it.unit==='s'?5:1));
-      setVal(ex,i,{[a]:x},d);render();break}
-    case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);setVal(ex,i,{rir:g.rir===+v?null:+v},d);render();break}
+      setVal(ex,i,{[a]:x},d);renderCard(ex);break}
+    case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);setVal(ex,i,{rir:g.rir===+v?null:+v},d);renderCard(ex);break}
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
     case 'abl':ablauf(v);break;
     case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,rpm:2}[f];
@@ -903,8 +936,103 @@ document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.d
 document.addEventListener('change',e=>{const t=e.target;if(!t.dataset||!t.dataset.ci)return;const dy=day(CUR);
   if(t.dataset.ci==='back'){dy.back=t.value;save();if(t.value==='stich'){vib([200,100,200]);if(RUN)stopRunner()}}else{dy.soreness=+t.value;save()}render()});
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
+// Kein Zoom: Pinch (iOS gesture*) und Doppeltipp blocken
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
+let LAST_TOUCH=0;document.addEventListener('touchend',e=>{const now=Date.now();const b=e.target.closest('button');if(b&&now-LAST_TOUCH<350){e.preventDefault();b.click()}LAST_TOUCH=now},{passive:false});
+document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
+// Hochformat: Lock wo unterstützt (Android/installierte PWA); iOS: Hinweis-Overlay per CSS
+function lockPortrait(){try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{})}catch(e){}}
+lockPortrait();document.addEventListener('visibilitychange',()=>{if(!document.hidden)lockPortrait()});
 load();render();requestAnimationFrame(loop);hashUpdate();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// ===== Sporty-Empfang (Webhook) =====
+// URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
+const APP_VER='20261019-0400';
+const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
+function hookCfg(){try{const c=JSON.parse(localStorage.getItem(HOOK_KEY)||'null');return c&&c.url?c:null}catch(e){return null}}
+function setHookCfg(c){if(c)localStorage.setItem(HOOK_KEY,JSON.stringify(c));else localStorage.removeItem(HOOK_KEY)}
+function hookHeaders(c){const h={};
+  if(c.headers&&Object.keys(c.headers).length)Object.assign(h,c.headers);
+  else if(c.key){if(c.style==='custom'&&c.hname)h[c.hname]=c.key;else h['Authorization']='Bearer '+c.key}
+  for(const k of Object.keys(h))if(k.toLowerCase()==='content-type')delete h[k];
+  h['Content-Type']='application/json';return h}
+// curl-Befehl / Snippet aus dem Routine-Panel zerlegen: URL + -H 'Name: Wert'
+function parseSnippet(txt){txt=String(txt||'').replace(/\\\r?\n/g,' ');const out={url:null,headers:{}};
+  const um=txt.match(/https?:\/\/[^\s'"`<>]+/);if(um)out.url=um[0].replace(/[),;]+$/,'');
+  const re=/(?:-H|--header)\s+(?:\$)?(['"])([\s\S]*?)\1/g;let m;
+  while((m=re.exec(txt))){const i=m[2].indexOf(':');if(i>0)out.headers[m[2].slice(0,i).trim()]=m[2].slice(i+1).trim()}
+  if(!Object.keys(out.headers).length){// JS/JSON-Stil: "Authorization": "Bearer …" bzw. Zeilen „Name: Wert“
+    const re2=/["']?((?:authorization|x-[a-z0-9-]+|api-key|apikey))["']?\s*:\s*["']([^"'\n]+)["']/gi;while((m=re2.exec(txt)))out.headers[m[1]]=m[2].trim();
+    if(!Object.keys(out.headers).length){const re3=/^\s*((?:authorization|x-[a-z0-9-]+|api-key|apikey))\s*:\s*(.+)$/gim;while((m=re3.exec(txt)))out.headers[m[1]]=m[2].trim()}}
+  for(const k of Object.keys(out.headers))if(k.toLowerCase()==='content-type')delete out.headers[k];
+  return out}
+async function postHook(payload,c){c=c||hookCfg();if(!c)throw new Error('Sporty-Empfang ist nicht eingerichtet.');
+  let res;try{res=await fetch(c.url,{method:'POST',mode:'cors',cache:'no-store',headers:hookHeaders(c),body:JSON.stringify(payload)})}
+  catch(e){const err=new Error('Keine Verbindung oder vom Server blockiert (Netzwerk/CORS): '+(e&&e.message||e));err.net=true;throw err}
+  if(!res.ok){let t='';try{t=(await res.text()).slice(0,140)}catch(e){}const err=new Error('HTTP '+res.status+(res.statusText?' '+res.statusText:'')+(t?' – '+t:''));err.status=res.status;throw err}
+  return res.status}
+function sessionId(d){const dy=day(d);if(!dy.sid){dy.sid='sportify-'+d+'-'+Math.random().toString(36).slice(2,8);save()}return dy.sid}
+function sessionPayload(d){
+  const dy=peek(d),t=typeOf(d),items=isStrength(t)||(dy.extras||[]).length?sessionItems(t,d):[];
+  const ex=[];let t0=null,t1=null;
+  for(const it of items){const arr=(dy.sets&&dy.sets[it.ex])||[];const sets=arr.filter(s=>s&&s.done).map(s=>{if(s.at){t0=t0==null?s.at:Math.min(t0,s.at);t1=t1==null?s.at:Math.max(t1,s.at)}return{weight:s.w??null,reps:s.r??null,rir:s.rir??null,unit:it.unit==='s'?'s':'reps'}});
+    if(sets.length)ex.push({id:it.ex,name:EX[it.ex]?EX[it.ex].n:it.ex,block:it.block,plannedSets:planned(it,d).sets.length,sets})}
+  const f=dy.feedback||{};
+  const s={id:sessionId(d),revision:(dy.sentRev||0)+1,date:d,type:t,name:TYPE_LABEL[t]||t,exercises:ex,
+    ruecken:BACK[dy.back||'ok'],muskelkater:dy.soreness??0,
+    feedback:{gefuehl:f.feel??null,ruecken:f.back?BACK[f.back]:null,energie:f.energy?ENERGY[f.energy]:null,notiz:f.note||null},
+    notiz:dy.note||null,durationMin:t0!=null&&t1>t0?Math.round((t1-t0)/60000):null,
+    modified:!!dy.modded,supersaetze:!dy.noSS,extras:dy.extras||[]};
+  if(dy.cardio)s.cardio=dy.cardio;if(dy.interval)s.interval=dy.interval;if(dy.free)s.free=dy.free;
+  const sl=sleepInfo(d);if(sl.score!=null||sl.hrv!=null)s.schlaf={score:sl.score??null,hrv:sl.hrv??null};
+  return{app:'sportify',version:APP_VER,sentAt:new Date().toISOString(),kind:s.revision>1?'update':'new',session:s,text:sessionText(d)}}
+function outbox(){try{return JSON.parse(localStorage.getItem(OUTBOX_KEY)||'{}')}catch(e){return{}}}
+function setOutbox(o){Object.keys(o).length?localStorage.setItem(OUTBOX_KEY,JSON.stringify(o)):localStorage.removeItem(OUTBOX_KEY)}
+let FLUSHING=false;
+async function flushOutbox(quiet){if(FLUSHING||!hookCfg())return;const o=outbox();const ids=Object.keys(o);if(!ids.length)return;FLUSHING=true;let ok=0;
+  try{for(const id of ids){try{await postHook({...o[id],sentAt:new Date().toISOString(),retry:true});const q=outbox();delete q[id];setOutbox(q);ok++;const ss=o[id].session;if(ss&&S.days[ss.date]&&S.days[ss.date].sid===id){S.days[ss.date].sentRev=ss.revision;S.days[ss.date].sentAt=new Date().toISOString();save()}}catch(e){if(e.net)break}}}finally{FLUSHING=false}
+  if(ok&&TAB==='training')render();if(ok&&!quiet)toast(ok===1?'Nachgereicht: an Sporty gesendet ✓':ok+' Einheiten an Sporty nachgereicht ✓')}
+async function saveAndSend(d){
+  const dy=day(d);if(!dy.type)dy.type=typeOf(d);dy.saved=new Date().toISOString();save();   // lokal immer zuerst
+  if(!hookCfg()){toast('Gespeichert ✓ – Sporty-Empfang im Menü einrichten');shareText(sessionText(d));return}
+  const p=sessionPayload(d);const q=outbox();q[p.session.id]=p;setOutbox(q);   // gleiche ID → ersetzt alte Version
+  try{await postHook(p);const q2=outbox();delete q2[p.session.id];setOutbox(q2);dy.sentRev=p.session.revision;dy.sentAt=p.sentAt;save();toast(p.kind==='update'?'Update an Sporty gesendet ✓':'An Sporty gesendet ✓');render()}
+  catch(e){toast('Nicht gesendet, wird erneut versucht');console.warn('Sportify send failed',e)}}
+function hookSheet(msg){const c=hookCfg()||{};
+  openSheet(`<div class="cfg"><h2>Sporty-Empfang einrichten</h2><div class="mut small">Einmalig: Webhook-Adresse und Schlüssel aus dem Grok-Bot-Panel einfügen. Bleibt nur auf diesem iPhone.</div>
+  <div class="lbl">Webhook-URL</div><input id="hkUrl" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://…" value="${esc(c.url||'')}">
+  <div class="lbl">Schlüssel</div><input id="hkKey" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${c.key||(c.headers&&Object.keys(c.headers).length)?'gespeichert – leer lassen = behalten':'Schlüssel einfügen'}">
+  <div class="lbl">Schlüssel senden als</div><select id="hkStyle"><option value="bearer" ${c.style!=='custom'?'selected':''}>Authorization: Bearer …</option><option value="custom" ${c.style==='custom'?'selected':''}>eigener Header-Name</option></select>
+  <input id="hkHname" style="margin-top:6px" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Header-Name, z. B. X-Webhook-Key" value="${esc(c.hname||'')}">
+  <div class="lbl" style="margin-top:12px"><b>Oder:</b> ganzen curl-Befehl / Beispiel aus dem Panel einfügen</div><textarea id="hkSnip" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="curl -X POST 'https://…' -H 'Authorization: …'"></textarea>
+  <div class="mut small">Aus dem Befehl werden URL und alle Header (-H 'Name: Wert') übernommen und haben Vorrang.</div>
+  <div class="grid2" style="margin-top:10px"><button class="btn" data-act="hksave">Speichern</button><button class="btn sec" data-act="hktest">Test senden</button></div>
+  <div class="res" id="hkRes">${msg||(c.url?`<div class="banner info small">Eingerichtet: ${esc(c.url.replace(/^(https?:\/\/[^/]+).*/,'$1'))}/… · ${c.headers&&Object.keys(c.headers).length?'Header: '+Object.keys(c.headers).map(esc).join(', '):(c.style==='custom'?esc(c.hname||'?'):'Authorization: Bearer')}${Object.keys(outbox()).length?' · '+Object.keys(outbox()).length+' in Warteschlange':''}</div>`:'')}</div>
+  ${c.url?'<button class="btn sec" style="margin-top:8px" data-act="hkdel">Empfang entfernen</button>':''}</div>`)}
+function readHookForm(){const old=hookCfg()||{};const snip=$('#hkSnip').value.trim();
+  if(snip){const p=parseSnippet(snip);if(!p.url)throw new Error('Im eingefügten Text keine https-Adresse gefunden.');
+    const keyIn=$('#hkKey').value.trim();const c={url:p.url,headers:p.headers};
+    if(!Object.keys(p.headers).length){c.key=keyIn||old.key||'';c.style=$('#hkStyle').value;c.hname=$('#hkHname').value.trim();delete c.headers}
+    return c}
+  const url=$('#hkUrl').value.trim();if(!/^https?:\/\//i.test(url))throw new Error('Bitte eine Webhook-URL mit https:// eingeben.');
+  const style=$('#hkStyle').value,hname=$('#hkHname').value.trim();if(style==='custom'&&!/^[A-Za-z0-9-]+$/.test(hname))throw new Error('Bitte einen gültigen Header-Namen eingeben (nur Buchstaben, Ziffern, -).');
+  const key=$('#hkKey').value.trim()||(old.url===url?old.key:'')||'';
+  const c={url,key,style,hname};if(!key&&old.headers&&old.url===url)c.headers=old.headers;return c}
+document.addEventListener('click',async e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;
+  if(a==='hookcfg')hookSheet();
+  else if(a==='hksave'){try{const c=readHookForm();setHookCfg(c);hookSheet('<div class="banner info small">Gespeichert ✓ – jetzt „Test senden“ tippen.</div>');flushOutbox()}catch(err){$('#hkRes').innerHTML=`<div class="banner bad small">${esc(err.message)}</div>`}}
+  else if(a==='hktest'){let c;try{c=readHookForm()}catch(err){$('#hkRes').innerHTML=`<div class="banner bad small">${esc(err.message)}</div>`;return}
+    $('#hkRes').innerHTML='<div class="mut small">Sende Test …</div>';
+    try{const st=await postHook({app:'sportify',type:'test',version:APP_VER,sentAt:new Date().toISOString()},c);setHookCfg(c);$('#hkRes').innerHTML=`<div class="banner info small"><b>Test angekommen ✓</b> (HTTP ${st}). Gespeichert.</div>`;flushOutbox()}
+    catch(err){$('#hkRes').innerHTML=`<div class="banner bad small"><b>Test fehlgeschlagen:</b> ${esc(err.message)}${err.net?'<br>Möglich: falsche Adresse, kein Netz, oder der Server erlaubt keine Anfragen aus dem Browser (CORS). Dann bitte Sporty Bescheid geben.':err.status===401||err.status===403?'<br>Schlüssel oder Header-Art stimmt nicht.':''}</div>`}}
+  else if(a==='hkdel'){if(confirm('Sporty-Empfang auf diesem Gerät entfernen?')){setHookCfg(null);hookSheet()}}
+  else if(a==='savesend')saveAndSend(CUR);
+});
+window.addEventListener('online',()=>flushOutbox());
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)flushOutbox()});
+setTimeout(()=>flushOutbox(),1500);
 
 </script>
 </body>
