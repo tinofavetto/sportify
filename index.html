@@ -971,9 +971,11 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261019-0407';
+const APP_VER='20261019-1032';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
-function hookCfg(){try{const c=JSON.parse(localStorage.getItem(HOOK_KEY)||'null');return c&&c.url?c:null}catch(e){return null}}
+// Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
+const GH_REPO='tinofavetto/sportify-logs';
+function hookCfg(){try{const c=JSON.parse(localStorage.getItem(HOOK_KEY)||'null');if(!c)return null;if(c.mode==='gh')return c.token?c:null;return c.url?c:null}catch(e){return null}}
 function setHookCfg(c){if(c)localStorage.setItem(HOOK_KEY,JSON.stringify(c));else localStorage.removeItem(HOOK_KEY)}
 function hookHeaders(c){const h={};
   if(c.headers&&Object.keys(c.headers).length)Object.assign(h,c.headers);
@@ -995,6 +997,28 @@ async function postHook(payload,c){c=c||hookCfg();if(!c)throw new Error('Sporty-
   catch(e){const err=new Error('Keine Verbindung oder vom Server blockiert (Netzwerk/CORS): '+(e&&e.message||e));err.net=true;throw err}
   if(!res.ok){let t='';try{t=(await res.text()).slice(0,140)}catch(e){}const err=new Error('HTTP '+res.status+(res.statusText?' '+res.statusText:'')+(t?' – '+t:''));err.status=res.status;throw err}
   return res.status}
+function b64utf8(str){const u=new TextEncoder().encode(str);let bin='';for(let i=0;i<u.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(bin)}
+function ghErr(st,txt){const m={401:'Schlüssel falsch oder abgelaufen (HTTP 401).',403:'Schlüssel hat keinen Zugriff auf sportify-logs (HTTP 403). Bei „Repository access“ sportify-logs wählen und „Contents: Read and write“ geben.',404:'Schlüssel hat keinen Zugriff auf sportify-logs (HTTP 404). Bei „Repository access“ sportify-logs wählen und „Contents: Read and write“ geben.',409:'Konflikt beim Speichern (HTTP 409) – bitte nochmal versuchen.',422:'GitHub hat die Datei abgelehnt (HTTP 422).'}[st];
+  const e=new Error(m||('GitHub-Fehler HTTP '+st+(txt?' – '+txt:'')));e.status=st;return e}
+async function ghFetch(c,path,opt,q){const url='https://api.github.com/repos/'+GH_REPO+'/contents/'+path.split('/').map(encodeURIComponent).join('/')+(q||'');
+  try{return await fetch(url,{...opt,cache:'no-store',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',...(opt&&opt.body?{'Content-Type':'application/json'}:{})}})}
+  catch(e){const err=new Error('Keine Verbindung zu GitHub ('+(e&&e.message||e)+').');err.net=true;throw err}}
+async function ghPut(path,obj,message,c){c=c||hookCfg();
+  const content=b64utf8(JSON.stringify(obj,null,1)+'\n');
+  for(let attempt=0;attempt<2;attempt++){
+    let sha;const g=await ghFetch(c,path,{method:'GET'},'?ref=main');
+    if(g.ok){try{sha=(await g.json()).sha}catch(e){}}else if(g.status!==404){let t='';try{t=(await g.json()).message||''}catch(e){}throw ghErr(g.status,t)}
+    else if(attempt===0){/* 404 = Datei neu ODER kein Zugriff – PUT klärt es */}
+    const r=await ghFetch(c,path,{method:'PUT',body:JSON.stringify({message,content,branch:'main',...(sha?{sha}:{})})});
+    if(r.ok)return r.status;
+    if((r.status===409||r.status===422)&&attempt===0)continue;   // sha veraltet → neu holen
+    let t='';try{t=(await r.json()).message||''}catch(e){}throw ghErr(r.status,t)}
+}
+function slug(t){return String(t).toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function sessionPath(s){const dy=S.days[s.date]||day(s.date);if(!dy.ghPath){dy.ghPath='sessions/'+s.date+'-'+slug(s.name||s.type)+'-'+String(s.id).split('-').pop()+'.json';save()}return dy.ghPath}
+async function sendPayload(p,c){c=c||hookCfg();if(!c)throw new Error('Sporty-Empfang ist nicht eingerichtet.');
+  if(c.mode==='gh'){if(p.type==='test')return ghPut('sessions/_test.json',p,'Sportify Test',c);return ghPut(sessionPath(p.session),p,'Sportify '+p.session.date+' '+p.session.name,c)}
+  return postHook(p,c)}
 function sessionId(d){const dy=day(d);if(!dy.sid){dy.sid='sportify-'+d+'-'+Math.random().toString(36).slice(2,8);save()}return dy.sid}
 function sessionPayload(d){
   const dy=peek(d),t=typeOf(d),items=isStrength(t)||(dy.extras||[]).length?sessionItems(t,d):[];
@@ -1014,16 +1038,22 @@ function outbox(){try{return JSON.parse(localStorage.getItem(OUTBOX_KEY)||'{}')}
 function setOutbox(o){Object.keys(o).length?localStorage.setItem(OUTBOX_KEY,JSON.stringify(o)):localStorage.removeItem(OUTBOX_KEY)}
 let FLUSHING=false;
 async function flushOutbox(quiet){if(FLUSHING||!hookCfg())return;const o=outbox();const ids=Object.keys(o);if(!ids.length)return;FLUSHING=true;let ok=0;
-  try{for(const id of ids){try{await postHook({...o[id],sentAt:new Date().toISOString(),retry:true});const q=outbox();delete q[id];setOutbox(q);ok++;const ss=o[id].session;if(ss&&S.days[ss.date]&&S.days[ss.date].sid===id){S.days[ss.date].sentRev=ss.revision;S.days[ss.date].sentAt=new Date().toISOString();save()}}catch(e){if(e.net)break}}}finally{FLUSHING=false}
+  try{for(const id of ids){try{await sendPayload({...o[id],sentAt:new Date().toISOString(),retry:true});const q=outbox();delete q[id];setOutbox(q);ok++;const ss=o[id].session;if(ss&&S.days[ss.date]&&S.days[ss.date].sid===id){S.days[ss.date].sentRev=ss.revision;S.days[ss.date].sentAt=new Date().toISOString();save()}}catch(e){if(e.net)break}}}finally{FLUSHING=false}
   if(ok&&TAB==='training')render();if(ok&&!quiet)toast(ok===1?'Nachgereicht: an Sporty gesendet ✓':ok+' Einheiten an Sporty nachgereicht ✓')}
 async function saveAndSend(d){
   const dy=day(d);if(!dy.type)dy.type=typeOf(d);dy.saved=new Date().toISOString();save();   // lokal immer zuerst
   if(!hookCfg()){toast('Gespeichert ✓ – Sporty-Empfang im Menü einrichten');shareText(sessionText(d));return}
   const p=sessionPayload(d);const q=outbox();q[p.session.id]=p;setOutbox(q);   // gleiche ID → ersetzt alte Version
-  try{await postHook(p);const q2=outbox();delete q2[p.session.id];setOutbox(q2);dy.sentRev=p.session.revision;dy.sentAt=p.sentAt;save();toast(p.kind==='update'?'Update an Sporty gesendet ✓':'An Sporty gesendet ✓');render()}
+  try{await sendPayload(p);const q2=outbox();delete q2[p.session.id];setOutbox(q2);dy.sentRev=p.session.revision;dy.sentAt=p.sentAt;save();toast(p.kind==='update'?'Update an Sporty gesendet ✓':'An Sporty gesendet ✓');render()}
   catch(e){toast('Nicht gesendet, wird erneut versucht');console.warn('Sportify send failed',e)}}
-function hookSheet(msg){const c=hookCfg()||{};
-  openSheet(`<div class="cfg"><h2>Sporty-Empfang einrichten</h2><div class="mut small">Einmalig: Webhook-Adresse und Schlüssel aus dem Grok-Bot-Panel einfügen. Bleibt nur auf diesem iPhone.</div>
+function hookSheet(msg){const c0=hookCfg()||{},isGh=c0.mode==='gh'||!c0.url,c=c0.mode==='gh'?{}:c0;
+  openSheet(`<div class="cfg"><h2>Sporty-Empfang einrichten</h2><div class="mut small">Einmalig: deinen GitHub-Schlüssel einfügen. Jede gespeicherte Einheit landet dann automatisch in deinem privaten Repo <b>sportify-logs</b>, dort liest Sporty sie. Der Schlüssel bleibt nur auf diesem iPhone (nicht im Export/Backup).</div>
+  <div class="lbl">GitHub-Schlüssel</div><input id="ghTok" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${c0.mode==='gh'?'gespeichert – leer lassen = behalten':'github_pat_…'}">
+  <div class="mut small">Repo: ${GH_REPO} (fest) · <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Schlüssel auf github.com erstellen</a> (Name „Sportify“, nur sportify-logs, Contents: Read and write)</div>
+  <div class="grid2" style="margin-top:10px"><button class="btn" data-act="ghsave">Speichern</button><button class="btn sec" data-act="ghtest">Test senden</button></div>
+  <div class="res" id="ghRes">${msg&&isGh?msg:(c0.mode==='gh'?`<div class="banner info small">Eingerichtet: GitHub · ${GH_REPO}${Object.keys(outbox()).length?' · '+Object.keys(outbox()).length+' in Warteschlange':''}</div>`:'')}</div>
+  ${c0.mode==='gh'?'<button class="btn sec" style="margin-top:8px" data-act="hkdel">Empfang entfernen</button>':''}
+  <details style="margin-top:14px"${!isGh?' open':''}><summary class="mut small">Erweitert: Webhook statt GitHub</summary>
   <div class="lbl">Webhook-URL</div><input id="hkUrl" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://…" value="${esc(c.url||'')}">
   <div class="lbl">Schlüssel</div><input id="hkKey" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${c.key||(c.headers&&Object.keys(c.headers).length)?'gespeichert – leer lassen = behalten':'Schlüssel einfügen'}">
   <div class="lbl">Schlüssel senden als</div><select id="hkStyle"><option value="bearer" ${c.style!=='custom'?'selected':''}>Authorization: Bearer …</option><option value="custom" ${c.style==='custom'?'selected':''}>eigener Header-Name</option></select>
@@ -1031,23 +1061,31 @@ function hookSheet(msg){const c=hookCfg()||{};
   <div class="lbl" style="margin-top:12px"><b>Oder:</b> ganzen curl-Befehl / Beispiel aus dem Panel einfügen</div><textarea id="hkSnip" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="curl -X POST 'https://…' -H 'Authorization: …'"></textarea>
   <div class="mut small">Aus dem Befehl werden URL und alle Header (-H 'Name: Wert') übernommen und haben Vorrang.</div>
   <div class="grid2" style="margin-top:10px"><button class="btn" data-act="hksave">Speichern</button><button class="btn sec" data-act="hktest">Test senden</button></div>
-  <div class="res" id="hkRes">${msg||(c.url?`<div class="banner info small">Eingerichtet: ${esc(c.url.replace(/^(https?:\/\/[^/]+).*/,'$1'))}/… · ${c.headers&&Object.keys(c.headers).length?'Header: '+Object.keys(c.headers).map(esc).join(', '):(c.style==='custom'?esc(c.hname||'?'):'Authorization: Bearer')}${Object.keys(outbox()).length?' · '+Object.keys(outbox()).length+' in Warteschlange':''}</div>`:'')}</div>
-  ${c.url?'<button class="btn sec" style="margin-top:8px" data-act="hkdel">Empfang entfernen</button>':''}</div>`)}
-function readHookForm(){const old=hookCfg()||{};const snip=$('#hkSnip').value.trim();
+  <div class="res" id="hkRes">${msg&&!isGh?msg:(c.url?`<div class="banner info small">Eingerichtet: ${esc(c.url.replace(/^(https?:\/\/[^/]+).*/,'$1'))}/… · ${c.headers&&Object.keys(c.headers).length?'Header: '+Object.keys(c.headers).map(esc).join(', '):(c.style==='custom'?esc(c.hname||'?'):'Authorization: Bearer')}${Object.keys(outbox()).length?' · '+Object.keys(outbox()).length+' in Warteschlange':''}</div>`:'')}</div>
+  ${c.url?'<button class="btn sec" style="margin-top:8px" data-act="hkdel">Empfang entfernen</button>':''}</details></div>`)}
+function readHookForm(){const o0=hookCfg()||{},old=o0.mode==='gh'?{}:o0;const snip=$('#hkSnip').value.trim();
   if(snip){const p=parseSnippet(snip);if(!p.url)throw new Error('Im eingefügten Text keine https-Adresse gefunden.');
-    const keyIn=$('#hkKey').value.trim();const c={url:p.url,headers:p.headers};
+    const keyIn=$('#hkKey').value.trim();const c={mode:'hook',url:p.url,headers:p.headers};
     if(!Object.keys(p.headers).length){c.key=keyIn||old.key||'';c.style=$('#hkStyle').value;c.hname=$('#hkHname').value.trim();delete c.headers}
     return c}
   const url=$('#hkUrl').value.trim();if(!/^https?:\/\//i.test(url))throw new Error('Bitte eine Webhook-URL mit https:// eingeben.');
   const style=$('#hkStyle').value,hname=$('#hkHname').value.trim();if(style==='custom'&&!/^[A-Za-z0-9-]+$/.test(hname))throw new Error('Bitte einen gültigen Header-Namen eingeben (nur Buchstaben, Ziffern, -).');
   const key=$('#hkKey').value.trim()||(old.url===url?old.key:'')||'';
-  const c={url,key,style,hname};if(!key&&old.headers&&old.url===url)c.headers=old.headers;return c}
+  const c={mode:'hook',url,key,style,hname};if(!key&&old.headers&&old.url===url)c.headers=old.headers;return c}
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;
   if(a==='hookcfg')hookSheet();
+  else if(a==='ghsave'||a==='ghtest'){const old=hookCfg();const tok=$('#ghTok').value.trim()||(old&&old.mode==='gh'?old.token:'');
+    if(!tok){$('#ghRes').innerHTML='<div class="banner bad small">Bitte den GitHub-Schlüssel einfügen (beginnt mit github_pat_).</div>';return}
+    if(/\s/.test(tok)){$('#ghRes').innerHTML='<div class="banner bad small">Der Schlüssel enthält Leerzeichen – bitte nur den Schlüssel einfügen.</div>';return}
+    const c={mode:'gh',token:tok};
+    if(a==='ghsave'){setHookCfg(c);hookSheet('<div class="banner info small">Gespeichert ✓ – jetzt „Test senden“ tippen.</div>');flushOutbox();return}
+    $('#ghRes').innerHTML='<div class="mut small">Verbinde mit GitHub …</div>';
+    try{await sendPayload({app:'sportify',type:'test',version:APP_VER,sentAt:new Date().toISOString()},c);setHookCfg(c);$('#ghRes').innerHTML='<div class="banner info small"><b>✓ Verbunden</b> – Testdatei in sportify-logs geschrieben. Gespeichert.</div>';flushOutbox()}
+    catch(err){$('#ghRes').innerHTML=`<div class="banner bad small"><b>Nicht verbunden:</b> ${esc(err.message)}</div>`}}
   else if(a==='hksave'){try{const c=readHookForm();setHookCfg(c);hookSheet('<div class="banner info small">Gespeichert ✓ – jetzt „Test senden“ tippen.</div>');flushOutbox()}catch(err){$('#hkRes').innerHTML=`<div class="banner bad small">${esc(err.message)}</div>`}}
   else if(a==='hktest'){let c;try{c=readHookForm()}catch(err){$('#hkRes').innerHTML=`<div class="banner bad small">${esc(err.message)}</div>`;return}
     $('#hkRes').innerHTML='<div class="mut small">Sende Test …</div>';
-    try{const st=await postHook({app:'sportify',type:'test',version:APP_VER,sentAt:new Date().toISOString()},c);setHookCfg(c);$('#hkRes').innerHTML=`<div class="banner info small"><b>Test angekommen ✓</b> (HTTP ${st}). Gespeichert.</div>`;flushOutbox()}
+    try{const st=await sendPayload({app:'sportify',type:'test',version:APP_VER,sentAt:new Date().toISOString()},c);setHookCfg(c);$('#hkRes').innerHTML=`<div class="banner info small"><b>Test angekommen ✓</b> (HTTP ${st}). Gespeichert.</div>`;flushOutbox()}
     catch(err){$('#hkRes').innerHTML=`<div class="banner bad small"><b>Test fehlgeschlagen:</b> ${esc(err.message)}${err.net?'<br>Möglich: falsche Adresse, kein Netz, oder der Server erlaubt keine Anfragen aus dem Browser (CORS). Dann bitte Sporty Bescheid geben.':err.status===401||err.status===403?'<br>Schlüssel oder Header-Art stimmt nicht.':''}</div>`}}
   else if(a==='hkdel'){if(confirm('Sporty-Empfang auf diesem Gerät entfernen?')){setHookCfg(null);hookSheet()}}
   else if(a==='savesend')saveAndSend(CUR);
