@@ -126,6 +126,10 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 @media (prefers-reduced-motion:reduce){.demo.anim img.fr1{animation-duration:3.2s}}
 .demo.none{aspect-ratio:auto;padding:18px 14px;text-align:center;color:var(--mut,#777);font-size:14px;border:1px dashed #c9c4b8;background:transparent}
 .demo-cr{margin-bottom:6px;font-size:11px}
+.checkin{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 12px}
+.checkin .ci{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;margin:0}
+.checkin select{font:inherit;font-weight:600;padding:6px 8px;border-radius:10px;border:1px solid #d8d3c7;background:var(--chip,#eee);color:inherit;max-width:150px}
+.checkin .ci-w{flex-basis:100%;margin-top:-2px}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -269,16 +273,27 @@ function applyData(data){
   // Persönliche Daten-Datei (kind: sportify-daten) oder komplettes Backup (v:1)
   if(data&&data.kind==='sportify-daten'){
     if(!S)S=emptyState();
-    S.plan=data.plan;S.garmin=data.garmin||S.garmin||null;S.seedDate=data.seedDate||data.exported;
+    S.plan=data.plan;S.garmin=mergeGarmin(S.garmin,data.garmin);S.seedDate=data.seedDate||data.exported;
     const sd=data.seed||{};
     for(const[k,w] of Object.entries(sd.weights||{}))if(S.weights[k]==null)S.weights[k]=w;
     for(const[k,x] of Object.entries(sd.days||{})){if(!S.days[k]||!Object.keys(S.days[k]).length)S.days[k]=convSets(JSON.parse(JSON.stringify(x)));
       else if(x.coach&&!S.days[k].coach)S.days[k].coach=x.coach}
     S.seedRef=sd;
+  }else if(data&&data.kind==='sportify-update'){
+    // Kleines Update per Code/Link: Garmin (Schlaf, Schritte, Aktivitäten, Waage) und optional Plan
+    if(!S||!S.plan)throw new Error('Bitte zuerst einmal die Datei sportify-daten.json importieren.');
+    if(data.garmin)S.garmin=mergeGarmin(S.garmin,data.garmin);
+    if(data.plan&&typeof data.plan==='object'&&data.plan.sessions)S.plan=data.plan;
+    S.lastUpdate=data.exported||TODAY;
   }else if(data&&data.v===1&&data.days){S=data}
   else throw new Error('Unbekanntes Dateiformat');
   bindData();save();
 }
+function mergeGarmin(a,b){if(!b)return a||null;if(!a)return JSON.parse(JSON.stringify(b));const o={...a,...b};
+  const by=(x,y,key)=>{const m=new Map();for(const r of (x||[]))m.set(key(r),r);for(const r of (y||[]))m.set(key(r),r);return [...m.values()].sort((p,q)=>key(p)<key(q)?-1:key(p)>key(q)?1:0)};
+  for(const k of ['sleep','days','scale'])if(Array.isArray(b[k])||Array.isArray(a[k]))o[k]=by(a[k],b[k],r=>String(r.date));
+  if(Array.isArray(b.activities)||Array.isArray(a.activities))o.activities=by(a.activities,b.activities,r=>r.date+' '+(r.time||'')+' '+(r.name||''));
+  if(a.snapshot&&b.snapshot&&a.snapshot>b.snapshot)o.snapshot=a.snapshot;return o}
 function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00'}
 function load(){try{const t=localStorage.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){}
   if(!S||!S.plan){if(EMBED){applyData(EMBED);return}if(!S)S=emptyState()}
@@ -343,17 +358,17 @@ function progress(sets,it,ex){
     return[s.w,Math.min(hi,s.r+1)];
   });
 }
-function history(exId,before){
+function exHistory(exId,before){
   const out=[];for(const k of Object.keys(S.days).sort()){if(k>=before)break;const dy=S.days[k];const a=dy.sets&&dy.sets[exId];if(a&&a.some(s=>s.done))out.push({date:k,sets:a,dy})}return out;
 }
 function e1rm(w,r){return w&&r?w*(1+r/30):0}
 function recFor(it,d){
   const ex=EX[it.ex];
-  const h=history(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE);
+  const h=exHistory(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE);
   let base=it.rec.map(a=>a.slice()),src='plan';
   if(h.length){const p=progress(h[h.length-1].sets,it,ex);if(p){base=p;src='prog';
     // Stagnation: 3 Einheiten ohne Fortschritt
-    const all=history(it.ex,d).filter(x=>!x.dy.modded);
+    const all=exHistory(it.ex,d).filter(x=>!x.dy.modded);
     if(all.length>=4){const sc=all.map(x=>Math.max(...x.sets.filter(s=>s.done).map(s=>e1rm(s.w,s.r))));const ref=sc[sc.length-4];if(Math.max(...sc.slice(-3))<=ref){base=base.map(([w,r])=>[w==null?null:roundW(w*0.9),it.lo]);src='stall'}}
   }}
   // Satzanzahl an Plan anpassen (neue Sätze = letzter Arbeitssatz)
@@ -433,7 +448,7 @@ function drawTimer(){
 // ===== Training-Tab =====
 let FOCUS=null;
 const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="minus">−</button><div class="v" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="plus">+</button></div>`;
-function lastWeight(before){const ks=Object.keys(S.weights).filter(k=>k<=before).sort();return ks.length?S.weights[ks[ks.length-1]]:PLAN.goal.start}
+function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:PLAN.goal.start}
 function stepsFor(d){return GARMIN?GARMIN.days.find(x=>x.date===d):null}
 
 function renderTraining(){
@@ -442,11 +457,10 @@ function renderTraining(){
   h+=`<div class="row sp" style="margin-top:4px"><button class="iconbtn" data-act="day" data-d="-1">‹</button><div style="text-align:center"><b>${WDL[wd]}, ${de(d)}</b><div class="mut small">Woche ${weekNo(d)} seit Planstart${isDeload(d)?' · <b>Deload</b>':''}${d===TODAY?' · heute':''}</div></div><button class="iconbtn" data-act="day" data-d="1">›</button></div>`;
   if(d!==TODAY)h+=`<div style="text-align:center;margin-top:6px"><button class="chip sm" data-act="today">Zu heute springen</button></div>`;
   // Check-in
-  const w=dy.weight??null,lw=lastWeight(addDays(d,-1));
-  h+=`<div class="card"><div class="grid2"><div><div class="lbl">Gewicht morgens (kg)</div>${stepper('wt',w!=null?nf(w,1):`<span style="color:#aaa">${nf(lw,1)}</span>`,w!=null?'gespeichert':'tippen ± oder ✓')}</div>
-  <div><div class="lbl">&nbsp;</div><button class="ok ${w!=null?'done':''}" style="width:100%;font-size:16px;font-weight:600" data-act="wtok">${w!=null?'✓ '+nf(w,1):'✓ übernehmen'}</button></div></div>
-  <div class="lbl">Rücken heute</div><div class="chips">${Object.entries(BACK).map(([k,v])=>`<button class="chip ${k==='stich'?'bad':''} ${dy.back===k?'on':''}" data-act="back" data-v="${k}">${v}</button>`).join('')}</div>
-  <div class="lbl">Muskelkater (0 = keiner, 5 = heftig)</div><div class="chips">${[0,1,2,3,4,5].map(i=>`<button class="chip sm ${dy.soreness===i?'on':''}" data-act="sore" data-v="${i}">${i}</button>`).join('')}</div></div>`;
+  const sc=scaleFor(d),lsc=lastScale(d);
+  h+=`<div class="card checkin"><label class="ci">Rücken <select data-ci="back" aria-label="Rücken heute">${Object.entries(BACK).map(([k,v])=>`<option value="${k}" ${(dy.back||'ok')===k?'selected':''}>${v}</option>`).join('')}</select></label>
+  <label class="ci">Muskelkater <select data-ci="sore" aria-label="Muskelkater">${[0,1,2,3,4,5].map(i=>`<option value="${i}" ${(dy.soreness??0)===i?'selected':''}>${i}</option>`).join('')}</select><span class="mut small">/5</span></label>
+  <div class="mut small ci-w">${sc?`Waage heute: <b>${nf(sc.kg,1)} kg</b>${sc.fat!=null?' · '+nf(sc.fat,1)+' % Fett':''}`:lsc?`Waage zuletzt ${de(lsc.date,false)}: ${nf(lsc.kg,1)} kg`:'Gewicht kommt automatisch von der Garmin-Waage.'}</div></div>`;
   // Schlaf & Schritte
   const sl=sleepInfo(d),st=stepsFor(d);
   h+=`<div class="card"><div class="row sp"><h3>Schlaf & Erholung</h3><span class="badge new">neu, von Sporty</span></div>`;
@@ -603,7 +617,7 @@ function sessionText(d){
   const dy=peek(d),t=typeOf(d),wd=parse(d).getDay(),m=mods(d),sl=sleepInfo(d);
   const L=[];
   L.push(`Sportify ${WD[wd]} ${de(d)} · ${TYPE_LABEL[t]}${m.tags.length?' ['+m.tags.join(', ')+']':''}`);
-  const a=[];if(dy.weight!=null)a.push('Gewicht '+nf(dy.weight,1)+' kg');if(dy.back)a.push('Rücken '+BACK[dy.back]);if(dy.soreness!=null)a.push('Muskelkater '+dy.soreness+'/5');
+  const a=[];const sc=scaleFor(d);if(sc)a.push('Waage '+nf(sc.kg,1)+' kg'+(sc.fat!=null?' / '+nf(sc.fat,1)+' % Fett':''));else if(dy.weight!=null)a.push('Gewicht '+nf(dy.weight,1)+' kg');a.push('Rücken '+BACK[dy.back||'ok']);a.push('Muskelkater '+(dy.soreness??0)+'/5');
   if(sl.score!=null||sl.hrv!=null)a.push('Schlaf '+(sl.score??'–')+' / HRV '+(sl.hrv!=null?nf(sl.hrv,0):'–'));
   const st=stepsFor(d);if(st)a.push('Schritte '+st.steps.toLocaleString('de-DE')+(st.is_partial?' (bisher)':''));
   if(a.length)L.push(a.join(' · '));
@@ -671,7 +685,27 @@ function renderPlanView(){
   return h;
 }
 // ===== Fortschritt =====
-function weightSeries(){return Object.entries(S.weights).filter(([k,v])=>v!=null).sort((a,b)=>a[0]<b[0]?-1:1)}
+function scaleList(){return (GARMIN&&GARMIN.scale||[]).filter(x=>x&&x.date&&typeof x.kg==='number')}
+function scaleFor(d){return scaleList().find(x=>x.date===d)||null}
+function lastScale(d){const L=scaleList().filter(x=>x.date<=d);return L.length?L[L.length-1]:null}
+// Gewicht: Verlauf aus dem Export, pro Datum ersetzt durch Garmin-Waage (bevorzugt)
+function weightSeries(){const m={};for(const[k,v] of Object.entries(S.weights||{}))if(v!=null)m[k]=v;for(const x of scaleList())m[x.date]=x.kg;
+  return Object.entries(m).sort((a,b)=>a[0]<b[0]?-1:1)}
+function isScale(k){return !!scaleFor(k)}
+function regr(pts){const n=pts.length;if(n<2)return null;const mx=pts.reduce((a,p)=>a+p[0],0)/n,my=pts.reduce((a,p)=>a+p[1],0)/n;const sxx=pts.reduce((a,p)=>a+(p[0]-mx)**2,0);const m=sxx?pts.reduce((a,p)=>a+(p[0]-mx)*(p[1]-my),0)/sxx:0;return{m,b:my-m*mx}}
+function miniChart(L,key,unit,dec,color){if(L.length<2)return '<div class="mut small">Zu wenige Messungen.</div>';const w=360,h=110,pl=34,pr=8,pt=8,pb=18;
+  const x0=L[0].date,x1=L[L.length-1].date,span=Math.max(1,diffDays(x0,x1));const v=L.map(x=>x[key]);const lo=Math.min(...v),hi=Math.max(...v),pad=Math.max(0.2,(hi-lo)*0.15);const a=lo-pad,b=hi+pad;
+  const X=k=>pl+(w-pl-pr)*diffDays(x0,k)/span,Y=y=>pt+(h-pt-pb)*(b-y)/(b-a);
+  const r=regr(L.map(x=>[diffDays(x0,x.date),x[key]]));
+  let s=`<svg viewBox="0 0 ${w} ${h}" width="100%" style="display:block"><text x="${pl-4}" y="${Y(hi)+4}" font-size="10" text-anchor="end" fill="#888">${nf(hi,dec)}</text><text x="${pl-4}" y="${Y(lo)+4}" font-size="10" text-anchor="end" fill="#888">${nf(lo,dec)}</text><line x1="${pl}" x2="${w-pr}" y1="${Y(hi)}" y2="${Y(hi)}" stroke="#eee"/><line x1="${pl}" x2="${w-pr}" y1="${Y(lo)}" y2="${Y(lo)}" stroke="#eee"/>`;
+  s+=`<polyline fill="none" stroke="${color}" stroke-opacity=".45" stroke-width="1.5" points="${L.map(x=>X(x.date)+','+Y(x[key])).join(' ')}"/>`;L.forEach(x=>s+=`<circle cx="${X(x.date)}" cy="${Y(x[key])}" r="3" fill="${color}"/>`);
+  if(r)s+=`<line x1="${X(x0)}" y1="${Y(r.b)}" x2="${X(x1)}" y2="${Y(r.m*span+r.b)}" stroke="#1f5f9e" stroke-width="2.5" stroke-linecap="round"/>`;
+  s+=`<text x="${pl}" y="${h-4}" font-size="10" fill="#888">${de(x0,false)}</text><text x="${w-pr}" y="${h-4}" font-size="10" text-anchor="end" fill="#888">${de(x1,false)}</text></svg>`;
+  const first=L[0][key],last=L[L.length-1][key];
+  return s+`<div class="kv"><span>Letzte Messung (${de(x1,false)})</span><span><b>${nf(last,dec)} ${unit}</b></span></div><div class="kv"><span>Seit ${de(x0,false)}</span><span>${last-first>0?'+':''}${nf(last-first,dec)} ${unit}</span></div>${r?`<div class="kv"><span>Trend (Regression)</span><span>${r.m>0?'+':''}${nf(r.m*7,2)} ${unit}/Wo</span></div>`:''}`}
+function bodyComp(){const L=scaleList();if(!L.length)return '';const F=L.filter(x=>typeof x.fat==='number'),M=L.filter(x=>typeof x.muscleKg==='number');
+  return `<div class="card"><h2>Körperzusammensetzung</h2><div class="mut small">Garmin Index-Waage (${L.length} Messungen). Fett- und Muskelwerte der Waage schwanken mit Wasserhaushalt – nur den Trend über Wochen ansehen.</div>
+  <h3 style="margin-top:10px">Körperfett</h3>${miniChart(F,'fat','%',1,'#b7791f')}<h3 style="margin-top:12px">Muskelmasse</h3>${miniChart(M,'muscleKg','kg',1,'#2f6b4f')}</div>`}
 function trend(){
   const W=weightSeries();if(W.length<2)return null;const last=W[W.length-1][0];const from=addDays(last,-28);
   const pts=W.filter(([k])=>k>=from).map(([k,v])=>[diffDays(from,k),v]);if(pts.length<2)return null;
@@ -689,19 +723,19 @@ function weightChart(){
   for(let v=Math.ceil(lo);v<=hi;v++){s+=`<line x1="${pl}" x2="${w-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eee"/><text x="${pl-4}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="#888">${v}</text>`}
   s+=`<line x1="${pl}" x2="${w-pr}" y1="${Y(PLAN.goal.mid)}" y2="${Y(PLAN.goal.mid)}" stroke="#b7791f" stroke-dasharray="4 3"/><text x="${w-pr}" y="${Y(PLAN.goal.mid)-3}" font-size="10" text-anchor="end" fill="#b7791f">Ziel ${PLAN.goal.mid}</text>`;
   s+=`<polyline fill="none" stroke="#9cbfac" stroke-width="1.5" points="${W.map(([k,v])=>X(k)+','+Y(v)).join(' ')}"/>`;
-  W.forEach(([k,v])=>s+=`<circle cx="${X(k)}" cy="${Y(v)}" r="3" fill="#2f6b4f"/>`);
+  W.forEach(([k,v])=>s+=`<circle cx="${X(k)}" cy="${Y(v)}" r="3" fill="${isScale(k)?'#2f6b4f':'#fff'}" stroke="#2f6b4f" stroke-width="1.5"/>`);
   if(T){const a=T.from<x0?x0:T.from;s+=`<line x1="${X(a)}" y1="${Y(T.at(a))}" x2="${X(T.last)}" y2="${Y(T.smoothed)}" stroke="#1f5f9e" stroke-width="3" stroke-linecap="round"/>`}
   s+=`<text x="${pl}" y="${h-6}" font-size="10" fill="#888">${de(x0,false)}</text><text x="${w-pr}" y="${h-6}" font-size="10" text-anchor="end" fill="#888">${de(x1,false)}</text></svg>`;
   return s;
 }
 function renderFortschritt(){
   const T=trend(),W=weightSeries();const cur=W.length?W[W.length-1][1]:null;
-  let h=`<div class="card"><h2>Gewicht</h2>${weightChart()}<div class="mut small">Punkte = Messungen · blaue Linie = geglätteter Trend (lineare Regression, letzte 28 Tage)</div>`;
+  let h=`<div class="card"><h2>Gewicht</h2>${weightChart()}<div class="mut small">● Garmin-Waage · ○ aus dem Export (nur Tage ohne Waagen-Wert) · blaue Linie = geglätteter Trend (lineare Regression, letzte 28 Tage)</div>`;
   if(T){const pct=Math.abs(T.week)/T.smoothed*100;h+=`<div class="grid2" style="margin-top:8px"><div><div class="lbl">Geglättet (${de(T.last,false)})</div><b style="font-size:22px">${nf(T.smoothed,1)} kg</b></div><div><div class="lbl">Trend</div><b style="font-size:22px">${T.week>0?'+':''}${nf(T.week,2)} kg/Wo</b><div class="mut small">≈ ${nf(pct,1)} % (empfohlen 0,5–1 %)</div></div></div>`;
-    h+=`<div class="kv"><span>Start ${de(PLAN.goal.startDate)}</span><span>${nf(PLAN.goal.start,1)} kg</span></div><div class="kv"><span>Letzte Messung</span><span>${nf(cur,1)} kg</span></div><div class="kv"><span>Seit Start</span><span>${nf(cur-PLAN.goal.start,1)} kg</span></div>`;
+    h+=`<div class="kv"><span>Start laut Plan ${de(PLAN.goal.startDate)}</span><span>${nf(PLAN.goal.start,1)} kg</span></div><div class="kv"><span>Letzte Messung</span><span>${nf(cur,1)} kg</span></div><div class="kv"><span>Seit Start</span><span>${nf(cur-PLAN.goal.start,1)} kg</span></div>`;
     if(T.eta(PLAN.goal.mid))h+=`<div class="kv"><span>Prognose ${PLAN.goal.mid} kg</span><span>um ${de(T.eta(PLAN.goal.mid))}</span></div><div class="kv"><span>Prognose ${PLAN.goal.final} kg</span><span>um ${de(T.eta(PLAN.goal.final))}</span></div>`;
     h+=`<div class="mut small">Einzelne Tage schwanken um ±0,7 kg, maßgeblich ist der Trend.</div>`}
-  h+=`</div>`;
+  h+=`</div>`+bodyComp();
   // Bestleistungen
   const best={};for(const[k,dy] of Object.entries(S.days))for(const[ex,arr] of Object.entries(dy.sets||{}))for(const s of arr){if(!s||!s.done||!s.w||!s.r||!EX[ex]||ex==='balance'||ex==='toes')continue;const e=e1rm(s.w,s.r);if(!best[ex]||e>best[ex].e)best[ex]={e,s,k}}
   const rows=Object.entries(best).sort((a,b)=>b[1].e-a[1].e);
@@ -714,7 +748,7 @@ function renderFortschritt(){
   h+=dataCard();
   $('#view').innerHTML=h;
 }
-function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
+function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn" style="margin-top:8px" data-act="paste">⇩ Update von Sporty einfügen</button><div class="mut small" style="margin-top:4px">Sporty schickt dir im Chat einen Update-Code (Garmin: Waage, Schlaf, Schritte, Aktivitäten). Code kopieren, hier tippen – fertig.${S&&S.lastUpdate?' Letztes Update: '+de(S.lastUpdate,false)+'.':''}</div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
 // ===== Garmin =====
 function renderGarmin(){
   if(!GARMIN){$('#view').innerHTML='<div class="card">Keine Garmin-Daten importiert.</div>'+dataCard();return}
@@ -763,6 +797,22 @@ function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinw
 // ===== Export / Import =====
 function doExport(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sportify-backup-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Export erstellt')}
 function doImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(data.v===1&&data.days&&S&&S.plan&&!confirm('Backup einspielen? Aktuelle Daten auf diesem Gerät werden ersetzt.'))return;applyData(data);toast('Import erfolgreich');closeSheet();render()}catch(e){alert('Import fehlgeschlagen: '+e.message)}};r.readAsText(f)};i.click()}
+// ===== Update-Code (kein Server: Code/Link-Fragment wird nur lokal gelesen) =====
+async function decodeUpdate(txt){txt=String(txt||'').trim();const i=txt.indexOf('#sync=');if(i>=0)txt=decodeURIComponent(txt.slice(i+6));
+  if(txt.startsWith('{'))return JSON.parse(txt);
+  const m=txt.match(/SPY1\.([A-Za-z0-9_-]+)/);if(!m)throw new Error('Kein Sportify-Update-Code gefunden.');
+  if(typeof DecompressionStream==='undefined')throw new Error('Dieser Browser kann den Code nicht entpacken (iOS 16.4+ nötig).');
+  const b=atob(m[1].replace(/-/g,'+').replace(/_/g,'/'));const u=Uint8Array.from(b,c=>c.charCodeAt(0));
+  const t=await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();return JSON.parse(t)}
+async function applyUpdate(txt){const data=await decodeUpdate(txt);if(!data||(data.kind!=='sportify-update'&&data.kind!=='sportify-daten'))throw new Error('Unbekannter Inhalt.');
+  applyData(data);const g=data.garmin||{},last=k=>{const L=g[k]||[];return L.length?de(L[L.length-1].date,false):null};
+  const p=[];if(last('scale'))p.push('Waage bis '+last('scale'));if(last('sleep'))p.push('Schlaf bis '+last('sleep'));if(last('days'))p.push('Schritte bis '+last('days'));if(data.plan)p.push('Plan');
+  closeSheet();render();toast('Update übernommen'+(p.length?': '+p.join(', '):''))}
+async function pasteUpdate(){let txt='';try{if(navigator.clipboard&&navigator.clipboard.readText)txt=await navigator.clipboard.readText()}catch(e){}
+  if(txt&&/SPY1\.|#sync=|"sportify-update"/.test(txt)){try{await applyUpdate(txt);return}catch(e){alert('Update fehlgeschlagen: '+e.message);return}}
+  openSheet(`<h2>Update einfügen</h2><div class="mut small">Code von Sporty hier einfügen (lange tippen → Einsetzen).</div><textarea id="updTxt" rows="5" style="width:100%;margin-top:8px;font-size:14px" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea><button class="btn big" style="margin-top:8px" data-act="pasteok">Übernehmen</button>`);setTimeout(()=>{const t=$('#updTxt');t&&t.focus()},50)}
+async function hashUpdate(){if(!location.hash.startsWith('#sync='))return;const h=location.hash;window.history.replaceState(null,'',location.pathname+location.search);
+  try{await applyUpdate(h)}catch(e){alert('Update fehlgeschlagen: '+e.message)}}
 // ===== Navigation =====
 let TAB='training';
 function render(){
@@ -800,10 +850,10 @@ document.addEventListener('click',e=>{
   switch(a){
     case 'day':CUR=addDays(CUR,+dd);FOCUS=null;render();break;
     case 'today':CUR=TODAY;render();break;
-    case 'wt':{const dy=day(d);let w=dy.weight??lastWeight(addDays(d,-1));if(dd==='edit'){const x=num(prompt('Gewicht (kg)',nf(w,1)));if(x==null)return;w=x}else w=Math.round((w+0.1*+dd)*10)/10;dy.weight=w;S.weights[d]=w;save();render();break}
-    case 'wtok':{const dy=day(d);if(dy.weight==null){dy.weight=lastWeight(addDays(d,-1));S.weights[d]=dy.weight;save();toast('Gewicht gespeichert')}render();break}
-    case 'back':{const dy=day(d);dy.back=dy.back===v?undefined:v;save();if(v==='stich'&&dy.back){vib([200,100,200]);if(RUN)stopRunner()}render();break}
-    case 'sore':{const dy=day(d);dy.soreness=dy.soreness===+v?undefined:+v;save();render();break}
+    case 'paste':pasteUpdate();break;
+    case 'pasteok':applyUpdate($('#updTxt').value).catch(err=>alert('Update fehlgeschlagen: '+err.message));break;
+    case 'back':{const dy=day(d);dy.back=v;save();if(v==='stich'&&dy.back){vib([200,100,200]);if(RUN)stopRunner()}render();break}
+    case 'sore':{const dy=day(d);dy.soreness=+v;save();render();break}
     case 'sleeplight':day(d).sleepLight=v==='1';save();render();break;
     case 'sleepedit':{const sc=num(prompt('Schlafwert (Garmin, 0–100)',sleepInfo(d).score??''));const hv=num(prompt('HRV (ms)',sleepInfo(d).hrv??''));const dy=day(d);if(sc!=null)dy.sleepScore=sc;if(hv!=null)dy.hrv=hv;save();render();break}
     case 'type':{const dy=day(d);dy.type=v;FOCUS=null;save();render();break}
@@ -850,8 +900,10 @@ document.addEventListener('input',e=>{const t=e.target;const a=t.dataset.act;if(
 });
 $('#tPlus').onclick=()=>addTime(15);$('#tPause').onclick=togglePause;$('#tSkip').onclick=()=>nextPhase(false);$('#tStop').onclick=stopRunner;
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+document.addEventListener('change',e=>{const t=e.target;if(!t.dataset||!t.dataset.ci)return;const dy=day(CUR);
+  if(t.dataset.ci==='back'){dy.back=t.value;save();if(t.value==='stich'){vib([200,100,200]);if(RUN)stopRunner()}}else{dy.soreness=+t.value;save()}render()});
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
-load();render();requestAnimationFrame(loop);
+load();render();requestAnimationFrame(loop);hashUpdate();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 </script>
