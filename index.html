@@ -328,7 +328,7 @@ function mergeGarmin(a,b){if(!b)return a||null;if(!a)return JSON.parse(JSON.stri
   for(const k of ['sleep','days','scale'])if(Array.isArray(b[k])||Array.isArray(a[k]))o[k]=by(a[k],b[k],r=>String(r.date));
   if(Array.isArray(b.activities)||Array.isArray(a.activities))o.activities=by(a.activities,b.activities,r=>r.date+' '+(r.time||'')+' '+(r.name||''));
   if(a.snapshot&&b.snapshot&&a.snapshot>b.snapshot)o.snapshot=a.snapshot;return o}
-function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00'}
+function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00';if(PLAN&&PLAN.sessions&&PLAN.sessions.cardio&&PLAN.sessions.cardio.name)TYPE_LABEL.cardio=PLAN.sessions.cardio.name}
 function load(){try{const t=localStorage.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){}
   if(!S||!S.plan){if(EMBED){applyData(EMBED);return}if(!S)S=emptyState()}
   bindData()}
@@ -595,7 +595,12 @@ function renderFree(k,d){
 
 // ===== Cardio & Intervall =====
 function lastOf(key,d){const ks=Object.keys(S.days).filter(k=>k<d&&k>SEED_DATE&&S.days[k][key]&&S.days[k][key].done).sort();return ks.length?S.days[ks[ks.length-1]][key]:null}
-function cardioRec(d){const l=lastOf('cardio',d),r=PLAN.sessions.cardio.rec;return l?{walkMin:l.walkMin??r.walkMin,incline:l.incline??r.incline,kmh:l.kmh??r.kmh,ctMin:l.ctMin??r.ctMin,ctLevel:l.ctLevel??r.ctLevel??null,rpm:l.rpm??null}:{...r,rpm:null}}
+function walkOnly(){return !!(PLAN.sessions.cardio&&PLAN.sessions.cardio.walkOnly)}
+function cardioRec(d){const C=PLAN.sessions.cardio,r=C.rec;
+  if(C.walkOnly){// Neuer Plan (ab C.since): nur Incline Walk. Dauer immer laut Plan; Steigung/Tempo nur aus Einheiten seit Planwechsel.
+    const ks=Object.keys(S.days).filter(k=>k<d&&k>SEED_DATE&&k>=(C.since||'')&&S.days[k].cardio&&S.days[k].cardio.done).sort();const l=ks.length?S.days[ks[ks.length-1]].cardio:null;
+    return{walkMin:r.walkMin,incline:l&&l.incline!=null?l.incline:r.incline,kmh:l&&l.kmh!=null?l.kmh:r.kmh}}
+  const l=lastOf('cardio',d);return l?{walkMin:l.walkMin??r.walkMin,incline:l.incline??r.incline,kmh:l.kmh??r.kmh,ctMin:l.ctMin??r.ctMin,ctLevel:l.ctLevel??r.ctLevel??null,rpm:l.rpm??null}:{...r,rpm:null}}
 function intervalRec(d){
   const l=lastOf('interval',d),r=PLAN.sessions.interval.rec;
   if(l&&l.rounds){const last=l.rounds[l.rounds.length-1];const up=last&&last.hr!=null&&last.hr<165&&l.rpe!=null&&l.rpe<=7;return{incline:l.rounds.map(x=>(x.incline??12)+(up?1:0)),kmh:l.rounds[0].kmh??5,src:up?'up':'same'}}
@@ -606,13 +611,19 @@ function renderCardio(d){
   const dy=peek(d),c=dy.cardio||{},r=cardioRec(d),v=k=>c[k]!==undefined?c[k]:r[k];
   const ses=PLAN.sessions.cardio;
   let h=`<div class="card"><div class="exhead"><div><h3>${ses.name}</h3><div class="meta">${ses.desc}</div></div><button class="abl" data-act="abl" data-v="walk">▶ Ablauf</button></div><div class="coach">Coach: ${esc(ses.coach)}</div>
-  <div class="lbl">Incline Walk</div><div class="grid3">${stepper('cd',v('walkMin'),'Min','data-f="walkMin"')}${stepper('cd',nf(v('incline')),'% Steigung','data-f="incline"')}${stepper('cd',nf(v('kmh')),'km/h','data-f="kmh"')}</div>
-  <div class="lbl">Crosstrainer</div><div class="grid3">${stepper('cd',v('ctMin'),'Min','data-f="ctMin"')}${stepper('cd',v('ctLevel')??'–','Widerstand','data-f="ctLevel"')}${stepper('cd',v('rpm')??'–','U/min','data-f="rpm"')}</div>
+  <div class="lbl">Incline Walk</div><div class="grid3">${stepper('cd',v('walkMin'),'Min','data-f="walkMin"')}${stepper('cd',nf(v('incline')),walkOnly()?'% Basis':'% Steigung','data-f="incline"')}${stepper('cd',nf(v('kmh')),'km/h','data-f="kmh"')}</div>
+  ${walkOnly()?`<div class="lbl">Ablauf (Signalton bei jedem Wechsel)</div><div id="phases">${cardioPhases(d).map((p,i)=>`<div class="phase" data-ph="${i}"><span>${p.label}</span><span>${fmtT(p.sec)}</span></div>`).join('')}</div>`:`<div class="lbl">Crosstrainer</div><div class="grid3">${stepper('cd',v('ctMin'),'Min','data-f="ctMin"')}${stepper('cd',v('ctLevel')??'–','Widerstand','data-f="ctLevel"')}${stepper('cd',v('rpm')??'–','U/min','data-f="rpm"')}</div>`}
   <div class="lbl">Puls Ø</div>${stepper('cd',v('hr')??'–','bpm','data-f="hr"')}
   <div class="lbl">Anstrengung (RPE 1–10)</div>${rpeChips('cdrpe',c.rpe)}
   <div class="row" style="margin-top:10px"><button class="btn sec" data-act="cdtimer">▶ Geführter Timer</button><button class="btn ${c.done?'':'sec'}" data-act="cddone">${c.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
   return h;
 }
+// Incline Walk: Aufwärmen (erste Minuten flacher), danach Wechsel an jeder vollen 5-Min-Marke zwischen Basis- und Hoch-Steigung.
+function cardioPhases(d){const C=PLAN.sessions.cardio,sg=C.segments||{warm:3,warmDrop:2,every:5,step:2},dy=peek(d),c=dy.cardio||{},r=cardioRec(d);
+  const total=Math.max(5,c.walkMin??r.walkMin)*60,base=c.incline??r.incline,kmh=c.kmh??r.kmh,hi=base+sg.step,ev=sg.every*60;const ph=[];
+  if(sg.warm>0)ph.push({label:`Aufwärmen ${nf(base-sg.warmDrop)} % · ${nf(kmh)} km/h`,sec:Math.min(sg.warm*60,total),pct:base-sg.warmDrop});
+  let t=sg.warm*60,k=0;while(t<total){const end=Math.min(total,(Math.floor(t/ev)+1)*ev);const inc=k%2?hi:base;ph.push({label:`${nf(inc)} % · ${nf(kmh)} km/h`,sec:end-t,pct:inc,kind:inc===hi?'hard':undefined});t=end;k++}
+  return ph}
 function intervalPhases(d){
   const s=PLAN.sessions.interval,r=intervalRec(d),dy=peek(d),iv=dy.interval||{};const ph=[{label:'Aufwärmen locker',sec:s.warm*60}];
   for(let i=0;i<s.rounds;i++){const inc=iv.rounds&&iv.rounds[i]&&iv.rounds[i].incline!=null?iv.rounds[i].incline:r.incline[i];
@@ -661,7 +672,8 @@ function sessionText(d){
   for(const it of items){const arr=(dy.sets&&dy.sets[it.ex]||[]).filter(s=>s&&s.done);if(!arr.length)continue;
     if(it.block!==cur&&PLAN.extras[it.block]){L.push('+ '+PLAN.extras[it.block].name);}cur=it.block;
     L.push(`${EX[it.ex].n}: ${arr.map(s=>setStr(s,it.unit)).join(' · ')}`)}
-  if(t==='cardio'&&dy.cardio){const c={...cardioRec(d),...dy.cardio};L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.incline)} % · ${nf(c.kmh)} km/h | Crosstrainer ${c.ctMin} Min${c.ctLevel!=null?' · Widerstand '+c.ctLevel:''}${c.rpm!=null?' · '+c.rpm+' U/min':''}${c.hr!=null?' | Puls Ø '+c.hr:''}${c.rpe?' | RPE '+c.rpe:''}`)}
+  if(t==='cardio'&&dy.cardio&&walkOnly()&&dy.cardio.ctMin==null){const c={...cardioRec(d),...dy.cardio},sg=PLAN.sessions.cardio.segments||{warmDrop:2,step:2};L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.kmh)} km/h · Steigung ${nf(c.incline)}/${nf(c.incline+sg.step)} % im Wechsel (Aufwärmen ${nf(c.incline-sg.warmDrop)} %)${c.hr!=null?' | Puls Ø '+c.hr:''}${c.rpe?' | RPE '+c.rpe:''}`)}
+  else if(t==='cardio'&&dy.cardio){const c={...cardioRec(d),...dy.cardio};L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.incline)} % · ${nf(c.kmh)} km/h${c.ctMin!=null?` | Crosstrainer ${c.ctMin} Min${c.ctLevel!=null?' · Widerstand '+c.ctLevel:''}${c.rpm!=null?' · '+c.rpm+' U/min':''}`:''}${c.hr!=null?' | Puls Ø '+c.hr:''}${c.rpe?' | RPE '+c.rpe:''}`)}
   if(t==='interval'&&dy.interval){const iv=dy.interval,r=intervalRec(d);L.push('Intervall: '+[0,1,2,3].map(i=>{const x=(iv.rounds&&iv.rounds[i])||{};return `R${i+1} ${nf(x.incline??r.incline[i])} % · ${nf(x.kmh??r.kmh)} km/h${x.hr!=null?' · Puls '+x.hr:''}`}).join(' | ')+(iv.rpe?' · RPE '+iv.rpe:''))}
   for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;L.push(`${PLAN.extras[k]?PLAN.extras[k].name:k}: ${p.min??''} Min${p.hr!=null?' · Puls Ø '+p.hr:''}${p.note?' · '+p.note:''}${p.done?' ✓':''}`)}
   if(dy.note)L.push('Notiz: '+dy.note);
@@ -922,8 +934,9 @@ document.addEventListener('click',e=>{
     case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,rpm:2}[f];
       if(dd==='edit'){const y=num(prompt('Wert',x??''));if(y==null)return;x=y}else x=Math.round(((x??(f==='hr'?120:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;c[f]=x;if(!dy.type)dy.type='cardio';save();render();break}
     case 'cdrpe':{const c=day(d).cardio=day(d).cardio||{};c.rpe=+v;save();render();break}
-    case 'cddone':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);for(const k of['walkMin','incline','kmh','ctMin','ctLevel','rpm'])if(c[k]===undefined)c[k]=r[k];c.done=!c.done;dy.type=dy.type||'cardio';save();render();if(c.done)toast('Gespeichert – Feedback an Sporty nicht vergessen');break}
-    case 'cdtimer':{const r={...cardioRec(d),...(peek(d).cardio||{})};startRunner('Cardio-Mix',[{label:`Incline Walk ${nf(r.incline)} % · ${nf(r.kmh)} km/h`,sec:r.walkMin*60},{label:'Crosstrainer locker',sec:r.ctMin*60}],null);break}
+    case 'cddone':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);for(const k of(walkOnly()?['walkMin','incline','kmh']:['walkMin','incline','kmh','ctMin','ctLevel','rpm']))if(c[k]===undefined)c[k]=r[k];c.done=!c.done;dy.type=dy.type||'cardio';save();render();if(c.done)toast('Gespeichert – Feedback an Sporty nicht vergessen');break}
+    case 'cdtimer':{if(walkOnly()){startRunner(PLAN.sessions.cardio.name||'Incline Walk',cardioPhases(d),()=>toast('Incline Walk fertig! Puls & RPE eintragen'));onPhase();break}
+      const r={...cardioRec(d),...(peek(d).cardio||{})};startRunner('Cardio-Mix',[{label:`Incline Walk ${nf(r.incline)} % · ${nf(r.kmh)} km/h`,sec:r.walkMin*60},{label:'Crosstrainer locker',sec:r.ctMin*60}],null);break}
     case 'ivtimer':startRunner('Intervall',intervalPhases(d),()=>toast('Intervall fertig! Werte & RPE eintragen'));onPhase();break;
     case 'ivrpe':{const iv=day(d).interval=day(d).interval||{};iv.rpe=+v;save();render();break}
     case 'ivdone':{const dy=day(d);const iv=dy.interval=dy.interval||{};const r=intervalRec(d);iv.rounds=[0,1,2,3].map(i=>({incline:iv.rounds?.[i]?.incline??r.incline[i],kmh:iv.rounds?.[i]?.kmh??r.kmh,hr:iv.rounds?.[i]?.hr??null}));iv.done=!iv.done;dy.type=dy.type||'interval';save();render();break}
@@ -971,7 +984,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261019-1032';
+const APP_VER='20261019-1408';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
