@@ -998,7 +998,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261020-0353';
+const APP_VER='20261020-0427';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1079,6 +1079,7 @@ function hookSheet(msg){const c0=hookCfg()||{},isGh=c0.mode==='gh'||!c0.url,c=c0
   <div class="mut small">Repo: ${GH_REPO} (fest) · <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Schlüssel auf github.com erstellen</a> (Name „Sportify“, nur sportify-logs, Contents: Read and write)</div>
   <div class="grid2" style="margin-top:10px"><button class="btn" data-act="ghsave">Speichern</button><button class="btn sec" data-act="ghtest">Test senden</button></div>
   <div class="res" id="ghRes">${msg&&isGh?msg:(c0.mode==='gh'?`<div class="banner info small">Eingerichtet: GitHub · ${GH_REPO}${Object.keys(outbox()).length?' · '+Object.keys(outbox()).length+' in Warteschlange':''}</div>`:'')}</div>
+  ${c0.mode==='gh'?pushBlock():''}
   ${c0.mode==='gh'?'<button class="btn sec" style="margin-top:8px" data-act="hkdel">Empfang entfernen</button>':''}
   <details style="margin-top:14px"${!isGh?' open':''}><summary class="mut small">Erweitert: Webhook statt GitHub</summary>
   <div class="lbl">Webhook-URL</div><input id="hkUrl" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://…" value="${esc(c.url||'')}">
@@ -1115,11 +1116,48 @@ document.addEventListener('click',async e=>{const t=e.target.closest('[data-act]
     try{const st=await sendPayload({app:'sportify',type:'test',version:APP_VER,sentAt:new Date().toISOString()},c);setHookCfg(c);$('#hkRes').innerHTML=`<div class="banner info small"><b>Test angekommen ✓</b> (HTTP ${st}). Gespeichert.</div>`;flushOutbox()}
     catch(err){$('#hkRes').innerHTML=`<div class="banner bad small"><b>Test fehlgeschlagen:</b> ${esc(err.message)}${err.net?'<br>Möglich: falsche Adresse, kein Netz, oder der Server erlaubt keine Anfragen aus dem Browser (CORS). Dann bitte Sporty Bescheid geben.':err.status===401||err.status===403?'<br>Schlüssel oder Header-Art stimmt nicht.':''}</div>`}}
   else if(a==='hkdel'){if(confirm('Sporty-Empfang auf diesem Gerät entfernen?')){setHookCfg(null);hookSheet()}}
+  else if(a==='pushon')pushEnable();
+  else if(a==='pushoff')pushDisable();
   else if(a==='savesend')saveAndSend(CUR);
 });
 window.addEventListener('online',()=>flushOutbox());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)flushOutbox()});
 setTimeout(()=>flushOutbox(),1500);
+
+// ===== 🔔 Web Push (Sporty → iPhone) =====
+// Nur öffentlicher VAPID-Schlüssel hier; der private liegt nur bei Sporty. Abo wird als push/subscriptions/<id>.json in sportify-logs gespeichert.
+const VAPID_PUB='BMfI4p_wwPpIP7pWWXq00xOakHjvR1ZH1fs2dx9NjM4t9H7D4ukGptCWFvX4JHFAaejOOC2dgMWBhccYP8oUZ5g';
+const PUSH_KEY='sportify.push';
+function pushSupported(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window}
+function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+function pushState(){try{return JSON.parse(localStorage.getItem(PUSH_KEY)||'null')}catch(e){return null}}
+function pushBlock(){const ps=pushState(),on=ps&&ps.on&&window.Notification&&Notification.permission==='granted';
+  let hint='';if(!pushSupported())hint=isStandalone()?'Push braucht iOS 16.4 oder neuer.':'Push geht nur in der App vom Home-Bildschirm (nicht im Safari-Tab).';
+  else if(Notification.permission==='denied')hint='Mitteilungen sind blockiert: iPhone-Einstellungen → Mitteilungen → Sportify → Erlauben.';
+  return `<div style="margin-top:14px"><button class="btn${on?' sec':''}" data-act="${on?'pushoff':'pushon'}" ${hint&&!on?'disabled':''}>${on?'🔔 Push-Nachrichten aktiv ✓ (ausschalten)':'🔔 Push-Nachrichten aktivieren'}</button><div class="res" id="pushRes">${hint?`<div class="mut small">${esc(hint)}</div>`:on?'<div class="mut small">Sporty meldet sich vor und nach dem Training.</div>':''}</div></div>`}
+function withTO(pr,ms,msg){return Promise.race([pr,new Promise((_,rej)=>setTimeout(()=>rej(new Error(msg)),ms))])}
+function u8key(b64){const p='='.repeat((4-b64.length%4)%4),s=atob((b64+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(s,ch=>ch.charCodeAt(0))}
+async function subId(endpoint){const h=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(endpoint)));return Array.from(h.slice(0,6),b=>b.toString(16).padStart(2,'0')).join('')}
+async function pushEnable(){const r=$('#pushRes'),say=(m,bad)=>{if(r)r.innerHTML=`<div class="${bad?'banner bad':'mut'} small">${m}</div>`};
+  try{if(!pushSupported())throw new Error('Push geht nur in der App vom Home-Bildschirm (iOS 16.4+).');
+    const perm=await Notification.requestPermission();   // muss direkt aus dem Tap kommen
+    if(perm!=='granted')throw new Error('Mitteilungen nicht erlaubt. Einstellungen → Mitteilungen → Sportify → Erlauben.');
+    say('Verbinde …');const reg=await withTO(navigator.serviceWorker.ready,10000,'App-Dienst nicht bereit – App schließen, neu öffnen und nochmal tippen.');
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await withTO(reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8key(VAPID_PUB)}),20000,'Apple-Push antwortet nicht – bitte später nochmal tippen.');
+    const js=sub.toJSON(),id=await subId(js.endpoint);
+    await ghPut('push/subscriptions/'+id+'.json',{app:'sportify',version:APP_VER,created:new Date().toISOString(),ua:navigator.userAgent,subscription:js},'Sportify Push-Abo '+id);
+    localStorage.setItem(PUSH_KEY,JSON.stringify({on:true,id,at:new Date().toISOString()}));
+    try{reg.showNotification('Sportify 🔔',{body:'Push ist aktiv – Sporty meldet sich hier.',icon:'icon-192.png',badge:'icon-192.png',tag:'sportify-test'})}catch(e){}
+    hookSheet('<div class="banner info small"><b>✓ Push aktiv</b> – Sporty kann dir jetzt Nachrichten schicken.</div>')}
+  catch(e){say(esc(e.message||String(e)),true)}}
+async function pushDisable(){try{const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();if(sub)await sub.unsubscribe()}catch(e){}
+  localStorage.removeItem(PUSH_KEY);hookSheet('<div class="banner info small">Push ausgeschaltet.</div>')}
+// Abo still auffrischen, falls iOS es erneuert hat
+setTimeout(async()=>{const ps=pushState();if(!ps||!ps.on||!hookCfg()||!pushSupported()||Notification.permission!=='granted')return;
+  try{const reg=await navigator.serviceWorker.ready;const sub=await reg.pushManager.getSubscription();
+    if(!sub){const s2=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8key(VAPID_PUB)});const js=s2.toJSON(),id=await subId(js.endpoint);
+      await ghPut('push/subscriptions/'+id+'.json',{app:'sportify',version:APP_VER,created:new Date().toISOString(),ua:navigator.userAgent,subscription:js},'Sportify Push-Abo '+id);localStorage.setItem(PUSH_KEY,JSON.stringify({on:true,id,at:new Date().toISOString()}))}}catch(e){console.warn('push refresh',e)}},4000);
 
 // ===== 🏅 Badges (Garmin-Challenges aus dem privaten Repo sportify-logs/badges/badges.json) =====
 // Liest mit demselben GitHub-Schlüssel wie der Sporty-Empfang. Daten nur im localStorage.
