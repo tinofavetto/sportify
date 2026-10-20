@@ -323,6 +323,14 @@ function applyData(data){
     if(!S||!S.plan)throw new Error('Bitte zuerst einmal die Datei sportify-daten.json importieren.');
     if(data.garmin)S.garmin=mergeGarmin(S.garmin,data.garmin);
     if(data.plan&&typeof data.plan==='object'&&data.plan.sessions)S.plan=data.plan;
+    // Optional: nachgetragene Tage (z. B. aus Garmin übernommen). Nie Nutzerdaten überschreiben:
+    // leerer Tag → komplett übernehmen; Tag ohne Trainingsinhalt → nur fehlende Felder ergänzen; Coach-Text nur wenn keiner da.
+    if(data.days&&typeof data.days==='object')for(const[k,x] of Object.entries(data.days)){if(!/^\d{4}-\d\d-\d\d$/.test(k)||!x||typeof x!=='object')continue;
+      const cur=S.days[k],nx=convSets(JSON.parse(JSON.stringify(x)));
+      if(!cur||!Object.keys(cur).length){S.days[k]=nx;continue}
+      const busy=cur.cardio||cur.interval||cur.free||(cur.sets&&Object.values(cur.sets).some(a=>(a||[]).some(z=>z&&(z.done||z.w!=null||z.r!=null))));
+      if(!busy)for(const[f,v] of Object.entries(nx))if(cur[f]===undefined)cur[f]=v;
+      if(nx.coach&&!cur.coach)cur.coach=nx.coach}
     S.lastUpdate=data.exported||TODAY;
   }else if(data&&data.v===1&&data.days){S=data}
   else throw new Error('Unbekanntes Dateiformat');
@@ -861,7 +869,7 @@ async function decodeUpdate(txt){txt=String(txt||'').trim();const i=txt.indexOf(
   const t=await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();return JSON.parse(t)}
 async function applyUpdate(txt){const data=await decodeUpdate(txt);if(!data||(data.kind!=='sportify-update'&&data.kind!=='sportify-daten'))throw new Error('Unbekannter Inhalt.');
   applyData(data);const g=data.garmin||{},last=k=>{const L=g[k]||[];return L.length?de(L[L.length-1].date,false):null};
-  const p=[];if(last('scale'))p.push('Waage bis '+last('scale'));if(last('sleep'))p.push('Schlaf bis '+last('sleep'));if(last('days'))p.push('Schritte bis '+last('days'));if(data.plan)p.push('Plan');
+  const p=[];if(last('scale'))p.push('Waage bis '+last('scale'));if(last('sleep'))p.push('Schlaf bis '+last('sleep'));if(last('days'))p.push('Schritte bis '+last('days'));if(data.plan)p.push('Plan');if(data.days){const n=Object.keys(data.days).length;if(n)p.push(n===1?'Training '+de(Object.keys(data.days)[0],false)+' nachgetragen':n+' Trainings nachgetragen')}
   closeSheet();render();toast('Update übernommen'+(p.length?': '+p.join(', '):''))}
 async function pasteUpdate(){let txt='';try{if(navigator.clipboard&&navigator.clipboard.readText)txt=await navigator.clipboard.readText()}catch(e){}
   if(txt&&/SPY1\.|#sync=|"sportify-update"/.test(txt)){try{await applyUpdate(txt);return}catch(e){alert('Update fehlgeschlagen: '+e.message);return}}
@@ -990,7 +998,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261020-0350';
+const APP_VER='20261020-0353';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
