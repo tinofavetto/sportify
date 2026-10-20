@@ -300,7 +300,6 @@ const wDn=w=>w==null?0:Math.max(0,w<=10?w-1:w-2.5);
 const TYPE_LABEL={A:'Ganzkörper A',B:'Ganzkörper B',cardio:'Cardio-Mix',interval:'Intervall',rest:'Ruhetag'};
 const TYPE_SHORT={A:'A',B:'B',cardio:'C',interval:'I',rest:'R'};
 const TYPE_CLS={A:'tA',B:'tB',cardio:'tC',interval:'tI',rest:'tR'};
-const BACK={ok:'ok',tight:'leicht verspannt',stich:'Stich / Schmerz'};
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1800)}
 
 // ===== State =====
@@ -381,12 +380,8 @@ function sleepInfo(d){
 function mods(d){
   const dy=peek(d);const m={factor:1,setDelta:0,setFactor:1,skipLegs:false,notes:[],tags:[]};
   if(isDeload(d)){m.setFactor=PLAN.deload.setFactor;m.factor*=PLAN.deload.weightFactor;m.tags.push('Deload');m.notes.push('Deload-Woche: etwa 60 % der Sätze, Gewichte 10 % leichter.')}
-  const so=dy.soreness;
-  let sore3=false;
-  if(so===3){m.factor*=0.9;sore3=true;m.tags.push('Muskelkater 3');m.notes.push('Muskelkater 3: Gewichte 10 % leichter.')}
-  if(so>=4){m.skipLegs=true;m.upper=0.8;m.setDelta=-1;m.tags.push('Muskelkater '+so);m.notes.push('Muskelkater '+so+': Beine auslassen, Oberkörper 20 % leichter mit einem Satz weniger – oder nur lockerer Walk.')}
   const sl=sleepInfo(d);
-  if(sl.low&&!sore3&&!(so>=4)&&dy.sleepLight!==false){m.factor*=0.9;m.tags.push('Schlaf/HRV');m.notes.push('Schlaf/HRV niedrig (neu, von Sporty): heute leichter, Gewichte 10 % leichter.')}
+  if(sl.low&&dy.sleepLight!==false){m.factor*=0.9;m.tags.push('Schlaf/HRV');m.notes.push('Schlaf/HRV niedrig (neu, von Sporty): heute leichter, Gewichte 10 % leichter.')}
   return m;
 }
 // Progression aus dem letzten in der App geloggten Satzblock
@@ -505,37 +500,32 @@ function renderTraining(){
   if(d!==TODAY)h+=`<div style="text-align:center;margin-top:6px"><button class="chip sm" data-act="today">Zu heute springen</button></div>`;
   // Check-in
   const sc=scaleFor(d),lsc=lastScale(d);
-  h+=`<div class="card checkin"><label class="ci">Rücken <select data-ci="back" aria-label="Rücken heute">${Object.entries(BACK).map(([k,v])=>`<option value="${k}" ${(dy.back||'ok')===k?'selected':''}>${v}</option>`).join('')}</select></label>
-  <label class="ci">Muskelkater <select data-ci="sore" aria-label="Muskelkater">${[0,1,2,3,4,5].map(i=>`<option value="${i}" ${(dy.soreness??0)===i?'selected':''}>${i}</option>`).join('')}</select><span class="mut small">/5</span></label>
-  <div class="mut small ci-w">${sc?`Waage heute: <b>${nf(sc.kg,1)} kg</b>${sc.fat!=null?' · '+nf(sc.fat,1)+' % Fett':''}`:lsc?`Waage zuletzt ${de(lsc.date,false)}: ${nf(lsc.kg,1)} kg`:'Gewicht kommt automatisch von der Garmin-Waage.'}</div></div>`;
+  h+=`<div class="card checkin"><div class="mut small ci-w">${sc?`Waage heute: <b>${nf(sc.kg,1)} kg</b>${sc.fat!=null?' · '+nf(sc.fat,1)+' % Fett':''}`:lsc?`Waage zuletzt ${de(lsc.date,false)}: ${nf(lsc.kg,1)} kg`:'Gewicht kommt automatisch von der Garmin-Waage.'}</div></div>`;
   // Schlaf & Schritte
   const sl=sleepInfo(d),st=stepsFor(d);
   h+=`<div class="card"><div class="row sp"><h3>Schlaf & Erholung</h3><span class="badge new">neu, von Sporty</span></div>`;
   h+=`<div class="grid2"><div><div class="lbl">Schlafwert letzte Nacht</div><div class="title" style="font-size:24px;${sl.score!=null&&sl.score<PLAN.sleep.scoreLow?'color:var(--warn)':''}">${sl.score??'–'}</div></div><div><div class="lbl">HRV (Basis ~${PLAN.sleep.hrvBase})</div><div class="title" style="font-size:24px;${sl.hrv!=null&&sl.hrv<PLAN.sleep.hrvLow?'color:var(--warn)':''}">${sl.hrv!=null?nf(sl.hrv,0)+' ms':'–'}</div></div></div>`;
-  h+=`<div class="mut small">${sl.src?('Quelle: '+sl.src+(sl.g&&sl.g.sleep_hours?' · '+nf(sl.g.sleep_hours,1)+' h':'')):'Keine Garmin-Daten für diese Nacht im Snapshot.'} <a href="#" data-act="sleepedit">eintragen</a></div>`;
-  if(sl.low){const off=dy.sleepLight===false;h+=`<div class="banner warn">Schlaf/HRV deutlich unter deiner Basis → heute <b>leichter trainieren</b> (Gewichte 10 % leichter, wie Muskelkater-Regel).<div class="chips"><button class="chip sm ${!off?'on':''}" data-act="sleeplight" data-v="1">leichter (−10 %)</button><button class="chip sm ${off?'on':''}" data-act="sleeplight" data-v="0">trotzdem normal</button></div></div>`}
+  h+=`<div class="mut small">${sl.src?('Quelle: '+sl.src+(sl.g&&sl.g.sleep_hours?' · '+nf(sl.g.sleep_hours,1)+' h':'')):'Keine Garmin-Daten für diese Nacht im Snapshot.'} <a href="#" data-act="sleepedit">eintragen</a></div>${d===TODAY?gsyncHint():''}`;
+  if(sl.low){const off=dy.sleepLight===false;h+=`<div class="banner warn">Schlaf/HRV deutlich unter deiner Basis → heute <b>leichter trainieren</b> (Gewichte 10 % leichter).<div class="chips"><button class="chip sm ${!off?'on':''}" data-act="sleeplight" data-v="1">leichter (−10 %)</button><button class="chip sm ${off?'on':''}" data-act="sleeplight" data-v="0">trotzdem normal</button></div></div>`}
   h+=`<div class="mut small">Für 5 Uhr Training: Licht aus gegen <b>${PLAN.sleep.bedtime}</b>.</div>`;
   const goal=PLAN.steps.min;
   if(st){const pct=Math.min(100,st.steps/goal*100);h+=`<div class="lbl" style="margin-top:10px">Schritte ${st.is_partial?'(bis Snapshot, Tag läuft noch)':''}</div><div class="row sp"><b>${st.steps.toLocaleString('de-DE')}</b><span class="mut small">Ziel 9.000–10.000</span></div><div style="height:8px;background:var(--chip);border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:${st.steps>=goal?'var(--acc)':'#d9a441'}"></i></div>${st.steps<goal?`<div class="hint">Noch ${(goal-st.steps).toLocaleString('de-DE')} Schritte: 20–30 Min Abendspaziergang einplanen.</div>`:'<div class="hint">Schrittziel erreicht 👍</div>'}`}
   else h+=`<div class="mut small" style="margin-top:8px">Schrittziel 9.000–10.000. Unter 9.000? 20–30 Min Abendspaziergang. (Garmin-Schritte im Snapshot nur bis ${GARMIN?de(GARMIN.snapshot):'–'}.)</div>`;
   h+=`</div>`;
   // Banner
-  if(dy.back==='stich'){h+=`<div class="banner bad"><b>Stich / Schmerz: Training sofort abbrechen.</b><br>${PLAN.rules.back}</div>`}
-  else if(dy.back==='tight')h+=`<div class="banner warn">Rücken leicht verspannt: ruhig starten, keine schwere Rückenlast. Bei Stich sofort abbrechen.</div>`;
   if(m.notes.length)h+=m.notes.map(n=>`<div class="banner ${n.startsWith('Deload')?'info':'warn'}">${esc(n)}</div>`).join('');
   if(!isDeload(d)){const nd=nextDeload(d);const dd=diffDays(d,nd);if(dd>0&&dd<=7)h+=`<div class="banner info">Deload-Woche ab ${de(nd)}.</div>`}
   // Session
   h+=`<div class="kicker">${dy.type?'Heute':'Heute dran'}</div><div class="title" id="sesTitle">${TYPE_LABEL[t]}</div>`;
   h+=`<div class="chips">${['A','B','cardio','interval','rest'].map(k=>`<button class="chip sm ${k===t?'on':''}" data-act="type" data-v="${k}">${TYPE_LABEL[k]}</button>`).join('')}</div>`;
-  if(dy.back!=='stich'){
+  {
     if(isStrength(t))h+=renderStrength(t,d);
     else if(t==='cardio')h+=renderCardio(d);
     else if(t==='interval')h+=renderInterval(d);
     else h+=`<div class="card"><h3>Ruhetag</h3><div class="mut">${PLAN.sessions.rest.desc}</div>${PLAN.supplements?`<div class="mut small" style="margin-top:6px">${esc(PLAN.supplements.daily)}</div>`:''}</div>`;
     if(PLAN.supplements&&t!=='rest')h+=`<div class="card small"><b>Morgenroutine</b><div class="mut">Vorher: ${esc(PLAN.supplements.pre)}<br>Danach: ${esc(PLAN.supplements.post)}<br>${esc(PLAN.supplements.daily)}</div></div>`;
-    if(dy.soreness>=4&&isStrength(t))h+=`<div class="card"><b>Alternative:</b> nur lockerer Walk. <button class="chip sm" data-act="type" data-v="cardio">Zu Cardio wechseln</button></div>`;
     h+=renderExtras(d,t);
-  }else h+=`<div class="card mut">Einheit ausgeblendet, weil „Stich / Schmerz“ gewählt ist. Tippe oben einen anderen Rücken-Status, falls das ein Versehen war.</div>`;
+  }
   // Notiz + Feedback
   h+=`<div class="card"><div class="lbl">Notiz (optional)</div><textarea data-act="note" placeholder="z. B. Fußspitzen 12 kg, Gerät besetzt …">${esc(dy.note||'')}</textarea></div>`;
   h+=renderFeedback(d);
@@ -558,7 +548,6 @@ function exCard(it,d,idx){
   if(p.sets.some(x=>x[0]==null)&&!noW)h+=`<div class="mut small">Kein Startgewicht im Plan – beim ersten Satz eintragen.</div>`;
   if(p.src==='prog')h+=`<div class="hint">Empfehlung aus deiner letzten Einheit (Progressionsregel).</div>`;
   if(p.src==='stall')h+=`<div class="banner warn small">3 Einheiten ohne Fortschritt: 10 % runter und neu hocharbeiten.</div>`;
-  if(p.skip){h+=`<div class="banner warn small">Heute auslassen (Muskelkater-Regel: Beine auslassen).</div></div>`;return h}
   p.sets.forEach(([pw,pr],i)=>{
     const s=stored[i]||{};const w=s.w!==undefined?s.w:pw,r=s.r!==undefined?s.r:pr,done=!!s.done;
     const foc=FOCUS&&FOCUS.ex===it.ex&&FOCUS.i===i;
@@ -665,7 +654,6 @@ function renderFeedback(d){
   const f=peek(d).feedback||{};
   return `<div class="card" style="border:2px solid var(--acc)"><h3>Feedback an Sporty</h3><div class="mut small">Antippen, optional kurze Notiz – dann mit einem Tipp an mich schicken.</div>
   <div class="lbl">Gefühl</div><div class="chips">${[1,2,3,4,5].map(i=>`<button class="chip sm ${f.feel===i?'on':''}" data-act="fb" data-f="feel" data-v="${i}">${i}</button>`).join('')}</div><div class="mut small">1 = sehr schwer · 3 = ok · 5 = top</div>
-  <div class="lbl">Rücken nach dem Training</div><div class="chips">${Object.entries(BACK).map(([k,v])=>`<button class="chip sm ${k==='stich'?'bad':''} ${f.back===k?'on':''}" data-act="fb" data-f="back" data-v="${k}">${v}</button>`).join('')}</div>
   <div class="lbl">Energie</div><div class="chips">${Object.entries(ENERGY).map(([k,v])=>`<button class="chip sm ${f.energy===k?'on':''}" data-act="fb" data-f="energy" data-v="${k}">${v}</button>`).join('')}</div>
   <div class="lbl">Kurze Notiz (optional)</div><input data-act="fbnote" value="${esc(f.note||'')}" placeholder="z. B. Knie ok, Hip Thrust leicht">
   ${(()=>{const dy=peek(d),pend=dy.sid&&outbox()[dy.sid];return `<button class="btn big" style="margin-top:12px" data-act="savesend">💾 Speichern${hookCfg()?" & an Sporty senden":""}</button><div class="mut small" style="margin-top:4px;text-align:center">${pend?"⏳ Noch nicht gesendet – wird automatisch erneut versucht":dy.sentAt?"✓ An Sporty gesendet "+new Date(dy.sentAt).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})+(dy.sentRev>1?" (Update "+dy.sentRev+")":"")+" – erneut speichern schickt ein Update":hookCfg()?"Schickt die Einheit automatisch an Sporty.":"Sporty-Empfang im Menü (⋯) einrichten, dann geht es automatisch."}</div>`})()}
@@ -677,7 +665,7 @@ function sessionText(d){
   const dy=peek(d),t=typeOf(d),wd=parse(d).getDay(),m=mods(d),sl=sleepInfo(d);
   const L=[];
   L.push(`Sportify ${WD[wd]} ${de(d)} · ${TYPE_LABEL[t]}${m.tags.length?' ['+m.tags.join(', ')+']':''}`);
-  const a=[];const sc=scaleFor(d);if(sc)a.push('Waage '+nf(sc.kg,1)+' kg'+(sc.fat!=null?' / '+nf(sc.fat,1)+' % Fett':''));else if(dy.weight!=null)a.push('Gewicht '+nf(dy.weight,1)+' kg');a.push('Rücken '+BACK[dy.back||'ok']);a.push('Muskelkater '+(dy.soreness??0)+'/5');
+  const a=[];const sc=scaleFor(d);if(sc)a.push('Waage '+nf(sc.kg,1)+' kg'+(sc.fat!=null?' / '+nf(sc.fat,1)+' % Fett':''));else if(dy.weight!=null)a.push('Gewicht '+nf(dy.weight,1)+' kg');
   if(sl.score!=null||sl.hrv!=null)a.push('Schlaf '+(sl.score??'–')+' / HRV '+(sl.hrv!=null?nf(sl.hrv,0):'–'));
   const st=stepsFor(d);if(st)a.push('Schritte '+st.steps.toLocaleString('de-DE')+(st.is_partial?' (bisher)':''));
   if(a.length)L.push(a.join(' · '));
@@ -690,7 +678,7 @@ function sessionText(d){
   if(t==='interval'&&dy.interval){const iv=dy.interval,r=intervalRec(d);L.push('Intervall: '+[0,1,2,3].map(i=>{const x=(iv.rounds&&iv.rounds[i])||{};return `R${i+1} ${nf(x.incline??r.incline[i])} % · ${nf(x.kmh??r.kmh)} km/h${x.hr!=null?' · Puls '+x.hr:''}`}).join(' | ')+(iv.rpe?' · RPE '+iv.rpe:''))}
   for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;L.push(`${PLAN.extras[k]?PLAN.extras[k].name:k}: ${p.min??''} Min${p.hr!=null?' · Puls Ø '+p.hr:''}${p.note?' · '+p.note:''}${p.done?' ✓':''}`)}
   if(dy.note)L.push('Notiz: '+dy.note);
-  const f=dy.feedback||{};const fb=[];if(f.feel)fb.push('Gefühl '+f.feel+'/5 ('+FEEL[f.feel]+')');if(f.back)fb.push('Rücken nachher '+BACK[f.back]);if(f.energy)fb.push('Energie '+ENERGY[f.energy]);if(f.note)fb.push(f.note);
+  const f=dy.feedback||{};const fb=[];if(f.feel)fb.push('Gefühl '+f.feel+'/5 ('+FEEL[f.feel]+')');if(f.energy)fb.push('Energie '+ENERGY[f.energy]);if(f.note)fb.push(f.note);
   if(fb.length)L.push('Feedback: '+fb.join(' · '));
   const n=S.nutrition[d];if(n)L.push(`Ernährung: ${n.kcal??'–'} kcal · ${n.protein??'–'} g Eiweiß`);
   return L.join('\n');
@@ -734,7 +722,7 @@ function dayDetail(k){
 function renderPlanView(){
   const P=PLAN;let h=`<div class="card"><h2>Plan</h2><div class="mut small">Ziel: ${esc(P.goal.text)}<br>Schwerpunkte: ${esc(P.goal.focus)}<br>Einschränkungen: ${esc(P.goal.limits)}<br>Training: ${esc(P.goal.time)} · Ernährung: ${esc(P.goal.food)}</div>
   <div class="lbl">Wochenplan</div>${[1,2,3,4,5,6,0].map(i=>`<div class="kv"><span>${WDL[i]}</span><span style="text-align:right;max-width:65%">${esc(P.week[i])}${[2,4,6,0].includes(i)?' <span class="badge new">+ Peloton Z2 optional</span>':''}</span></div>`).join('')}
-  <div class="lbl">Regeln</div>${Object.entries({Progression:P.rules.progression,Intensität:P.rules.intensity,'Muskelkater-Regel':P.rules.soreness,'Rücken-Regel':P.rules.back,Deload:P.rules.deload}).map(([k,v])=>`<div class="small" style="margin:6px 0"><b>${k}:</b> ${esc(v)}</div>`).join('')}
+  <div class="lbl">Regeln</div>${Object.entries({Progression:P.rules.progression,Intensität:P.rules.intensity,Deload:P.rules.deload}).map(([k,v])=>`<div class="small" style="margin:6px 0"><b>${k}:</b> ${esc(v)}</div>`).join('')}
   ${P.warmup?`<div class="small" style="margin:6px 0"><b>Aufwärmen:</b> ${esc(P.warmup)}</div><div class="small" style="margin:6px 0">${esc(P.supersetNote)}</div><div class="small" style="margin:6px 0">${esc(P.notInPlan)}</div>`:''}
   <div class="small" style="margin:6px 0"><span class="badge new">neu, von Sporty</span> <b>Schritte:</b> 9.000–10.000 pro Tag, darunter 20–30 Min Abendspaziergang.</div>
   <div class="small" style="margin:6px 0"><span class="badge new">neu, von Sporty</span> <b>Schlaf:</b> Schlafenszeit ca. ${P.sleep.bedtime} für 5 Uhr Training. HRV unter ~${P.sleep.hrvLow} (Basis ~${P.sleep.hrvBase}) oder Schlafwert unter ${P.sleep.scoreLow} → Gewichte 10 % leichter.</div>
@@ -814,7 +802,7 @@ function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut smal
 function renderGarmin(){
   if(!GARMIN){$('#view').innerHTML=badgeCard()+'<div class="card">Keine Garmin-Daten importiert.</div>'+dataCard();loadBadges();return}
   const G=GARMIN,sl=G.sleep.filter(x=>x.sleep_score!=null).slice(-14),days=G.days.slice(-14);
-  let h=`<div class="banner info small">Garmin-Snapshot vom ${de(G.snapshot)}. Neue Daten: im Chat bei Sporty anfragen und Datei neu importieren.</div>`;
+  let h=gsyncTime()?`<div class="mut small" style="margin:6px 2px">Garmin aktualisiert: ${gsyncTime()} · kommt automatisch von Sporty</div>`:`<div class="banner info small">Garmin-Snapshot vom ${de(G.snapshot)}. Neue Daten kommen automatisch, sobald der Sporty-Empfang (⋯) eingerichtet ist – sonst per Update-Code.</div>`;
   const last=sl[sl.length-1];
   h+=badgeCard();
   h+=`<div class="card"><h2>Schlaf</h2>${last?`<div class="grid3"><div><div class="lbl">Score ${de(last.date,false)}</div><b style="font-size:22px">${last.sleep_score}</b></div><div><div class="lbl">HRV</div><b style="font-size:22px">${nf(last.avg_overnight_hrv,0)}</b></div><div><div class="lbl">Dauer</div><b style="font-size:22px">${nf(last.sleep_hours,1)} h</b></div></div>`:''}
@@ -887,7 +875,7 @@ function render(){
 }
 // Gezielt nur eine Übungskarte neu zeichnen (Stepper/RIR) – kein Neuaufbau der Seite.
 function renderCard(exId){
-  const d=CUR,t=typeOf(d);if(TAB!=='training'||peek(d).back==='stich')return render();
+  const d=CUR,t=typeOf(d);if(TAB!=='training')return render();
   const els=document.querySelectorAll('#ex-'+CSS.escape(exId));if(els.length!==1)return render();
   let it=null,idx=0;
   if(isStrength(t)){const k=PLAN.sessions[t].items.findIndex(x=>x.ex===exId);if(k>=0){it=PLAN.sessions[t].items[k];idx=k}}
@@ -932,8 +920,6 @@ document.addEventListener('click',e=>{
     case 'today':CUR=TODAY;render();break;
     case 'paste':pasteUpdate();break;
     case 'pasteok':applyUpdate($('#updTxt').value).catch(err=>alert('Update fehlgeschlagen: '+err.message));break;
-    case 'back':{const dy=day(d);dy.back=v;save();if(v==='stich'&&dy.back){vib([200,100,200]);if(RUN)stopRunner()}render();break}
-    case 'sore':{const dy=day(d);dy.soreness=+v;save();render();break}
     case 'sleeplight':day(d).sleepLight=v==='1';save();render();break;
     case 'sleepedit':{const sc=num(prompt('Schlafwert (Garmin, 0–100)',sleepInfo(d).score??''));const hv=num(prompt('HRV (ms)',sleepInfo(d).hrv??''));const dy=day(d);if(sc!=null)dy.sleepScore=sc;if(hv!=null)dy.hrv=hv;save();render();break}
     case 'type':{const dy=day(d);dy.type=v;FOCUS=null;save();render();break}
@@ -982,8 +968,6 @@ document.addEventListener('input',e=>{const t=e.target;const a=t.dataset.act;if(
 });
 $('#tPlus').onclick=()=>addTime(15);$('#tPause').onclick=togglePause;$('#tSkip').onclick=()=>nextPhase(false);$('#tStop').onclick=stopRunner;
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
-document.addEventListener('change',e=>{const t=e.target;if(!t.dataset||!t.dataset.ci)return;const dy=day(CUR);
-  if(t.dataset.ci==='back'){dy.back=t.value;save();if(t.value==='stich'){vib([200,100,200]);if(RUN)stopRunner()}}else{dy.soreness=+t.value;save()}render()});
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
 // Kein Zoom: Pinch (iOS gesture*) und Doppeltipp blocken
 ['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
@@ -998,7 +982,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261020-0427';
+const APP_VER='20261020-0619';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1054,8 +1038,7 @@ function sessionPayload(d){
     if(sets.length)ex.push({id:it.ex,name:EX[it.ex]?EX[it.ex].n:it.ex,block:it.block,plannedSets:planned(it,d).sets.length,sets})}
   const f=dy.feedback||{};
   const s={id:sessionId(d),revision:(dy.sentRev||0)+1,date:d,type:t,name:TYPE_LABEL[t]||t,exercises:ex,
-    ruecken:BACK[dy.back||'ok'],muskelkater:dy.soreness??0,
-    feedback:{gefuehl:f.feel??null,ruecken:f.back?BACK[f.back]:null,energie:f.energy?ENERGY[f.energy]:null,notiz:f.note||null},
+    feedback:{gefuehl:f.feel??null,energie:f.energy?ENERGY[f.energy]:null,notiz:f.note||null},
     notiz:dy.note||null,durationMin:t0!=null&&t1>t0?Math.round((t1-t0)/60000):null,
     modified:!!dy.modded,supersaetze:!dy.noSS,extras:dy.extras||[]};
   if(dy.cardio)s.cardio=dy.cardio;if(dy.interval)s.interval=dy.interval;if(dy.free)s.free=dy.free;
@@ -1167,14 +1150,19 @@ function b64dec(s){const bin=atob(String(s).replace(/\s/g,''));const u=new Uint8
 function bKey(b){return b.name+'|'+(b.date||'')}
 function bRow(x){const p=Math.max(0,Math.min(100,x.percent||0));
   return `<div class="bdg"><div class="bt"><span>${esc(x.name)}</span><span class="mut small">${[x.percent!=null?Math.round(p)+' %':'',x.notStarted?'ab '+de(x.start,false):x.daysLeft!=null?x.daysLeft+' T':''].filter(Boolean).join(' · ')}</span></div>${x.percent!=null?`<div class="pbar"><i style="width:${p}%"></i></div>`:''}${x.todo?`<div class="mut small">${esc(x.todo)}</div>`:''}</div>`}
+function evRow(x){const today=x.daysUntil===0;return `<div class="bdg"><div class="bt"><span>${today?'🎯 ':''}${esc(x.name)}</span><span class="mut small">${esc(x.when||'')}${x.points?' · '+x.points+' P':''}</span></div>${x.percent!=null?`<div class="pbar"><i style="width:${Math.max(0,Math.min(100,x.percent))}%"></i></div>`:''}<div class="mut small">${esc(x.how||'')}${x.confidence==='niedrig'?' (unsicher)':''}</div></div>`}
+function glRow(x){return `<div class="bdg"><div class="bt"><span>${esc(x.name)}</span><span class="mut small">${x.points} P</span></div>${x.percent!=null?`<div class="pbar"><i style="width:${Math.max(0,Math.min(100,x.percent))}%"></i></div>`:''}<div class="mut small">${esc(x.todo||x.how||'')}</div></div>`}
 function badgeCard(){
   if(!hookCfg())return `<div class="card" id="badgeCard"><h2>🏅 Badges</h2><div class="mut small">Sporty-Empfang im Menü (⋯) einrichten – dann erscheinen hier deine Garmin-Badges und Ziele.</div><button class="btn sec" style="margin-top:8px" data-act="hookcfg">📡 Sporty-Empfang einrichten</button></div>`;
   const D=badgeData();
   if(!D)return `<div class="card" id="badgeCard"><h2>🏅 Badges</h2><div class="mut small">${BADGE_ERR?esc(BADGE_ERR):BADGE_BUSY?'Lade …':'Noch keine Badge-Daten von Sporty.'}</div><button class="btn sec" style="margin-top:8px" data-act="badgeload">↻ Laden</button></div>`;
-  const fr=D.lowHanging||[],stl=D.stretch||[],no=(D.active||[]).filter(a=>!a.fits),av=(D.available||[]).filter(a=>a.fits);
+  const so=(D.soon||[]).filter(x=>x.fits!==false),sn=new Set(so.map(x=>x.name)),fr=(D.lowHanging||[]).filter(x=>!sn.has(x.name)),stl=D.stretch||[],no=(D.active||[]).filter(a=>!a.fits),av=(D.available||[]).filter(a=>a.fits);
+  const gl=(D.global||[]).filter(x=>x.fits!==false&&(x.effort||3)<=2).slice(0,4);
   return `<div class="card" id="badgeCard"><div class="bt"><h2 style="margin:0">🏅 Badges</h2><button class="iconbtn" data-act="badgeload" aria-label="Aktualisieren">${BADGE_BUSY?'…':'↻'}</button></div>
   <div class="grid3" style="margin:6px 0 4px"><div><div class="lbl">Gesamt</div><b style="font-size:22px">${(D.earned&&D.earned.total||0).toLocaleString('de-DE')}</b></div><div><div class="lbl">Diesen Monat</div><b style="font-size:22px">${D.earned&&D.earned.thisMonth||0}</b></div><div><div class="lbl">Offen</div><b style="font-size:22px">${fr.length+stl.length}</b></div></div>
+  ${so.length?`<div class="lbl" style="margin-top:10px">Heute/diese Woche möglich</div>${so.map(evRow).join('')}`:''}
   ${fr.length?`<div class="lbl" style="margin-top:10px">Nächste Ziele</div>${fr.map(bRow).join('')}`:''}
+  ${gl.length?`<div class="lbl" style="margin-top:10px">Leicht machbar</div>${gl.map(glRow).join('')}`:''}
   ${stl.length?`<div class="lbl" style="margin-top:10px">Mit Extra-Einsatz</div>${stl.map(bRow).join('')}`:''}
   ${av.length?`<div class="lbl" style="margin-top:10px">Noch beitreten (Garmin Connect)</div>${av.map(a=>`<div class="mut small">${esc(a.name)}</div>`).join('')}`:''}
   ${no.length?`<details style="margin-top:10px"><summary class="mut small">Passt gerade nicht (${no.length})</summary>${no.map(a=>`<div class="mut small">${esc(a.name)} · ${a.percent!=null?Math.round(a.percent)+' %':'–'}</div>`).join('')}</details>`:''}
@@ -1202,6 +1190,32 @@ async function loadBadges(force){const c=hookCfg();if(!c||c.mode!=='gh'||BADGE_B
 document.addEventListener('click',e=>{const t=e.target.closest('[data-act="badgeload"]');if(t)loadBadges(true)});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadBadges()});
 setTimeout(()=>loadBadges(),2500);
+
+// ===== Garmin automatisch: sportify-logs/garmin/latest.json (gleiches Format wie ein Update-Code) =====
+// Holt Schlaf, Waage, Schritte, Aktivitäten und nachgetragene Garmin-Trainings beim Start und beim Zurückkehren in die App.
+// Ohne GitHub-Schlüssel passiert nichts (dann wie bisher per Update-Code). Trainings füllen nur leere Tage (applyData).
+const GSYNC_KEY='sportify.gsync';let GSYNC_BUSY=false;
+function gsyncInfo(){try{return JSON.parse(localStorage.getItem(GSYNC_KEY)||'null')}catch(e){return null}}
+function gsyncTime(){const i=gsyncInfo();if(!i||!i.updatedAt)return null;const d=new Date(i.updatedAt);if(isNaN(d))return null;
+  const same=iso(d)===TODAY;return same?d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}):d.toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function gsyncHint(){const t=gsyncTime();return t?`<div class="mut small" id="gsyncHint" style="margin-top:4px">Garmin aktualisiert: ${t}</div>`:''}
+function gsyncBusyUI(){const a=document.activeElement;return RUN||$('#sheet').classList.contains('show')||(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))}
+async function loadGarmin(force){const c=hookCfg();if(!c||c.mode!=='gh'||GSYNC_BUSY||!S||!S.plan)return;
+  const i=gsyncInfo()||{};if(!force&&i.checkedAt&&Date.now()-i.checkedAt<3*60e3)return;
+  GSYNC_BUSY=true;
+  try{const r=await ghFetch(c,'garmin/latest.json',{method:'GET'},'?ref=main');if(!r.ok)return;   // 404/kein Zugriff: still bleiben
+    const j=await r.json();
+    if(j.sha&&j.sha===i.sha){i.checkedAt=Date.now();localStorage.setItem(GSYNC_KEY,JSON.stringify(i));return}
+    let txt=j.content?b64dec(j.content):null;
+    if(!txt)return;   // Datei > 1 MB liefert die Contents-API ohne Inhalt – push-garmin.py hält sie klein (60 Tage)
+    const data=JSON.parse(txt);if(!data||data.kind!=='sportify-update')return;
+    applyData(data);
+    localStorage.setItem(GSYNC_KEY,JSON.stringify({sha:j.sha||null,updatedAt:data.updatedAt||data.exported||null,checkedAt:Date.now()}));
+    if(!gsyncBusyUI())render();else{const h=$('#gsyncHint');if(h)h.outerHTML=gsyncHint()}
+  }catch(e){/* offline o. ä.: still, letzter Stand bleibt */}
+  finally{GSYNC_BUSY=false}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadGarmin()});
+setTimeout(()=>loadGarmin(true),1200);
 
 </script>
 </body>
