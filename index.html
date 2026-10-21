@@ -123,6 +123,18 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 .rnd input{padding:8px;text-align:center}
 .toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + var(--sat));background:#222;color:#fff;padding:10px 16px;border-radius:12px;z-index:60;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
+.tgl{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:15px}.tgl input{width:20px;height:20px;flex:none;margin:0}
+.abl.sm{padding:6px 10px;font-size:14px}
+.exbtns{display:flex;flex-direction:column;align-items:flex-end}
+.devline{font-size:13px;background:#eef4ff;border:1px solid #cddcf5;color:#1f3f6e;border-radius:10px;padding:6px 10px;margin-top:6px}
+.set.adj{background:#fff8e1;margin:0 -14px;padding:10px 14px 6px;box-shadow:inset 3px 0 0 #e0a800}
+.adjrow{display:flex;align-items:center;gap:8px;margin:6px 0 0 28px;font-size:13px;flex-wrap:wrap}.adjrow .chip{margin-left:auto}
+.badge.adjb{background:#e0a800;color:#fff}
+.rir .chip.def{border-style:dashed;border-color:var(--acc);color:var(--acc)}
+.moodtag{margin:4px 0 0 28px;font-size:12px;font-weight:600}.m-stark{color:var(--acc)}.m-zaeh{color:#8a5a00}.m-neutral{color:var(--mut)}
+.set{position:relative}
+.stamp{display:inline-block;margin:6px 0 2px;transform:rotate(-4deg);font:900 15px/1 "Arial Black",Impact,sans-serif;letter-spacing:1px;color:#c0262d;border:3px solid #c0262d;border-radius:6px;padding:4px 8px;background:rgba(255,247,225,.92);box-shadow:0 0 0 2px rgba(255,247,225,.92);text-shadow:1px 1px 0 #f5d48a;pointer-events:none;animation:stampIn .35s cubic-bezier(.2,1.6,.4,1)}
+@keyframes stampIn{from{transform:rotate(-4deg) scale(2);opacity:0}}
 .numdlg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.35);display:none;align-items:flex-start;justify-content:center;padding:calc(var(--sat) + 70px) 16px 0}
 .numdlg.show{display:flex}
 .numdlg .in{background:var(--card);border-radius:18px;padding:14px;width:100%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
@@ -399,7 +411,7 @@ function mods(d){
 // Progression aus dem letzten in der App geloggten Satzblock
 function progress(sets,it,ex){
   const lo=it.lo,hi=it.hi;const legs=!!ex.legs;
-  const w=sets.filter(s=>s.done&&s.r!=null);
+  const w=sets.filter(s=>s&&s.done&&s.r!=null);
   if(!w.length)return null;
   const allTop=w.every(s=>s.r>=hi);
   const rirs=w.map(s=>s.rir).filter(x=>x!=null);
@@ -407,23 +419,30 @@ function progress(sets,it,ex){
   const anyFail=w.some(s=>s.rir===0&&s.r<hi);
   return w.map(s=>{
     if(s.w==null)return[null,allTop?lo:Math.min(hi,s.r+1)];
-    if(allTop||rirHigh){const inc=s.w<10?1:(legs?5:2.5);return[s.w+inc,lo]}
+    if(allTop||rirHigh){// Steigerung am Gerät abrunden; reicht der Schritt nicht, erst Wdh. rauf (außer Wdh. schon klar über Ziel → nächster Schritt)
+      if(!stepCfg(it.ex)){const inc=s.w<10?1:(legs?5:2.5);return[s.w+inc,lo]}
+      const nw=gearInc(it.ex,s.w);if(nw>s.w+1e-6)return[nw,lo];
+      if(s.r>=hi+3){const up=gearUp(it.ex,s.w);if(up>s.w)return[up,lo]}
+      return[s.w,Math.min(hi+2,s.r+1)]}
     if(anyFail)return[s.w,s.r];
     return[s.w,Math.min(hi,s.r+1)];
   });
 }
-function exHistory(exId,before){
-  const out=[];for(const k of Object.keys(S.days).sort()){if(k>=before)break;const dy=S.days[k];const a=dy.sets&&dy.sets[exId];if(a&&a.some(s=>s.done))out.push({date:k,sets:a,dy})}return out;
+// Historie je Gerät: nur Sätze, die am aktuellen Gerät der Übung gemacht wurden (s.dev; ohne = Original-Gerät)
+function exHistory(exId,before,dv){if(dv===undefined)dv=devId(exId);
+  const out=[];for(const k of Object.keys(S.days).sort()){if(k>=before)break;const dy=S.days[k];const a0=dy.sets&&dy.sets[exId];if(!a0)continue;
+    const a=a0.map(s=>s&&(s.dev||null)===dv?s:null);if(a.some(s=>s&&s.done))out.push({date:k,sets:a,dy})}return out;
 }
 function e1rm(w,r){return w&&r?w*(1+r/30):0}
 function recFor(it,d){
   const ex=EX[it.ex];
   const h=exHistory(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE);
   let base=it.rec.map(a=>a.slice()),src='plan';
+  const dv=devCur(it.ex);if(dv&&!h.length&&dv.startW!=null){base=it.rec.map(([w,r])=>[w==null?null:dv.startW,r]);src='dev'}
   if(h.length){const p=progress(h[h.length-1].sets,it,ex);if(p){base=p;src='prog';
     // Stagnation: 3 Einheiten ohne Fortschritt
     const all=exHistory(it.ex,d).filter(x=>!x.dy.modded);
-    if(all.length>=4){const sc=all.map(x=>Math.max(...x.sets.filter(s=>s.done).map(s=>e1rm(s.w,s.r))));const ref=sc[sc.length-4];if(Math.max(...sc.slice(-3))<=ref){base=base.map(([w,r])=>[w==null?null:roundW(w*0.9),it.lo]);src='stall'}}
+    if(all.length>=4){const sc=all.map(x=>Math.max(...x.sets.filter(s=>s&&s.done).map(s=>e1rm(s.w,s.r))));const ref=sc[sc.length-4];if(Math.max(...sc.slice(-3))<=ref){base=base.map(([w,r])=>[w==null?null:snapW(it.ex,w*0.9,'down'),it.lo]);src='stall'}}
   }}
   // Satzanzahl an Plan anpassen (neue Sätze = letzter Arbeitssatz)
   while(base.length<it.sets)base.push(base[base.length-1].slice());
@@ -436,7 +455,7 @@ function planned(it,d){
   if(m.setFactor<1)n=Math.max(1,Math.round(n*m.setFactor));
   let f=m.factor;let skip=false;
   if(m.skipLegs){if(ex.legs)skip=true;else{f*=m.upper;n=Math.max(1,n+m.setDelta)}}
-  const sets=r.sets.slice(0,n).map(([w,rp])=>[w==null||it.unit==='s'?w:roundW(w*f),rp]);
+  const sets=r.sets.slice(0,n).map(([w,rp])=>[w==null||it.unit==='s'?w:snapW(it.ex,w*f,f<1?'down':'near'),rp]);
   return{sets,skip,src:r.src,mod:f!==1||n!==it.sets};
 }
 function sessionItems(t,d){
@@ -446,6 +465,168 @@ function sessionItems(t,d){
   return items;
 }
 
+// ===== Geräte & Gewichtsschritte =====
+// S.wsteps[key] = {step, start, list:[…]}  (key = Übungs-ID, nach Gerätewechsel „ID@Geräte-ID“) · fehlt = Automatisch (wie bisher:
+//   unter 10 kg 0,5er-Raster, ab 10 kg 1,25er-Raster, +/- 1 bzw. 2,5 kg)
+// S.dev[exId] = aktuelles Ersatzgerät {id,name,cat,mode,since,startW,basedOnW,factor,testFirst,reqId,pending,prev}
+// S.devAll[id] = {name,exId} (für Bestleistungen/Historie je Gerät) · S.devReq = Wechsel-Anfragen an Sporty
+const GEAR_CAT=[ // fam = Bewegungsfamilie, idx = grobe Last relativ zum Standardgerät der Familie (vorsichtig gewählt)
+ {id:'lp-guided',n:'Beinpresse geführt (Steckgewicht)',fam:'knee',idx:1,steps:{step:10,start:10}},
+ {id:'lp-45',n:'45° Beinpresse (Scheiben)',fam:'knee',idx:0.9,steps:{step:2.5,start:0}},
+ {id:'lp-horiz',n:'Beinpresse sitzend (Scheiben)',fam:'knee',idx:0.9,steps:{step:2.5,start:0}},
+ {id:'hack',n:'Hackenschmidt (Hack Squat)',fam:'knee',idx:0.6,steps:{step:2.5,start:0}},
+ {id:'squat-bb',n:'Back Squat Langhantel',fam:'knee',idx:0.45,steps:{step:2.5,start:20}},
+ {id:'frontsquat-bb',n:'Front Squat Langhantel',fam:'knee',idx:0.38,steps:{step:2.5,start:20}},
+ {id:'smith-squat',n:'Smith Machine Kniebeuge',fam:'knee',idx:0.5,steps:{step:2.5,start:0}},
+ {id:'goblet',n:'Goblet Squat (Kurzhantel)',fam:'knee',idx:0.2,steps:{step:2,start:2}},
+ {id:'bss-db',n:'Bulgarian Split Squat (Kurzhanteln)',fam:'knee',idx:0.12,steps:{step:2,start:2}},
+ {id:'lunge-db',n:'Ausfallschritte (Kurzhanteln)',fam:'knee',idx:0.12,steps:{step:2,start:2}},
+ {id:'bench-machine',n:'Bankdrücken Maschine (Steckgewicht)',fam:'press',idx:1,steps:{step:5,start:5}},
+ {id:'chestpress',n:'Brustpresse Maschine',fam:'press',idx:1,steps:{step:5,start:5}},
+ {id:'bench-bb',n:'Bankdrücken Langhantel',fam:'press',idx:0.8,steps:{step:2.5,start:20}},
+ {id:'bench-smith',n:'Bankdrücken Smith Machine',fam:'press',idx:0.8,steps:{step:2.5,start:0}},
+ {id:'bench-db',n:'Bankdrücken Kurzhantel',fam:'press',idx:0.35,steps:{step:2,start:2}},
+ {id:'incline-db',n:'Schrägbankdrücken Kurzhantel',fam:'press',idx:0.3,steps:{step:2,start:2}},
+ {id:'latpull',n:'Latzug Maschine (Kabel)',fam:'pull',idx:1,steps:{step:5,start:5}},
+ {id:'row-cable',n:'Rudern Kabel sitzend',fam:'pull',idx:1,steps:{step:5,start:5}},
+ {id:'row-machine',n:'Rudermaschine brustgestützt',fam:'pull',idx:1,steps:{step:5,start:5}},
+ {id:'row-db',n:'Kurzhantelrudern einarmig',fam:'pull',idx:0.4,steps:{step:2,start:2}},
+ {id:'hipthrust-bb',n:'Hip Thrust Langhantel',fam:'hinge',idx:1,steps:{step:2.5,start:20}},
+ {id:'hipthrust-machine',n:'Hip Thrust Maschine',fam:'hinge',idx:0.8,steps:{step:5,start:5}},
+ {id:'glutebridge-smith',n:'Glute Bridge Smith Machine',fam:'hinge',idx:0.9,steps:{step:2.5,start:0}},
+ {id:'legcurl-lying',n:'Beinbeuger liegend (Maschine)',fam:'curl',idx:1,steps:{step:5,start:5}},
+ {id:'legcurl-seated',n:'Beinbeuger sitzend (Maschine)',fam:'curl',idx:1,steps:{step:5,start:5}},
+ {id:'shoulder-db',n:'Schulterdrücken Kurzhantel',fam:'shoulder',idx:1,steps:{step:2,start:2}},
+ {id:'shoulder-machine',n:'Schulterdrücken Maschine',fam:'shoulder',idx:1.6,steps:{step:5,start:5}},
+ {id:'cable',n:'Kabelzug (Seilzug) allgemein',fam:'cable',idx:1,steps:{step:1.25,start:1.25}},
+ {id:'db',n:'Kurzhanteln allgemein',fam:'db',idx:1,steps:{step:2,start:2}}];
+// Standard-Gerät der Plan-Übungen (für die Umrechnung beim Wechsel)
+const GEAR_BASE={legpress:'lp-guided',bss:'bss-db',benchdb:'bench-machine',inclinedb:'incline-db',inclinedb30:'incline-db',latpull:'latpull',row:'row-machine',row1:'row-db',
+ hipthrust:'hipthrust-bb',legcurl:'legcurl-lying',shoulderdb:'shoulder-db',arnold:'shoulder-db'};
+// Vorschläge im Schritte-Editor je Übungstyp
+function gearPresetFor(exId){const c=GEAR_CAT.find(x=>x.id===GEAR_BASE[exId]);if(c)return c.steps;
+  if(/cable|kabel|pushdown|facepull|ohtri|kickback/i.test(exId+' '+(EX[exId]&&EX[exId].n)))return{step:1.25,start:1.25};
+  if(/kurzhantel|\bkh\b|curl|seitheben|arnold/i.test((EX[exId]&&EX[exId].n)||''))return{step:2,start:2};return{step:2.5,start:0}}
+function gearCat(id){return GEAR_CAT.find(c=>c.id===id)||null}
+function gearFind(name){const s=String(name||'').trim().toLowerCase();return GEAR_CAT.find(c=>c.n.toLowerCase()===s)||null}
+function devCur(exId){return S&&S.dev&&S.dev[exId]||null}
+function devId(exId){const d=devCur(exId);return d?d.id:null}
+function devKey(exId){const d=devCur(exId);return d?exId+'@'+d.id:exId}
+function devName(id){return id&&S&&S.devAll&&S.devAll[id]?S.devAll[id].name:null}
+function stepCfg(exId){const c=S&&S.wsteps&&S.wsteps[devKey(exId)];return c&&(c.step>0||(c.list&&c.list.length))?c:null}
+// verfügbare Gewichte (aufsteigend)
+function gearList(c){
+  if(!c){const a=[];for(let w=0;w<10;w+=0.5)a.push(w);for(let w=10;w<=400;w+=1.25)a.push(Math.round(w*100)/100);return a}
+  if(c.list&&c.list.length)return [...new Set(c.list.map(Number).filter(x=>x>=0))].sort((a,b)=>a-b);
+  const a=[],st=+c.step,s0=+(c.start||0);for(let k=0;k<=400;k++){const w=Math.round((s0+k*st)*100)/100;if(w>500)break;a.push(w)}return a}
+// auf verfügbares Gewicht runden. mode: 'near' (Gleichstand → leichter), 'down', 'up'
+function snapList(L,w,mode){if(w==null||!L.length)return w;const e=1e-6;
+  if(mode==='down'){let r=L[0];for(const x of L)if(x<=w+e)r=x;return r}
+  if(mode==='up'){for(const x of L)if(x>=w-e)return x;return L[L.length-1]}
+  let b=L[0];for(const x of L){if(Math.abs(x-w)<Math.abs(b-w)-e)b=x}return b}
+function snapW(exId,w,mode){if(w==null)return w;const c=stepCfg(exId);if(!c&&mode==='near')return roundW(w);return snapList(gearList(c),w,mode||'near')}
+// +/- Knöpfe: nächstes verfügbares Gewicht
+function gearUp(exId,w){const c=stepCfg(exId);if(!c)return wUp(w);const L=gearList(c);if(w==null)return L[0];for(const x of L)if(x>w+1e-6)return x;return w}
+function gearDn(exId,w){const c=stepCfg(exId);if(!c)return wDn(w);const L=gearList(c);if(w==null)return L[0];let r=null;for(const x of L)if(x<w-1e-6)r=x;return r==null?L[0]:r}
+// gewünschte Steigerung (+1 kg unter 10 kg, sonst +2,5 kg), am Gerät abgerundet; kann gleich w bleiben (dann Wdh. rauf)
+function gearInc(exId,w){const c=stepCfg(exId);if(!c)return wUp(w);return snapList(gearList(c),w+(w<10?1:2.5),'down')}
+function gearsHelpers(exId){return{incW:w=>gearInc(exId,w),nextW:w=>gearUp(exId,w),downW:w=>snapW(exId,w,'down'),prevW:w=>gearDn(exId,w),hasCfg:!!stepCfg(exId)}}
+function stepsText(c){if(!c)return 'Automatisch (1,25-kg-Raster, unter 10 kg 0,5)';if(c.list&&c.list.length)return 'Liste: '+gearList(c).map(x=>nf(x)).join(' · ');return nf(c.step)+' kg Schritte'+(c.start?' ab '+nf(c.start)+' kg':'')}
+
+// ----- Editor „Gewichtsschritte“ -----
+let WS_EX=null,WS_TMP=null;
+function wstepsSheet(exId){WS_EX=exId;const c=stepCfg(exId);WS_TMP=c?JSON.parse(JSON.stringify(c)):null;wstepsDraw()}
+function wstepsDraw(){const exId=WS_EX,c=WS_TMP,pre=gearPresetFor(exId),d=devCur(exId);
+  const L=gearList(c).filter(x=>x>0).slice(0,12);
+  const presets=[['Steckgewicht 10 kg',{step:10,start:10}],['Steckgewicht 5 kg',{step:5,start:5}],['Scheiben 2,5 kg',{step:2.5,start:0}],['Langhantel 20 + 2,5',{step:2.5,start:20}],['Kabel 1,25 kg',{step:1.25,start:1.25}],['Kurzhantel 2 kg',{step:2,start:2}],['Kurzhantel 1 kg',{step:1,start:1}]];
+  openSheet(`<h2>⚙︎ Gewichtsschritte</h2><div class="mut small">${esc(EX[exId].n)}${d?' · Gerät: <b>'+esc(d.name)+'</b>':''}</div>
+  <div class="card"><div class="lbl">Aktuell</div><b>${esc(stepsText(c))}</b><div class="mut small" style="margin-top:4px">Verfügbar: ${L.map(x=>nf(x)).join(' · ')} …</div>
+  <div class="grid2" style="margin-top:10px"><div><div class="lbl">Schrittweite (kg)</div>${stepper('wsf',c&&c.step?nf(c.step):'–','kg','data-f="step"')}</div><div><div class="lbl">Start / Offset (kg)</div>${stepper('wsf',c&&c.step?nf(c.start||0):'–','kg','data-f="start"')}</div></div>
+  <div class="lbl" style="margin-top:10px">Eigene Liste (für krumme Stapel, optional)</div><input id="wsList" inputmode="decimal" placeholder="z. B. 11,25; 13,75; 16,25" value="${c&&c.list?c.list.map(x=>nf(x)).join('; '):''}">
+  <div class="chips" style="margin-top:10px">${presets.map(([n,p])=>`<button class="chip sm ${pre.step===p.step&&(pre.start||0)===p.start?'on':''}" data-act="wspre" data-v='${JSON.stringify(p)}'>${n}</button>`).join('')}</div>
+  <div class="mut small">Markiert = passender Vorschlag für diese Übung.</div>
+  <div class="row" style="margin-top:10px"><button class="btn sec" data-act="wsauto">Automatisch</button><button class="btn" data-act="wssave">Speichern</button></div></div>`)}
+function wstepsSave(){const raw=($('#wsList')||{}).value||'';const list=raw.split(/[;\s]+/).map(x=>num(x)).filter(x=>x!=null&&x>=0);
+  S.wsteps=S.wsteps||{};const k=devKey(WS_EX);
+  if(list.length)S.wsteps[k]={list:[...new Set(list)].sort((a,b)=>a-b),step:0,start:0};else if(WS_TMP&&WS_TMP.step>0)S.wsteps[k]={step:WS_TMP.step,start:WS_TMP.start||0};else delete S.wsteps[k];
+  save();closeSheet();render();toast('Gewichtsschritte gespeichert')}
+function wstepsOverview(){const items=[];const seen=new Set();
+  for(const t of ['A','B'])for(const it of (PLAN.sessions[t]||{items:[]}).items||[]){if(seen.has(it.ex)||it.bw||it.unit==='s')continue;seen.add(it.ex);items.push(it.ex)}
+  for(const b of Object.values(PLAN.extras||{}))for(const it of b.items||[]){if(seen.has(it.ex)||it.bw||it.unit==='s')continue;seen.add(it.ex);items.push(it.ex)}
+  return `<div class="card"><h3>⚙︎ Gewichtsschritte je Gerät</h3><div class="mut small">Welche Gewichte gibt es am Gerät? Vorschläge, Anpassungen und +/- runden darauf.</div>${items.map(ex=>{const d=devCur(ex);return `<div class="kv" data-act="wsopen" data-v="${ex}"><span>${esc(EX[ex].n)}${d?'<div class="mut small">'+esc(d.name)+'</div>':''}</span><span class="mut small" style="text-align:right">${esc(stepsText(stepCfg(ex)))} ›</span></div>`}).join('')}</div>`}
+
+// ----- Gerät wechseln -----
+function workW(exId,d){const h=exHistory(exId,d);if(h.length){const ws=h[h.length-1].sets.filter(s=>s&&s.done&&s.w!=null).map(s=>s.w);if(ws.length)return Math.max(...ws)}
+  const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId)||Object.values(PLAN.sessions).flatMap(s=>s.items||[]).find(x=>x.ex===exId);
+  if(!it)return null;const ws=planned(it,d).sets.map(s=>s[0]).filter(x=>x!=null);return ws.length?Math.max(...ws):null}
+// Startgewicht fürs neue Gerät: gleiche Familie → Lastindex-Verhältnis (gleiche Geräteart ×0,9), sonst/unklar 70 %; dann am neuen Gerät abrunden
+function gearConvert(fromCat,toCat,W){if(W==null)return{w:null,factor:null};
+  const a=gearCat(fromCat),b=gearCat(toCat);let f=0.7;
+  if(a&&b&&a.fam===b.fam){f=b.idx/a.idx;if(a.id===b.id||Math.abs(a.idx-b.idx)<0.15)f*=0.9}
+  f=Math.min(f,1);const L=gearList(b?b.steps:{step:2.5,start:0});let w=snapList(L,W*f,'down');if(w<=0)w=L.find(x=>x>0)||w;return{w,factor:Math.round(f*100)/100}}
+function gearSheet(exId){const d=devCur(exId),cur=d?d.name:(gearCat(GEAR_BASE[exId])||{n:EX[exId].n}).n;
+  openSheet(`<h2>⇄ Gerät wechseln</h2><div class="mut small">${esc(EX[exId].n)} · jetzt: <b>${esc(cur)}</b></div>
+  <div class="card"><div class="lbl">1 · Name (mit Vorschlägen)</div><input id="gearName" list="gearCatList" placeholder="z. B. Back Squat Langhantel" autocomplete="off"><datalist id="gearCatList">${GEAR_CAT.map(c=>`<option value="${esc(c.n)}">`).join('')}</datalist>
+  <button class="btn" style="margin-top:8px" data-act="gearname" data-v="${exId}">Übernehmen</button></div>
+  <div class="card"><div class="lbl">2 · Foto vom Gerät (Sporty ordnet es zu)</div><label class="btn sec" style="display:block;text-align:center">📷 Foto aufnehmen/wählen<input id="gearPhoto" data-v="${exId}" type="file" accept="image/*" capture="environment" style="display:none"></label></div>
+  <div class="card"><div class="lbl">3 · Einfach wechseln</div><button class="btn sec" data-act="gearunknown" data-v="${exId}">Ich wechsle das Gerät</button><div class="mut small" style="margin-top:4px">2,5-kg-Schritte, vorsichtiges Startgewicht, erster Satz zum Antasten. Sporty trägt die Details nach.</div></div>
+  ${d?`<button class="btn sec" style="margin-top:4px" data-act="gearundo" data-v="${exId}">↺ Zurück zu ${esc(d.prev?d.prev.name:(gearCat(GEAR_BASE[exId])||{n:EX[exId].n}).n)}</button>`:''}`);
+  const f=$('#gearPhoto');if(f)f.onchange=()=>{const file=f.files&&f.files[0];if(file)gearPhotoPick(exId,file)}}
+function gearApply(exId,mode,name,cat,photoKey){const d=CUR,old=devCur(exId),fromCat=old?old.cat:GEAR_BASE[exId];
+  const W=workW(exId,d),c=cat?gearCat(cat):null;const cv=gearConvert(fromCat,c?c.id:null,W);
+  const id='d'+Date.now().toString(36).slice(-5)+Math.random().toString(36).slice(2,5),reqId='dr-'+d+'-'+id;
+  const dev={id,name:name||(mode==='photo'?'Neues Gerät (Foto)':'Neues Gerät'),cat:c?c.id:null,mode,since:d,startW:cv.w,basedOnW:W,factor:cv.factor,testFirst:true,reqId,pending:true,announced:false,
+    prev:old?{...old,prev:undefined}:null,fromName:old?old.name:(gearCat(fromCat)||{n:EX[exId].n}).n};
+  S.dev=S.dev||{};S.devAll=S.devAll||{};S.wsteps=S.wsteps||{};S.dev[exId]=dev;S.devAll[id]={name:dev.name,exId,cat:dev.cat,since:d};
+  S.wsteps[exId+'@'+id]=c?{...c.steps}:{step:2.5,start:0};
+  // offene, noch nicht selbst geänderte Sätze von heute aufs neue Gerät setzen
+  const a=day(d).sets&&day(d).sets[exId];if(a)for(let i=0;i<a.length;i++)if(a[i]&&!a[i].done)delete a[i];
+  S.devReq=S.devReq||[];S.devReq.push({id:reqId,exId,date:d,mode,name:dev.name,cat:dev.cat,devId:id,startW:cv.w,basedOnW:W,factor:cv.factor,photo:photoKey||null,status:'pending',sent:false,createdAt:new Date().toISOString(),from:{devId:old?old.id:null,name:dev.fromName}});
+  save();closeSheet();render();
+  const line=`Neues Gerät: ${dev.name.replace(/\s*\(.*?\)\s*/g,' ').trim()}.`+(cv.w!=null?` Erster Satz zum Antasten mit ${kg(cv.w)}.`:' Erster Satz zum Antasten.');
+  dev.announced=true;save();say(line);toast('Gerät gewechselt'+(cv.w!=null?' · Start '+nf(cv.w)+' kg':''));devSync()}
+function gearUndo(exId){const d=devCur(exId);if(!d)return;const r=(S.devReq||[]).find(x=>x.id===d.reqId);if(r){r.status='undone';r.sent=false}
+  if(d.prev)S.dev[exId]=d.prev;else delete S.dev[exId];
+  const a=day(CUR).sets&&day(CUR).sets[exId];if(a)for(let i=0;i<a.length;i++)if(a[i]&&!a[i].done)delete a[i];
+  save();closeSheet();render();toast('Gerätewechsel rückgängig');devSync()}
+// Foto: auf ~1024 px verkleinern (JPEG), nur lokal speichern; Upload nur wenn sportify-logs privat ist
+function gearPhotoPick(exId,file){const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{try{const s=Math.min(1,1024/Math.max(img.width,img.height));const cv=document.createElement('canvas');cv.width=Math.round(img.width*s);cv.height=Math.round(img.height*s);
+  cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);const data=cv.toDataURL('image/jpeg',0.78);URL.revokeObjectURL(url);
+  const key='sportify.photo.'+Date.now().toString(36);try{localStorage.setItem(key,data)}catch(e){toast('Foto zu groß zum Speichern – nur Text-Anfrage');gearApply(exId,'photo',null,null,null);return}
+  gearApply(exId,'photo',null,null,key)}catch(e){toast('Foto konnte nicht gelesen werden')}};img.onerror=()=>toast('Foto konnte nicht gelesen werden');img.src=url}
+// ----- Sync mit sportify-logs: Anfragen hoch, Zuordnungen von Sporty runter -----
+let DEV_BUSY=false,REPO_PRIVATE=null;
+async function repoIsPrivate(c){if(REPO_PRIVATE!=null)return REPO_PRIVATE;try{const r=await fetch('https://api.github.com/repos/'+GH_REPO,{cache:'no-store',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+  if(!r.ok)return false;const j=await r.json();REPO_PRIVATE=j.private===true;return REPO_PRIVATE}catch(e){return false}}
+async function ghPutB64(path,b64,message,c){let sha;const g=await ghFetch(c,path,{method:'GET'},'?ref=main');if(g.ok){try{sha=(await g.json()).sha}catch(e){}}
+  const r=await ghFetch(c,path,{method:'PUT',body:JSON.stringify({message,content:b64,branch:'main',...(sha?{sha}:{})})});if(!r.ok)throw ghErr(r.status,'');return r.status}
+function devReqPayload(r){const ex=EX[r.exId]||{n:r.exId};const it=Object.entries(PLAN.sessions).find(([k,s])=>(s.items||[]).some(x=>x.ex===r.exId));
+  return{kind:'sportify-device-request',v:1,id:r.id,status:r.status,createdAt:r.createdAt,date:r.date,mode:r.mode,
+    exercise:{id:r.exId,name:ex.n,block:it?it[0]:null},from:r.from,
+    to:{deviceId:r.devId,name:r.name,catalogId:r.cat,steps:(S.wsteps||{})[r.exId+'@'+r.devId]||null,startW:r.startW,basedOnW:r.basedOnW,factor:r.factor,testFirst:true},
+    photo:r.photo?{path:r.photoPath||null,uploaded:!!r.photoPath,note:r.photoPath?null:'nur lokal (Repo nicht privat oder Upload fehlgeschlagen)'}:null,app:APP_VER}}
+async function devSync(){const c=hookCfg();if(!c||c.mode!=='gh'||DEV_BUSY||!S||!S.plan)return;DEV_BUSY=true;
+  try{for(const r of (S.devReq||[]).filter(x=>!x.sent)){
+      if(r.photo&&!r.photoPath&&r.status!=='undone'){const data=localStorage.getItem(r.photo);
+        if(data&&await repoIsPrivate(c)){const p='devices/photos/'+r.id+'.jpg';try{await ghPutB64(p,data.split(',')[1],'Sportify Gerätefoto '+r.id,c);r.photoPath=p}catch(e){}}}
+      await ghPut('devices/requests/'+r.id+'.json',devReqPayload(r),'Sportify Gerätewechsel '+r.id,c);r.sent=true;save()}
+    await devLoadAssignments(c)}catch(e){}finally{DEV_BUSY=false}}
+async function devLoadAssignments(c){const r=await ghFetch(c,'devices/assignments.json',{method:'GET'},'?ref=main');if(!r.ok)return;const j=await r.json();if(!j.content)return;
+  const data=JSON.parse(b64dec(j.content));if(!data||data.kind!=='sportify-device-assignments')return;const n=devApply(data);
+  if(n){if(!gsyncBusyUI())render();toast(n===1?'Sporty hat ein Gerät zugeordnet ✓':n+' Geräte von Sporty zugeordnet ✓')}}
+// Zuordnung anwenden (einmal je Eintrag): Name, Schritte, ggf. Startgewicht (nur solange am Gerät noch nichts geloggt ist)
+function devApply(data){let n=0;S.devDone=S.devDone||{};
+  for(const a of data.assignments||[]){const key=a.requestId||(a.exerciseId+'|'+(a.deviceId||'')+'|'+(a.updatedAt||data.updatedAt));if(S.devDone[key]||!a.exerciseId||!EX[a.exerciseId])continue;
+    const d=devCur(a.exerciseId);if(a.requestId&&(!d||d.reqId!==a.requestId)){S.devDone[key]=1;continue}
+    S.wsteps=S.wsteps||{};
+    if(d){if(a.name){d.name=a.name;S.devAll[d.id].name=a.name}if(a.catalogId)d.cat=a.catalogId;d.pending=false;
+      if(a.startW!=null&&!exHistory(a.exerciseId,addDays(TODAY,1)).length)d.startW=a.startW;}
+    if(a.steps&&(a.steps.step>0||(a.steps.list&&a.steps.list.length)))S.wsteps[devKey(a.exerciseId)]={step:+a.steps.step||0,start:+a.steps.start||0,...(a.steps.list?{list:a.steps.list.map(Number)}:{})};
+    S.devDone[key]=1;n++}
+  if(n)save();return n}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)devSync()});
+setTimeout(()=>devSync(),2000);
+
 // ===== Audio / Vibration / Wake Lock =====
 // iOS (Safari/Home-Bildschirm-App): AudioContext darf nur in einer Nutzer-Geste starten und wird beim
 // Verlassen der App, Sperren oder Anrufen „interrupted“/„suspended“. Darum bei JEDER Geste wieder aufwecken.
@@ -453,18 +634,24 @@ let AC=null;
 const SOUND_KEY='sportify-ton';
 function soundOn(){try{return localStorage.getItem(SOUND_KEY)!=='0'}catch(e){return true}}
 function setSound(on){try{localStorage.setItem(SOUND_KEY,on?'1':'0')}catch(e){}}
-function audioUnlock(){try{
+// iOS 16.4+/17: Audio-Sitzung „playback“ → Pieptöne/Fanfare auch bei Stummschalter. Kann laufende Musik anhalten;
+// Schalter „Musik nicht unterbrechen“ nimmt „transient“ (Musik wird nur kurz leiser, Stummschalter gilt dann wieder).
+const MIX_KEY='sportify-musik';
+function audioSessionSet(){try{const as=navigator.audioSession;if(!as||!('type' in as))return;const want=localStorage.getItem(MIX_KEY)==='1'?'transient':'playback';if(as.type!==want)as.type=want}catch(e){}}
+function audioUnlock(){try{audioSessionSet();
   if(!AC||AC.state==='closed'){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();AC.onstatechange=()=>{}}
   if(AC.state!=='running'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}
   // stiller Puffer in der Geste – iOS „entsperrt“ die Ausgabe erst durch echtes Abspielen
   const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0)}catch(e){}}
-function audioWake(){try{if(AC&&AC.state!=='running'&&AC.state!=='closed'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
+function audioWake(){try{audioSessionSet();if(AC&&AC.state!=='running'&&AC.state!=='closed'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
 function beep(freq=880,dur=0.12,vol=0.35,when=0,type='sine'){try{if(!AC||!soundOn())return;audioWake();const t=AC.currentTime+0.02+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.008);g.gain.setValueAtTime(vol,t+Math.max(0.01,dur-0.04));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.03)}catch(e){}}
-function tick(){beep(880,0.09,0.45);vib(60)}
+function tick(){voiceStop();beep(880,0.09,0.45);vib(60)}
 // Pausenende: 3 kräftige Pieptöne (~880 Hz, Dreieck = lauter wahrgenommen als Sinus) + hoher Schlusston
-function endBeep(){for(let k=0;k<3;k++)beep(880,0.18,0.9,k*0.28,'triangle');beep(1320,0.5,0.9,0.9,'triangle');vib([300,120,300,120,500])}
+function endBeep(){voiceStop();for(let k=0;k<3;k++)beep(880,0.18,0.9,k*0.28,'triangle');beep(1320,0.5,0.9,0.9,'triangle');vib([300,120,300,120,500])}
 function phaseBeep(){beep(1100,0.25,0.8,0,'triangle');beep(1500,0.4,0.8,0.3,'triangle');vib([250,100,250])}
-function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+// Vibration nur wo es sie gibt (Android); iOS kennt navigator.vibrate nicht → gar nicht erst aufrufen
+const CAN_VIB=typeof navigator.vibrate==='function'&&!/iP(hone|ad|od)/.test(navigator.userAgent)&&!(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function vib(p){if(!CAN_VIB)return;try{navigator.vibrate(p)}catch(e){}}
 let WL=null;
 async function wake(on){try{if(on&&'wakeLock' in navigator&&!WL){WL=await navigator.wakeLock.request('screen');WL.addEventListener('release',()=>WL=null)}if(!on&&WL){await WL.release();WL=null}}catch(e){}}
 ['pointerdown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,audioUnlock,{passive:true,capture:true}));
@@ -486,7 +673,7 @@ function runStep(){
   let adv=false;while(RUN.end<=Date.now()&&RUN.i<RUN.phases.length-1){RUN.i++;RUN.end+=RUN.phases[RUN.i].sec*1000;RUN.lastSec=null;adv=true}
   if(adv){phaseBeep();if(typeof onPhase==='function')onPhase()}
   const r=remSec(),s=Math.ceil(r);
-  if(s!==RUN.lastSec){if(s<=3&&s>=1&&RUN.lastSec!=null&&RUN.lastSec>s)tick();RUN.lastSec=s}
+  if(s!==RUN.lastSec){if(s<=3&&s>=1&&RUN.lastSec!=null&&RUN.lastSec>s)tick();voiceCountdown(s,RUN.lastSec);RUN.lastSec=s}
   if(r<=0){finishRun(true);return}
   drawTimer();
 }
@@ -532,6 +719,146 @@ function restoreRun(){try{const o=JSON.parse(localStorage.getItem(RUN_KEY)||'nul
   if(!o.paused&&Date.now()-o.end>10*60*1000){localStorage.removeItem(RUN_KEY);return}
   RUN={title:o.title,phases:o.phases,i:0,end:o.end,paused:!!o.paused,rem:o.rem||0,onDone:null,lastSec:null,done:false,missed:false};
   $('#timer').classList.add('show');wake(true);runStep();drawTimer()}catch(e){}}
+
+// ===== Coach: automatische Satz-Auswertung → Anpassung des nächsten Satzes → Sprach-Feedback =====
+// Keine Extra-Eingabe: ausgewertet werden Gewicht, geschaffte Wdh. und RIR (Reserve) des Satzes. Ohne RIR-Eingabe gilt 2 (Standard).
+const VOICE_KEY='sportify-sprache',V10_KEY='sportify-sprache10',VNAME_KEY='sportify-stimme',AUTO_KEY='sportify-auto',VRATE_KEY='sportify-tempo';
+const flag=(k,def)=>{try{const v=localStorage.getItem(k);return v==null?def:v==='1'}catch(e){return def}};
+const setFlag=(k,on)=>{try{localStorage.setItem(k,on?'1':'0')}catch(e){}};
+function voiceOn(){return flag(VOICE_KEY,true)}function v10On(){return flag(V10_KEY,true)}function autoOn(){return flag(AUTO_KEY,true)}
+function vRate(){const r=parseFloat(localStorage.getItem(VRATE_KEY));return r>0.5&&r<1.6?r:1}
+
+// --- Regeln (reine Funktion, testbar) ---
+// x: w (kg, null = Körpergewicht/Zeit), r (geschafft), t (Ziel-Wdh.), lo/hi (Bereich), rir, rirDef (RIR nicht eingegeben → 2),
+//    sec (Zeit-Übung), pnw/pnr (Plan nächster Satz), low (Tag reduziert, z. B. −10 %), test (erster Satz am neuen Gerät),
+//    g = Geräte-Helfer {incW, nextW, downW, prevW} (Gewichtsschritte des Geräts)
+// Ergebnis: {v:'up'|'keep'|'down', nw, nr, kind:'w'|'r'|null, capped, stay}
+const G_LEGACY={incW:w=>wUp(w),nextW:w=>wUp(w),downW:w=>{const L=gearList(null);return snapList(L,w,'down')},prevW:w=>wDn(w)};
+function coachEval(x){
+  const g=x.g||G_LEGACY,t=x.t??x.hi,r=x.r,rir=x.rir??2,def=!!x.rirDef,lo=x.lo??t,hi=x.hi??t,w=x.w;
+  const out={v:'keep',nw:w,nr:x.pnr??t,kind:null,capped:false,stay:false};
+  // Testsatz am neuen Gerät: Gewicht für Ziel-Wdh. mit 2 Reserve aus e1RM (RIR-basiert), am Gerät abgerundet, max. +50 %
+  if(x.test&&w){const e=w*(1+(r+rir)/30);let nw=g.downW(Math.min(e/(1+(t+2)/30),w*1.5));if(x.low&&x.pnw!=null&&nw>x.pnw*1.5)nw=g.downW(x.pnw*1.5);
+    if(nw>w+1e-6){out.v='up';out.nw=nw;out.kind='w';out.nr=t;return out}
+    if(r<lo||(!def&&rir===0&&r<t)){const d=g.downW(Math.min(nw,w*0.95));if(d<w-1e-6&&d>0){out.v='down';out.nw=d;out.kind='w';out.nr=t;return out}}}   // sonst normale Regeln
+  const up=r>=t+2||r>hi||(r>=t&&rir>=3&&!def);
+  const down=r<lo||(!def&&rir===0&&r<t);
+  const repStep=x.sec?5:1;
+  if(down){out.v='down';
+    if(w&&r<lo){const k=lo-r>=3?0.9:0.95;let nw=g.downW(w*k);if(nw>=w-1e-6)nw=g.prevW(w);
+      if(nw<w-1e-6&&nw>0){out.nw=nw;out.kind='w';out.nr=clampR(repsAt(w,r,rir,nw),lo,hi);return out}}
+    out.nr=Math.max(1,r);out.kind='r';return out}   // Körpergewicht/Zeit, kein leichteres Gewicht oder knapp unter Ziel bei RIR 0 → Ziel = geschaffte Wdh.
+  if(up){out.v='up';
+    if(w){let nw=g.incW(w);
+      if(nw>w+1e-6&&(nw-w)/w>0.15)nw=w;                         // Sprung > 15 % → lieber Wdh. rauf
+      if(nw<=w+1e-6&&r>=t+3){const j=g.nextW(w);if(j>w&&(j-w)/w<=0.25)nw=j} // Wdh. klar über Ziel → nächster Geräteschritt
+      if(x.low&&x.pnw!=null&&nw>x.pnw+1e-6){out.capped=true;nw=Math.max(w,x.pnw)}  // reduzierter Tag: nicht über den Tagesplan
+      if(nw>w+1e-6){out.nw=nw;out.kind='w';out.nr=clampR(repsAt(w,r,rir,nw),lo,hi);return out}
+      const nr=Math.min(Math.max(r,t+1),t+2,out.capped?hi:t+2);if(nr>(x.pnr??t)){out.nr=nr;out.kind='r';out.stay=true;return out}
+      out.v=out.capped?'keep':'up';return out}
+    out.nr=Math.min(Math.max(t,r)+repStep,hi+(x.sec?15:3));if(out.nr<=(x.pnr??t)){out.v='keep';out.kind=null;return out}out.kind='r';return out}
+  return out}
+// Wdh. bei neuem Gewicht aus e1RM (Epley mit RIR): e = w·(1+(r+RIR)/30), Ziel 2 Wdh. Reserve
+function repsAt(w,r,rir,nw){if(!w||!nw)return r;const e=w*(1+(r+(rir??2))/30);return Math.floor(30*(e/nw-1))-2}
+function clampR(n,lo,hi){return Math.max(lo,Math.min(hi,n))}
+// Bestleistung je Gerät: schwerer als je zuvor ODER mehr Wdh. als je zuvor bei genau diesem Gewicht (frühere Einheiten am Gerät + heutige Sätze)
+function isRecord(prev,s,isW){if(!prev.length)return false;
+  if(!isW){const m=Math.max(...prev.map(p=>p.r||0));return s.r>m}
+  const maxW=Math.max(...prev.map(p=>p.w||0));if(s.w>maxW+1e-6)return true;
+  const same=prev.filter(p=>Math.abs((p.w||0)-s.w)<1e-6);if(!same.length||s.r<=Math.max(...same.map(p=>p.r||0)))return false;
+  return !prev.some(p=>(p.w||0)>=s.w-1e-6&&(p.r||0)>=s.r)}
+
+// --- Anwenden auf den nächsten Satz derselben Übung ---
+function coachApply(exId,i,d){
+  const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId);if(!it)return null;
+  const P=planned(it,d).sets,g=getSet(exId,i,d),dy=day(d),arr=(dy.sets&&dy.sets[exId])||[];
+  const isS=it.unit==='s',bw=isS||!!it.bw||g.w==null,dv=devCur(exId);
+  const test=!!(dv&&dv.testFirst&&i===0&&!exHistory(exId,d).length);
+  const tAdj=arr[i]&&arr[i].adj&&arr[i].adj.to?arr[i].adj.to.r:null;
+  const res=coachEval({w:bw?null:g.w,r:g.r,t:tAdj??(P[i]||[])[1]??it.hi,lo:it.lo,hi:it.hi,rir:g.rir,rirDef:!!(arr[i]&&arr[i].rirDef),sec:isS,
+    pnw:(P[i+1]||[])[0],pnr:(P[i+1]||[])[1],low:mods(d).factor<1,test,g:gearsHelpers(exId)});
+  Object.assign(res,{i,n:P.length,it,g,test,applied:false});
+  // Stimmung: rekord > stark > zaeh > neutral
+  const prev=[];for(const x of exHistory(exId,d))for(const s of x.sets)if(s&&s.done&&s.r!=null)prev.push(s);
+  const hist=prev.length>0;arr.forEach((s,j)=>{if(s&&s.done&&j!==i&&s.r!=null)prev.push(s)});
+  res.record=hist&&isRecord(prev,g,!bw);
+  res.mood=res.record?'rekord':res.v==='up'?'stark':res.v==='down'?'zaeh':'neutral';
+  if(arr[i]){arr[i].mood=res.mood;save()}
+  if(i+1>=P.length||!res.kind)return res;
+  const nx=arr[i+1];
+  if(nx&&nx.done)return res;
+  if(nx&&!nx.adj&&(nx.w!==undefined||nx.r!==undefined))return res;   // selbst eingetragen → nicht anfassen
+  const cur=nx&&nx.adj?nx.adj.from:{w:P[i+1][0],r:P[i+1][1]};
+  // Plan steigt zum nächsten Satz an: Aufwärmsatz (< 80 % des nächsten) → nicht anpassen; sonst Änderung als Differenz übertragen
+  if(!bw&&cur.w!=null&&g.w!=null&&cur.w>g.w+0.01){if(g.w<0.8*cur.w)return res;
+    if(res.kind==='w'){res.nw=snapW(exId,cur.w+(res.nw-g.w),'down');if(res.v==='up'&&res.nw<=cur.w){res.nw=cur.w;res.kind=res.nr>cur.r?'r':null;res.stay=true;if(!res.kind)return res}}}
+  // reduzierter Tag (Schlaf/Deload): nicht über den Tagesplan des nächsten Satzes steigern (lag er schon drüber: Gewicht halten)
+  if(mods(d).factor<1&&res.kind==='w'&&res.v==='up'&&cur.w!=null&&res.nw>Math.max(cur.w,g.w)+0.01){const nw0=Math.max(cur.w,g.w);
+    res.capped=true;res.stay=true;res.nw=nw0;res.nr=Math.min(it.hi,(cur.r||it.hi)+2,Math.max(res.nr,g.r));res.kind=nw0!==cur.w?'w':(res.nr>cur.r?'r':null);if(!res.kind)return res}
+  const nw=res.kind==='w'?res.nw:cur.w;
+  if(nw===cur.w&&res.nr===cur.r){if(nx&&nx.adj)delete arr[i+1];return res}
+  if(!autoOn()){res.suggest=true;return res}
+  dy.sets=dy.sets||{};const a=dy.sets[exId]=dy.sets[exId]||[];
+  a[i+1]={w:cur.w==null?null:nw,r:res.nr,rir:null,done:false,adj:{from:cur,to:{w:cur.w==null?null:nw,r:res.nr},v:res.v,by:i}};save();res.applied=true;return res}
+function coachUndo(exId,i,d){const a=day(d).sets&&day(d).sets[exId];if(!a||!a[i]||!a[i].adj||a[i].done)return false;delete a[i];save();return true}
+
+// --- Sprache ---
+const SP=('speechSynthesis' in window)?window.speechSynthesis:null;let SP_UNLOCK=false,SAYN=Math.floor(Math.random()*7),SAY_T=[],UTTS=[];
+function deVoices(){if(!SP)return[];try{return SP.getVoices().filter(v=>/^de([-_]|$)/i.test(v.lang))}catch(e){return[]}}
+function pickVoice(){const vs=deVoices();if(!vs.length)return null;const want=localStorage.getItem(VNAME_KEY);if(want){const v=vs.find(v=>v.voiceURI===want||v.name===want);if(v)return v}
+  const sc=v=>{const s=(v.name+' '+v.voiceURI).toLowerCase();let p=0;if(/premium/.test(s))p+=4;if(/enhanced|erweitert|verbessert/.test(s))p+=3;if(/anna/.test(s))p+=2;if(/de[-_]de/i.test(v.lang))p+=1;
+    if(/eddy|flo\b|grandma|grandpa|oma|opa|reed|rocko|sandy|shelley|bahh|bells|boing|bubbles|cellos|wobble|jester|organ|trinoids|whisper|zarvox|albert|bad news|good news/.test(s))p-=6;return p};
+  return vs.slice().sort((a,b)=>sc(b)-sc(a))[0]}
+const MOOD={rekord:{rate:1.1,pitch:1.2},stark:{rate:1.05,pitch:1.1},neutral:{rate:1,pitch:1},zaeh:{rate:0.95,pitch:0.95}};
+function voiceStop(){SAY_T.forEach(clearTimeout);SAY_T=[];try{if(SP&&(SP.speaking||SP.pending))SP.cancel()}catch(e){}}
+// parts: Text oder Liste von Sätzen (je eine Äußerung → kleine Pausen); mood steuert Tempo/Tonhöhe relativ zum gewählten Tempo
+function say(parts,mood){if(!SP||!voiceOn()||!parts||!parts.length)return;const list=Array.isArray(parts)?parts.filter(Boolean):[parts];const m=MOOD[mood]||MOOD.neutral;
+  const go=()=>{const v=pickVoice();UTTS=list.map(t=>{const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';if(v)u.voice=v;u.rate=Math.min(1.6,vRate()*m.rate);u.pitch=m.pitch;u.volume=1;return u});
+    for(const u of UTTS)SP.speak(u)};
+  try{const busy=SP.speaking||SP.pending;voiceStop();
+    if(mood==='rekord'&&soundOn()&&AC){fanfare();SAY_T.push(setTimeout(go,950))}else if(busy)SAY_T.push(setTimeout(go,80));else go();SP_UNLOCK=true}catch(e){}}
+// kurze Fanfare (4 steigende Töne, < 1 s), folgt dem Schalter „Ton“
+function fanfare(){[523,659,784,1047].forEach((f,k)=>beep(f,k===3?0.34:0.13,0.7,k*0.15,'triangle'))}
+// iOS: Sprachausgabe erst nach speak() in einer Nutzer-Geste – stilles Mini-Wort beim ersten Tipp
+function voiceUnlock(){if(SP_UNLOCK||!SP||!voiceOn())return;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;u.lang='de-DE';SP.speak(u);SP_UNLOCK=true}catch(e){}}
+['touchend','click'].forEach(ev=>document.addEventListener(ev,voiceUnlock,{passive:true,capture:true}));
+function pick(a){SAYN++;return a[SAYN%a.length]}
+const kg=w=>nf(w)+' Kilo',wdh=r=>r+(r===1?' Wiederholung':' Wiederholungen'),sek=s=>s%60===0&&s>=60?(s/60)+(s===60?' Minute':' Minuten'):s+' Sekunden';
+const amount=(r,isS)=>isS?sek(r):wdh(r);
+// Ansage als Liste von Sätzen
+function coachLine(res,ex,o){
+  const {i,n,g,it}=res,isS=it.unit==='s',k=i+1,w=it.bw||isS?null:g.w,M=res.mood;const st=((peek(CUR).sets||{})[it.ex]||[])[i];const t=(st&&st.adj&&st.adj.to?st.adj.to.r:null)??(planned(it,CUR).sets[i]||[])[1]??it.hi;
+  const R=amount(g.r,isS),W=w!=null?kg(w):'',RW=W?W+', '+R:R,diff=g.r!==t?`${g.r} statt ${t}`:R;
+  const p=[];
+  if(M==='rekord'){p.push(pick(['Neuer Rekord!','Rekord!','Bestleistung!']));p.push(RW+'.');p.push(pick(['Der Eisenbrecher schlägt zu!','So sieht Fortschritt aus!','Stark wie nie!']))}
+  else if(M==='stark')p.push(pick([`Stark, ${diff}.`,`Da ging mehr: ${diff}.`,`Sehr gut, ${RW}.`]));
+  else if(M==='zaeh')p.push(pick(['Okay. Der war zäh.','Zäher Satz, aber durchgezogen.','Hart erkämpft, gut gemacht.']));
+  else p.push(pick([`Satz ${k} von ${n} geschafft.`,`Satz ${k} sitzt.`,`Gut, ${RW}.`]));
+  if(res.test&&res.kind==='w')p.push('Testsatz ausgewertet.');
+  if(M!=='rekord'&&o.more)p.push(o.more);
+  if(res.applied||res.suggest){const pre=res.suggest?'Vorschlag: nächster Satz':'Nächster Satz';const nr=res.nr;
+    if(res.kind==='w'&&res.stay)p.push(`${pre} bleibt bei ${kg(res.nw)}, ${wdh(res.nr)}. Heute nicht mehr, Erholung geht vor.`);
+    else if(res.kind==='w')p.push(`${pre} ${res.v==='down'?(M!=='zaeh'?'leichter, ':''):'mit '}${kg(res.nw)}${nr!==(planned(it,CUR).sets[i+1]||[])[1]?', '+wdh(nr):''}.`);
+    else if(res.stay&&w!=null)p.push(`${pre} bleibt bei ${kg(res.capped?(planned(it,CUR).sets[i+1]||[w])[0]:w)}, aber ${wdh(nr)}.`+(res.capped?' Heute zählt Erholung.':''));
+    else p.push(`${pre}: ${amount(nr,isS)}.`)}
+  else if(res.capped)p.push('Heute bleibt es beim reduzierten Gewicht.');
+  if(M==='zaeh')p.push(pick(['Du packst das.','Ruhig atmen, du schaffst das.','Schritt für Schritt.']));
+  else if(M!=='rekord')p.push('Tipp: '+coachTip(res,ex)+'.');
+  if(o.nextEx)p.push('Als Nächstes: '+o.nextEx+'.');
+  else if(o.partner)p.push('Weiter mit '+o.partner+'.');
+  else if(o.rest&&k===1)p.push(sek(o.rest)+' Pause.');
+  return p}
+function coachTip(res,ex){
+  if(res.v==='up')return pick(['langsam absenken, zwei Sekunden','Tempo kontrolliert lassen','oben kurz halten']);
+  const c=ex&&ex.cues&&ex.cues.length?ex.cues:['beim Drücken ausatmen'];return c[SAYN%c.length].replace(/[.!]+$/,'')}
+function coachMore(exId,i,d,g,it){if(it.bw||it.unit==='s'||g.w==null)return null;const h=exHistory(exId,d);if(!h.length)return null;
+  const ls=h[h.length-1].sets[i];if(ls&&ls.done&&ls.w!=null&&g.w>ls.w+0.01)return kg(Math.round((g.w-ls.w)*100)/100)+' mehr als letztes Mal.';return null}
+function finishLine(d){let n=0,vol=0;for(const it of sessionItems(typeOf(d),d))for(const s of(((peek(d).sets||{})[it.ex])||[]))if(s&&s.done){n++;if(s.w&&s.r&&it.unit!=='s')vol+=s.w*s.r}
+  const T=vol>=1000?nf(Math.round(vol/100)/10)+' Tonnen':null;
+  return [pick(['Einheit geschafft!','Fertig für heute!','Das war’s, stark!']),`${n} Sätze${T?', '+T+' bewegt':''}.`,pick(['Feedback an Sporty nicht vergessen.','Jetzt trinken und kurz Feedback geben.'])]}
+// „Noch 10 Sekunden“ (nur Satzpausen ab 20 s, nur wenn gerade nichts gesprochen wird)
+function voiceCountdown(s,prev){if(!RUN||RUN.title!=='Pause'||!v10On()||!voiceOn())return;const p=RUN.phases[RUN.i];if(!p||p.sec<20)return;
+  if(s===10&&prev!=null&&prev>10&&!(SP&&(SP.speaking||SP.pending)))say('Noch 10 Sekunden.')}
 
 // ===== Training-Tab =====
 let FOCUS=null,SCROLL_FOCUS=false,KEEP_SCROLL=true;
@@ -606,7 +933,9 @@ function exCard(it,d,idx){
   if(it.ss||it.ssOf)badges+=` <span class="badge ss">Supersatz</span>`;
   if(it.isNew)badges+=` <span class="badge new">neu, von Sporty</span>`;
   if(it.optional)badges+=` <span class="badge dl">optional</span>`;
-  let h=`<div class="card ex ${p.skip?'skip':''}" id="ex-${it.ex}"><div class="exhead"><div><h3>${esc(ex.n)}${badges}</h3><div class="meta">${p.sets.length}${p.sets.length!==it.sets?' (statt '+it.sets+')':''} × ${rng}${isS?' s':''}${it.side?' '+it.side:''} · ${it.rest?'Pause '+it.rest+' s':'ohne Pause'}${it.restStd?' <span class="badge est">Pause nicht im Plan · Standard</span>':''}</div></div><button class="abl" data-act="abl" data-v="${it.ex}">▶ Ablauf</button></div>`;
+  let h=`<div class="card ex ${p.skip?'skip':''}" id="ex-${it.ex}"><div class="exhead"><div><h3>${esc(ex.n)}${badges}</h3><div class="meta">${p.sets.length}${p.sets.length!==it.sets?' (statt '+it.sets+')':''} × ${rng}${isS?' s':''}${it.side?' '+it.side:''} · ${it.rest?'Pause '+it.rest+' s':'ohne Pause'}${it.restStd?' <span class="badge est">Pause nicht im Plan · Standard</span>':''}</div></div><div class="exbtns"><button class="abl" data-act="abl" data-v="${it.ex}">▶ Ablauf</button>${noW?'':`<div class="row" style="gap:6px;justify-content:flex-end;margin-top:6px"><button class="abl sm" data-act="wsopen" data-v="${it.ex}" aria-label="Gewichtsschritte">⚙︎</button><button class="abl sm" data-act="gearopen" data-v="${it.ex}" aria-label="Gerät wechseln">⇄ Gerät</button></div>`}</div></div>`;
+  {const dv=devCur(it.ex),sc=stepCfg(it.ex);if(dv)h+=`<div class="devline">🔁 Gerät: <b>${esc(dv.name)}</b>${dv.pending?' <span class="badge est">Sporty prüft</span>':''} · ${esc(stepsText(sc))}${p.src==='dev'?'<div>Erster Satz zum Antasten'+(dv.startW!=null?' mit '+nf(dv.startW)+' kg':'')+' – danach passt Sportify per RIR an.</div>':''}</div>`;
+   else if(sc&&!noW)h+=`<div class="mut small">⚙︎ ${esc(stepsText(sc))}</div>`}
   if(it.note)h+=`<div class="mut small" style="margin-top:4px">${esc(it.note)}</div>`;
   if(it.isNew)h+=`<div class="banner new small" style="margin:6px 0">Neu, von Sporty: ${esc(it.isNew)}</div>`;
   if(it.why&&p.src==='plan')h+=`<div class="hint">${esc(it.why)}</div>`;
@@ -617,12 +946,17 @@ function exCard(it,d,idx){
     const s=stored[i]||{};const w=s.w!==undefined?s.w:pw,r=s.r!==undefined?s.r:pr,done=!!s.done;
     const foc=FOCUS&&FOCUS.ex===it.ex&&FOCUS.i===i;
     const a=`data-ex="${it.ex}" data-i="${i}"`;
-    h+=`<div class="set ${foc?'focus':''}" data-set="${it.ex}-${i}"><div class="setrow"><div class="setno">${i+1}</div>`;
+    const adj=s.adj&&!done?s.adj:null,mood=done&&s.mood?s.mood:null;
+    h+=`<div class="set ${foc?'focus':''} ${adj?'adj':''}" data-set="${it.ex}-${i}"><div class="setrow"><div class="setno">${i+1}</div>`;
     if(noW)h+=`<div class="mut small" style="text-align:center">${isS?'Zeit':'Körpergewicht'}</div>`;
     else h+=stepper('w',w==null?'<span style="color:#aaa">kg</span>':nf(w),'kg',a);
     h+=stepper('r',r,isS?'s':'Wdh.',a);
     h+=`<button class="ok ${done?'done':''}" data-act="ok" ${a}>✓</button></div>`;
-    if(!isS)h+=`<div class="rir"><span>RIR</span>${[0,1,2,3,4].map(v=>`<button class="chip sm ${s.rir===v?'on':''}" data-act="rir" data-v="${v}" ${a}>${v===4?'4+':v}</button>`).join('')}</div>`;
+    if(adj)h+=`<div class="adjrow"><span class="badge adjb">angepasst</span> <span>${adj.from.w!=null&&adj.from.w!==w?nf(adj.from.w)+' → <b>'+nf(w)+' kg</b>':''}${adj.from.r!==r?(adj.from.w!=null&&adj.from.w!==w?' · ':'')+adj.from.r+' → <b>'+r+'</b> Wdh.':''}</span><button class="chip sm" data-act="adjundo" ${a}>↺ Rückgängig</button></div>`;
+    if(mood==='rekord')h+=`<div class="moodtag"><span class="stamp">NEUER REKORD!</span></div>`;
+    if(mood&&mood!=='rekord')h+=`<div class="moodtag m-${mood}">${{stark:'💪 Stark – über Ziel',zaeh:'🧱 Zäh – gut durchgezogen',neutral:'✓ Im Ziel'}[mood]}</div>`;
+    // RIR (Wdh. in Reserve): ohne Eingabe gilt 2 – vorgewählt angezeigt, kostet keinen Extra-Tipp
+    if(!isS){const rv=s.rir??null,dflt=rv==null||s.rirDef;h+=`<div class="rir"><span>RIR</span>${[0,1,2,3,4].map(v=>`<button class="chip sm ${!dflt&&rv===v?'on':''} ${dflt&&v===2?'def':''}" data-act="rir" data-v="${v}" ${a}>${v===4?'4+':v}</button>`).join('')}</div>`}
     h+=`</div>`;
   });
   return h+`</div>`;
@@ -851,9 +1185,9 @@ function renderFortschritt(){
     h+=`<div class="mut small">Einzelne Tage schwanken um ±0,7 kg, maßgeblich ist der Trend.</div>`}
   h+=`</div>`+bodyComp();
   // Bestleistungen
-  const best={};for(const[k,dy] of Object.entries(S.days))for(const[ex,arr] of Object.entries(dy.sets||{}))for(const s of arr){if(!s||!s.done||!s.w||!s.r||!EX[ex]||ex==='balance'||ex==='toes')continue;const e=e1rm(s.w,s.r);if(!best[ex]||e>best[ex].e)best[ex]={e,s,k}}
+  const best={};for(const[k,dy] of Object.entries(S.days))for(const[ex,arr] of Object.entries(dy.sets||{}))for(const s of arr){if(!s||!s.done||!s.w||!s.r||!EX[ex]||ex==='balance'||ex==='toes')continue;const e=e1rm(s.w,s.r),key=ex+'@'+(s.dev||'');if(!best[key]||e>best[key].e)best[key]={e,s,k,ex,dev:s.dev||null}}
   const rows=Object.entries(best).sort((a,b)=>b[1].e-a[1].e);
-  h+=`<div class="card"><h2>Bestleistungen</h2><div class="mut small">e1RM nach Epley: Gewicht × (1 + Wdh./30)</div><table><tr><th>Übung</th><th>Bester Satz</th><th>e1RM</th></tr>${rows.map(([ex,b])=>`<tr><td>${esc(EX[ex].n)}</td><td>${nf(b.s.w)} × ${b.s.r}<div class="mut small">${de(b.k,false)}</div></td><td><b>${nf(b.e,1)}</b></td></tr>`).join('')||'<tr><td colspan=3 class="mut">Noch keine Sätze.</td></tr>'}</table></div>`;
+  h+=`<div class="card"><h2>Bestleistungen</h2><div class="mut small">e1RM nach Epley: Gewicht × (1 + Wdh./30)</div><table><tr><th>Übung</th><th>Bester Satz</th><th>e1RM</th></tr>${rows.map(([key,b])=>`<tr><td>${esc(EX[b.ex].n)}${b.dev?'<div class="mut small">'+esc(devName(b.dev)||'anderes Gerät')+'</div>':''}</td><td>${nf(b.s.w)} × ${b.s.r}<div class="mut small">${de(b.k,false)}</div></td><td><b>${nf(b.e,1)}</b></td></tr>`).join('')||'<tr><td colspan=3 class="mut">Noch keine Sätze.</td></tr>'}</table></div>`;
   // Sätze pro Muskel 7 Tage
   const to=CUR,from=addDays(to,-6),cnt={};
   for(const[k,dy] of Object.entries(S.days)){if(k<from||k>to)continue;for(const[ex,arr] of Object.entries(dy.sets||{})){const n=arr.filter(s=>s&&s.done).length;if(!n||!EX[ex])continue;for(const m of EX[ex].m)cnt[m]=(cnt[m]||0)+n;for(const m of(EX[ex].m2||[]))cnt[m]=(cnt[m]||0)+n*0.5}}
@@ -917,7 +1251,7 @@ function credits(){const seen=new Set(),rows=[];
   for(const[id,m] of Object.entries(typeof MEDIA!=='undefined'?MEDIA:{})){if(!m||m.none||!EX[id])continue;const k=m.f[0];if(seen.has(k))continue;seen.add(k);
     rows.push(`<li>${esc(EX[id].n)}: ${m.src==='wger.de'?`„${esc(m.title)}“ von ${esc(m.by)}, <a href="${m.url}" target="_blank" rel="noopener">wger.de</a>, <a href="${m.licUrl}" target="_blank" rel="noopener">${esc(m.lic)}</a> (verkleinert, WebP)`:`<a href="${m.url}" target="_blank" rel="noopener">free-exercise-db</a>, Public Domain`}</li>`)}
   openSheet(`<h2>Info / Bildquellen</h2><div class="mut small">Übungsbilder überwiegend aus <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener">free-exercise-db</a> (yuhonas, Public Domain/Unlicense), verkleinert und als WebP. „Bird Dog“: Settebello via wger.de, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; die bearbeitete Datei steht ebenfalls unter CC BY-SA 4.0. Muskelzuordnung teils nach dem <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">openGym</a>-Katalog (AGPL-3.0 / ExerciseDB MIT), Texte von Sporty.</div><ul class="small" style="padding-left:18px">${rows.join('')}</ul>`)}
-function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Ton bei Pausenende</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><div class="mut small">Ton: iPhone-Stummschalter aus und Lautstärke hoch, sonst sind die Pieptöne nicht hörbar. Der Ton kommt nur, solange Sportify offen im Vordergrund ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div><button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
+function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Ton bei Pausenende</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label class="tgl" style="flex:1"><input type="checkbox" data-act="voice" ${voiceOn()?'checked':''}><span>Sprach-Feedback</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="voicetest">🗣️ Test</button></div><label class="tgl"><input type="checkbox" data-act="v10" ${v10On()?'checked':''}><span>„Noch 10 Sekunden“ ansagen</span></label><label class="tgl"><input type="checkbox" data-act="auto" ${autoOn()?'checked':''}><span>Automatisch anpassen (nächster Satz)</span></label><label class="tgl"><input type="checkbox" data-act="musik" ${localStorage.getItem(MIX_KEY)==='1'?'checked':''}><span>Musik nicht unterbrechen (Stummschalter gilt dann)</span></label><div class="lbl">Sprechtempo</div><div class="chips">${[['0.9','ruhig'],['1','normal'],['1.12','zügig']].map(([v,n])=>`<button class="chip sm ${Math.abs(vRate()-v)<.01?'on':''}" data-act="vrate" data-v="${v}">${n}</button>`).join('')}</div>${deVoices().length?`<div class="lbl">Stimme</div><select id="vname"><option value="">Automatisch (${esc((pickVoice()||{}).name||'–')})</option>${deVoices().map(v=>`<option value="${esc(v.voiceURI)}" ${localStorage.getItem(VNAME_KEY)===v.voiceURI?'selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')}</select>`:'<div class="mut small">Keine deutsche Stimme gefunden – iPhone: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch (z. B. Anna, Premium laden).</div>'}<div class="mut small">Ton & Sprache: Lautstärke hoch. Ab iOS 17 sind Pausenton und Rekord-Fanfare auch bei Stummschalter zu hören (außer „Musik nicht unterbrechen“ ist an). Die Sprache folgt je nach iOS-Version dem Stummschalter. Beides nur, solange Sportify offen im Vordergrund ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div>${PLAN?wstepsOverview():''}<button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
 // ===== Export / Import =====
 function doExport(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sportify-backup-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Export erstellt')}
 function doImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(data.v===1&&data.days&&S&&S.plan&&!confirm('Backup einspielen? Aktuelle Daten auf diesem Gerät werden ersetzt.'))return;applyData(data);toast('Import erfolgreich');closeSheet();render()}catch(e){alert('Import fehlgeschlagen: '+e.message)}};r.readAsText(f)};i.click()}
@@ -974,13 +1308,15 @@ function getSet(exId,i,d){const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId
 function firstOpen(exId,d){const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId);if(!it)return -1;const n=planned(it,d).sets.length;for(let i=0;i<n;i++)if(!getSet(exId,i,d).done)return i;return -1}
 function onSetDone(exId,i){
   const d=CUR,g=getSet(exId,i,d),it=g.it;
-  if(g.done){setVal(exId,i,{done:false},d);render();return}
-  setVal(exId,i,{w:g.w,r:g.r,rir:g.rir,done:true,at:Date.now()},d);
+  if(g.done){setVal(exId,i,{done:false},d);coachUndo(exId,i+1,d);render();return}
+  voiceUnlock();
+  setVal(exId,i,{w:g.w,r:g.r,rir:g.rir??2,rirDef:g.rir==null,done:true,at:Date.now(),dev:devId(exId)},d);
   const dy=day(d);if(mods(d).tags.length)dy.modded=true;save();
   const items=sessionItems(typeOf(d),d);const n=planned(it,d).sets.length;
   const noSS=!!peek(d).noSS;
+  const res=coachApply(exId,i,d);   // Auswertung + ggf. nächsten Satz anpassen (vor dem Rendern → sofort sichtbar)
   if(it.ss&&!noSS){const p=items.find(x=>x.ex===it.ss);const pn=p?planned(p,d).sets.length:0;const ps=p&&i<pn?getSet(p.ex,i,d):null;
-    if(ps&&!ps.done){FOCUS={ex:p.ex,i};SCROLL_FOCUS='set';render();toast('Supersatz → '+EX[p.ex].n+' Satz '+(i+1));vib(40);return}}
+    if(ps&&!ps.done){FOCUS={ex:p.ex,i};SCROLL_FOCUS='set';render();toast('Supersatz → '+EX[p.ex].n+' Satz '+(i+1));vib(40);if(res)say(coachLine(res,EX[exId],{partner:EX[p.ex].n}),res.mood);return}}
   let next='';
   let mode='set';
   if(it.ssOf&&!noSS){const a=items.find(x=>x.ex===it.ssOf);if(a&&i+1<planned(a,d).sets.length&&!getSet(a.ex,i+1,d).done){FOCUS={ex:a.ex,i:i+1};next=EX[a.ex].n+' Satz '+(i+2)}}
@@ -990,7 +1326,11 @@ function onSetDone(exId,i){
       const idx=items.findIndex(x=>x.ex===exId);const open=x=>x.ex!==exId&&!planned(x,d).skip&&firstOpen(x.ex,d)>=0;
       const nx=items.slice(idx+1).find(open)||items.slice(0,Math.max(0,idx)).find(open);
       if(nx){FOCUS={ex:nx.ex,i:firstOpen(nx.ex,d)};next=EX[nx.ex].n;mode='ex'}else{FOCUS=null;mode='end'}}}
-  SCROLL_FOCUS=mode;render();if(!it.rest){if(next)toast('Weiter: '+next);return}startRest(it.rest,'Pause · '+EX[exId].n,next||'Einheit fertig – Feedback an Sporty');
+  SCROLL_FOCUS=mode;render();
+  if(res){if(mode==='end'){const L=coachLine(res,EX[exId],{});say(L.slice(0,res.mood==='rekord'?3:1).concat(finishLine(d)),res.mood==='rekord'?'rekord':'stark')}
+    else say(coachLine(res,EX[exId],{nextEx:mode==='ex'&&FOCUS?EX[FOCUS.ex].n:null,rest:it.rest,more:coachMore(exId,i,d,g,it)}),res.mood);
+    if(res.applied)toast('Nächster Satz angepasst');}
+  if(!it.rest){if(next&&!(res&&res.applied))toast('Weiter: '+next);return}startRest(it.rest,'Pause · '+EX[exId].n,next||'Einheit fertig – Feedback an Sporty');
 }
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,v=t.dataset.v,dd=t.dataset.d;
@@ -1007,12 +1347,36 @@ document.addEventListener('click',e=>{
     case 'type':{const dy=day(d);dy.type=v;FOCUS=null;save();render();break}
     case 'extra':{const dy=day(d);dy.extras=dy.extras||[];const k=dy.extras.indexOf(v);if(k>=0)dy.extras.splice(k,1);else dy.extras.push(v);save();render();break}
     case 'w':case 'r':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);let x=a==='w'?g.w:g.r;
-      const ap=x=>{setVal(ex,i,{[a]:x},d);renderCard(ex)};
+      const ap=x=>{setVal(ex,i,{[a]:x,adj:undefined},d);renderCard(ex)};
       if(dd==='edit'){numEdit(a==='w'?'Gewicht (kg)':(g.it.unit==='s'?'Sekunden':'Wiederholungen'),x,a==='w',ap);break}
-      else if(a==='w')x=+dd>0?wUp(x):wDn(x);else x=Math.max(0,(x||0)+(+dd)*(g.it.unit==='s'?5:1));
+      else if(a==='w')x=+dd>0?gearUp(ex,x):gearDn(ex,x);else x=Math.max(0,(x||0)+(+dd)*(g.it.unit==='s'?5:1));
       setVal(ex,i,{[a]:x},d);renderCard(ex);break}
-    case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);setVal(ex,i,{rir:g.rir===+v?null:+v},d);renderCard(ex);break}
+    case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);const nv=g.rir===+v&&!(peek(d).sets[ex][i]||{}).rirDef?null:+v;
+      setVal(ex,i,{rir:nv,rirDef:false},d);
+      if(g.done){// RIR nachträglich geändert → Anpassung des nächsten Satzes neu berechnen
+        const A=day(d).sets[ex];if(nv==null){A[i].rir=2;A[i].rirDef=true}if(A[i+1]&&A[i+1].adj&&A[i+1].adj.by===i&&!A[i+1].done)delete A[i+1];save();
+        const r=coachApply(ex,i,d);if(r&&(r.applied||r.suggest)){toast('Nächster Satz angepasst');say(coachLine(r,EX[ex],{}).filter(x=>/^(Nächster Satz|Vorschlag)/.test(x)),r.mood==='rekord'?'stark':r.mood)}}
+      renderCard(ex);break}
+    case 'adjundo':{const ex=t.dataset.ex,i=+t.dataset.i;if(coachUndo(ex,i,d))toast('Anpassung zurückgenommen');renderCard(ex);break}
     case 'rotflip':localStorage.setItem('sportify.rotflip',t.checked?'1':'0');applyRot();break;
+    case 'voice':setFlag(VOICE_KEY,t.checked);if(t.checked){voiceUnlock();say('Sprach-Feedback an.')}else voiceStop();break;
+    case 'v10':setFlag(V10_KEY,t.checked);break;
+    case 'auto':setFlag(AUTO_KEY,t.checked);toast(t.checked?'Nächster Satz wird automatisch angepasst':'Nur Vorschläge, keine automatische Anpassung');break;
+    case 'musik':localStorage.setItem(MIX_KEY,t.checked?'1':'0');audioSessionSet();break;
+    case 'vrate':localStorage.setItem(VRATE_KEY,v);menu();say('So klingt das Tempo.');break;
+    case 'voicetest':{if(!voiceOn()){toast('Sprach-Feedback ist aus');break}const moods=['stark','rekord','zaeh','neutral'],m=moods[SAYN%4];SAYN++;
+      say({stark:['Stark, 12 statt 10 Wiederholungen.','Nächster Satz mit 42,5 Kilo.','Tipp: unten kurz halten.'],rekord:['Neuer Rekord!','42,5 Kilo, 15 Wiederholungen.','Der Eisenbrecher schlägt zu!'],
+        zaeh:['Okay. Der war zäh.','Nächster Satz 40 Kilo.','Du packst das.'],neutral:['Satz 2 von 3 geschafft.','Tipp: beim Drücken ausatmen.','90 Sekunden Pause.']}[m],m);toast('Test: '+m);break}
+    case 'wsopen':wstepsSheet(v);break;
+    case 'wspre':{WS_TMP=JSON.parse(v);const li=$('#wsList');if(li)li.value='';wstepsDraw();break}
+    case 'wsauto':WS_TMP=null;S.wsteps&&delete S.wsteps[devKey(WS_EX)];save();closeSheet();render();toast('Gewichtsschritte: automatisch');break;
+    case 'wssave':wstepsSave();break;
+    case 'wsf':{const f=t.dataset.f,c=WS_TMP||{step:2.5,start:0};if(dd==='edit'){numEdit(f==='step'?'Schrittweite (kg)':'Start / kleinstes Gewicht (kg)',c[f]??0,true,y=>{c[f]=Math.max(f==='step'?0.25:0,y);WS_TMP=c;wstepsDraw()});break}
+      const st=f==='step'?[0.5,1,1.25,2,2.5,5,10]:null;if(st){const k=st.findIndex(x=>x>=c.step-1e-6);c.step=st[Math.max(0,Math.min(st.length-1,(k<0?st.length-1:k)+(+dd)))]}else c.start=Math.max(0,(c.start||0)+(+dd)*(c.step||2.5));WS_TMP=c;wstepsDraw();break}
+    case 'gearopen':gearSheet(v);break;
+    case 'gearname':{const n=($('#gearName').value||'').trim();if(!n){toast('Bitte einen Namen eingeben');break}const c=gearFind(n);gearApply(v,'name',c?c.n:n,c?c.id:null,null);break}
+    case 'gearunknown':gearApply(v,'unknown',null,null,null);break;
+    case 'gearundo':gearUndo(v);break;
     case 'sound':setSound(t.checked);toast(t.checked?'Ton bei Pausenende an':'Ton aus – nur Blinken');break;
     case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');endBeep();break;
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
@@ -1055,7 +1419,8 @@ document.addEventListener('input',e=>{const t=e.target;const a=t.dataset.act;if(
   if(a==='iv'){const iv=day(d).interval=day(d).interval||{};iv.rounds=iv.rounds||[];const i=+t.dataset.i;iv.rounds[i]=iv.rounds[i]||{};iv.rounds[i][t.dataset.f]=num(t.value);if(!day(d).type)day(d).type='interval';save()}
 });
 $('#numForm').addEventListener('submit',e=>{e.preventDefault();const y=num($('#numIn').value),cb=NUM_CB;numClose();if(y!=null&&cb)cb(y)});
-$('#numCancel').onclick=numClose;$('#numdlg').addEventListener('click',e=>{if(e.target.id==='numdlg')numClose()});
+$('#numCancel').onclick=numClose;
+document.addEventListener('change',e=>{if(e.target.id==='vname'){localStorage.setItem(VNAME_KEY,e.target.value);say('Hallo, so klinge ich.')}});$('#numdlg').addEventListener('click',e=>{if(e.target.id==='numdlg')numClose()});
 $('#tPlus').onclick=()=>addTime(15);$('#tPause').onclick=togglePause;$('#tSkip').onclick=()=>nextPhase(false);$('#tStop').onclick=stopRunner;
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
@@ -1105,7 +1470,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261021-0335';
+const APP_VER='20261021-0420';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1157,8 +1522,9 @@ function sessionId(d){const dy=day(d);if(!dy.sid){dy.sid='sportify-'+d+'-'+Math.
 function sessionPayload(d){
   const dy=peek(d),t=typeOf(d),items=isStrength(t)||(dy.extras||[]).length?sessionItems(t,d):[];
   const ex=[];let t0=null,t1=null;
-  for(const it of items){const arr=(dy.sets&&dy.sets[it.ex])||[];const sets=arr.filter(s=>s&&s.done).map(s=>{if(s.at){t0=t0==null?s.at:Math.min(t0,s.at);t1=t1==null?s.at:Math.max(t1,s.at)}return{weight:s.w??null,reps:s.r??null,rir:s.rir??null,unit:it.unit==='s'?'s':'reps'}});
-    if(sets.length)ex.push({id:it.ex,name:EX[it.ex]?EX[it.ex].n:it.ex,block:it.block,plannedSets:planned(it,d).sets.length,sets})}
+  for(const it of items){const arr=(dy.sets&&dy.sets[it.ex])||[];const sets=arr.filter(s=>s&&s.done).map(s=>{if(s.at){t0=t0==null?s.at:Math.min(t0,s.at);t1=t1==null?s.at:Math.max(t1,s.at)}return{weight:s.w??null,reps:s.r??null,rir:s.rir??null,rirDefault:!!s.rirDef,mood:s.mood||null,unit:it.unit==='s'?'s':'reps',device:s.dev||null}});
+    if(sets.length){const dv=devCur(it.ex);const adj=arr.map((s,j)=>s&&s.adj?{set:j+1,from:s.adj.from,to:{w:s.w,r:s.r},why:s.adj.v,kept:!!s.done}:null).filter(Boolean);
+      ex.push({id:it.ex,name:EX[it.ex]?EX[it.ex].n:it.ex,block:it.block,plannedSets:planned(it,d).sets.length,sets,device:dv?{id:dv.id,name:dv.name,catalogId:dv.cat,pending:!!dv.pending,requestId:dv.reqId}:null,weightSteps:stepCfg(it.ex),autoAdjust:adj.length?adj:undefined})}}
   const f=dy.feedback||{};
   const s={id:sessionId(d),revision:(dy.sentRev||0)+1,date:d,type:t,name:TYPE_LABEL[t]||t,exercises:ex,
     feedback:{gefuehl:f.feel??null,energie:f.energy?ENERGY[f.energy]:null,notiz:f.note||null},
