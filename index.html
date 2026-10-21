@@ -10,10 +10,10 @@
 <meta name="theme-color" content="#f3f1ec">
 <title>Sportify</title>
 <style>
-:root{--bg:#f3f1ec;--card:#fff;--ink:#1d1d1b;--mut:#6b6a66;--line:#e4e1da;--chip:#f1efea;--acc:#2f6b4f;--acc2:#e6f0ea;--warn:#b7791f;--warnbg:#fff6e5;--bad:#b42318;--badbg:#fdecea;--new:#5b3fd1;--newbg:#efebff}
+:root{--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom);--sal:env(safe-area-inset-left);--sar:env(safe-area-inset-right);--vh1:1vh;--bg:#f3f1ec;--card:#fff;--ink:#1d1d1b;--mut:#6b6a66;--line:#e4e1da;--chip:#f1efea;--acc:#2f6b4f;--acc2:#e6f0ea;--warn:#b7791f;--warnbg:#fff6e5;--bad:#b42318;--badbg:#fdecea;--new:#5b3fd1;--newbg:#efebff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;max-width:100%;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
-body{padding:env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom))}
+#scr{padding:var(--sat) var(--sar) calc(76px + var(--sab)) var(--sal)}
 header{display:flex;align-items:flex-end;justify-content:space-between;padding:14px 16px 6px}
 header h1{margin:0;font-size:26px;letter-spacing:-.5px}
 header .sub{color:var(--mut);font-size:14px}
@@ -74,11 +74,11 @@ textarea{min-height:70px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
 .kv:last-child{border-bottom:0}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:20}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + var(--sab));z-index:20}
 nav.tabs button{flex:1;border:0;background:none;font-size:11px;color:var(--mut);padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav.tabs button b{font-size:20px;font-weight:400}
 nav.tabs button.on{color:var(--acc);font-weight:700}
-#timer{position:fixed;left:8px;right:8px;bottom:calc(70px + env(safe-area-inset-bottom));background:#14231b;color:#fff;border-radius:20px;padding:12px 14px 14px;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#timer{position:fixed;left:8px;right:8px;bottom:calc(70px + var(--sab));background:#14231b;color:#fff;border-radius:20px;padding:12px 14px 14px;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
 #timer.show{display:block}
 #timer .tl{font-size:14px;opacity:.85;display:flex;justify-content:space-between}
 #timer .tt{font-size:68px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;line-height:1.05;margin:4px 0}
@@ -95,7 +95,7 @@ nav.tabs button.on{color:var(--acc);font-weight:700}
 #timer .nx{font-size:13px;opacity:.75;text-align:center;margin-bottom:8px}
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40;display:none;align-items:flex-end}
 .sheet.show{display:flex}
-.sheet .in{background:var(--card);width:100%;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+.sheet .in{background:var(--card);width:100%;max-height:88%;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(20px + var(--sab))}
 .sheet ol{padding-left:20px;margin:6px 0}
 .sheet li{margin:4px 0}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
@@ -121,10 +121,14 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 .phase.cur{font-weight:700;color:var(--acc)}
 .rnd{display:grid;grid-template-columns:36px 1fr 1fr 1fr;gap:6px;align-items:center;margin:6px 0}
 .rnd input{padding:8px;text-align:center}
-.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + env(safe-area-inset-top));background:#222;color:#fff;padding:10px 16px;border-radius:12px;z-index:60;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + var(--sat));background:#222;color:#fff;padding:10px 16px;border-radius:12px;z-index:60;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
+.numdlg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.35);display:none;align-items:flex-start;justify-content:center;padding:calc(var(--sat) + 70px) 16px 0}
+.numdlg.show{display:flex}
+.numdlg .in{background:var(--card);border-radius:18px;padding:14px;width:100%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+#numdlg #numIn{font-size:30px!important;font-weight:700;text-align:center;margin:4px 0 12px;font-variant-numeric:tabular-nums}
 .hidden{display:none!important}
-.demo{position:relative;width:100%;max-height:36vh;margin:8px 0 4px;border-radius:12px;overflow:hidden;background:#e7e4dc}
+.demo{position:relative;width:100%;max-height:calc(var(--vh1)*36);margin:8px 0 4px;border-radius:12px;overflow:hidden;background:#e7e4dc}
 .demo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .demo.anim img.fr1{animation:demoFlip 1.6s steps(1,end) infinite}
 @keyframes demoFlip{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
@@ -138,17 +142,19 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 button,a,select,input,textarea,label,[data-act]{touch-action:manipulation}
 input,textarea,select{font-size:16px!important}
 .stp button,.ok,.chip,.btn,nav.tabs button,.iconbtn{-webkit-user-select:none;user-select:none}
-#rotate{display:none}
-@media (orientation:landscape) and (max-height:500px){
- #rotate{display:flex;position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--ink);flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px calc(20px + env(safe-area-inset-right)) 20px calc(20px + env(safe-area-inset-left))}
- #rotate .ph{font-size:56px;animation:rotHint 2.4s ease-in-out infinite}
- #rotate b{font-size:22px}
- body.rot-lock{overflow:hidden}
-}
-@keyframes rotHint{0%,30%{transform:rotate(-90deg)}60%,100%{transform:rotate(0)}}
+/* Querformat (iPhone): iOS ignoriert die Drehsperre der PWA – die App-Oberfläche wird per CSS zurückgedreht,
+   damit sie relativ zum Handy hochkant bleibt. #app = gedrehter Rahmen, #scr = Scroll-Bereich darin. */
+html.rot,html.rot body{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+html.rot #app{position:fixed;top:0;left:0;width:var(--uw);height:var(--uh);transform-origin:0 0;overflow:hidden;background:var(--bg)}
+html.rot.r90 #app{transform:translateY(var(--uw)) rotate(-90deg)}
+html.rot.r270 #app{transform:translateX(var(--uh)) rotate(90deg)}
+html.rot #scr{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+/* Safe-Area mitdrehen: Notch-Seite wird zum oberen Rand der App */
+html.rot.r90{--sat:env(safe-area-inset-left);--sab:12px;--sal:env(safe-area-inset-bottom);--sar:0px}
+html.rot.r270{--sat:env(safe-area-inset-right);--sab:12px;--sal:0px;--sar:env(safe-area-inset-bottom)}
 .sheet.compact{align-items:center;justify-content:center;padding:16px}
 .sheet.compact .in{border-radius:18px;max-height:none;overflow:hidden;padding:10px 12px 12px;max-width:420px}
-.sheet.compact .demo{max-height:60vh;margin:6px 0 0}
+.sheet.compact .demo{max-height:calc(var(--vh1)*60);margin:6px 0 0}
 .demohd{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:16px}
 .demox{border:0;background:var(--chip);border-radius:999px;width:36px;height:36px;font-size:16px;color:var(--ink);flex:none}
 .cfg textarea{min-height:90px;font-family:ui-monospace,Menlo,monospace}
@@ -164,13 +170,14 @@ input,textarea,select{font-size:16px!important}
 <link rel="icon" href="icon-192.png">
 </head>
 <body>
-<header><div><h1>Sportify</h1><div class="sub" id="hdrSub"></div></div><button class="iconbtn" data-act="menu" aria-label="Menü">⋯</button></header>
-<main id="view"></main>
+<div id="app"><div id="scr"><header><div><h1>Sportify</h1><div class="sub" id="hdrSub"></div></div><button class="iconbtn" data-act="menu" aria-label="Menü">⋯</button></header>
+<main id="view"></main></div>
 <div id="timer"><div class="tl"><span id="tTitle"></span><span id="tKind"></span></div><div class="tt" id="tTime">0:00</div><div class="bar"><i id="tBar"></i></div><div class="nx" id="tNext"></div><div class="tb"><button id="tPlus">+15 s</button><button id="tPause">Pause</button><button id="tSkip">Skip</button></div><button id="tStop" style="display:block;margin:8px auto 0;background:none;border:0;color:#fff;opacity:.7;font-size:14px">Timer schließen</button></div>
 <div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
 <div class="toast" id="toast"></div>
-<div id="rotate" role="alert"><div class="ph">📱</div><b>Bitte Handy hochkant halten</b><div class="mut">Sportify ist nur fürs Hochformat gebaut.<br>Tipp: Ausrichtungssperre im Kontrollzentrum einschalten.</div></div>
+<div class="numdlg" id="numdlg"><form class="in" id="numForm" autocomplete="off"><div class="lbl" id="numLbl"></div><input id="numIn" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false"><div class="row"><button type="button" class="btn sec" id="numCancel">Abbrechen</button><button type="submit" class="btn">OK</button></div></form></div>
 <nav class="tabs"><button data-tab="training"><b>🏋️</b>Training</button><button data-tab="kalender"><b>📅</b>Kalender</button><button data-tab="fortschritt"><b>📈</b>Fortschritt</button><button data-tab="garmin"><b>⌚</b>Garmin</button><button data-tab="ernaehrung"><b>🥗</b>Ernährung</button></nav>
+</div>
 <script>
 const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Rear_Delt_Raise"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
 
@@ -528,6 +535,25 @@ function restoreRun(){try{const o=JSON.parse(localStorage.getItem(RUN_KEY)||'nul
 
 // ===== Training-Tab =====
 let FOCUS=null,SCROLL_FOCUS=false,KEEP_SCROLL=true;
+// Scroll-Helfer: Hochformat = Fenster, gedrehtes Querformat (html.rot) = #scr. Positionen über offsetTop (stimmt auch im gedrehten Rahmen).
+let ROT=0,PENDING_SCROLL=null;
+function scroller(){return ROT?$('#scr'):(document.scrollingElement||document.documentElement)}
+function getY(){return scroller().scrollTop}
+function setY(y,smooth){const s=scroller();y=Math.max(0,Math.min(y,s.scrollHeight-viewH()));if(smooth&&s.scrollTo)s.scrollTo({top:y,behavior:'smooth'});else s.scrollTop=y}
+function viewH(){return ROT?$('#scr').clientHeight:innerHeight}
+function yOf(el){const s=ROT?$('#scr'):null;let y=0;for(let e=el;e&&e!==s&&e!==document.body;e=e.offsetParent)y+=e.offsetTop;return y}
+function topGap(){return (parseFloat(getComputedStyle($('#scr')).paddingTop)||0)+12}
+function bottomGap(){const t=$('#timer');return (RUN&&t.classList.contains('show')?t.offsetHeight+80:90)}
+// mode 'set' = nächster Satz (nur scrollen, wenn nicht gut sichtbar) · 'ex' = nächste Übung oben zeigen · 'end' = Feedback-Karte
+function scrollFocus(mode){
+  let el=null;
+  if(mode==='end')el=$('#fbCard');
+  else if(FOCUS)el=mode==='ex'?document.getElementById('ex-'+FOCUS.ex):document.querySelector(`[data-set="${FOCUS.ex}-${FOCUS.i}"]`);
+  if(!el)return;
+  const y=getY(),top=yOf(el),h=el.offsetHeight,vh=viewH(),tg=topGap(),bg=bottomGap();
+  if(mode==='set'){if(top>=y+tg&&top+h<=y+vh-bg)return;const room=vh-tg-bg;setY(top-tg-Math.max(0,(room-h)/2),true);return}
+  setY(top-tg,true);
+}
 const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="minus">−</button><div class="v" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="plus">+</button></div>`;
 function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:PLAN.goal.start}
 function stepsFor(d){return GARMIN?GARMIN.days.find(x=>x.date===d):null}
@@ -569,8 +595,8 @@ function renderTraining(){
   h+=`<div class="card"><div class="lbl">Notiz (optional)</div><textarea data-act="note" placeholder="z. B. Fußspitzen 12 kg, Gerät besetzt …">${esc(dy.note||'')}</textarea></div>`;
   h+=renderFeedback(d);
   $('#view').innerHTML=h;
-  // Nur direkt nach „Satz erledigt“ zum nächsten Satz scrollen – und nur, wenn er nicht schon sichtbar ist.
-  if(FOCUS&&SCROLL_FOCUS){SCROLL_FOCUS=false;const el=document.querySelector(`[data-set="${FOCUS.ex}-${FOCUS.i}"]`);if(el){const r=el.getBoundingClientRect(),bot=innerHeight-(RUN?300:90);if(r.top<60||r.bottom>bot)KEEP_SCROLL=false,setTimeout(()=>el.scrollIntoView({block:'center',behavior:'smooth'}),0)}}
+  // Nur direkt nach „Satz erledigt“: Seite bleibt erst stehen (render() stellt die Position wieder her), dann sanft weiter.
+  if(SCROLL_FOCUS){const m=SCROLL_FOCUS===true?'set':SCROLL_FOCUS;SCROLL_FOCUS=false;PENDING_SCROLL=()=>scrollFocus(m)}
 }
 function exCard(it,d,idx){
   const ex=EX[it.ex],dy=peek(d),p=planned(it,d),stored=(dy.sets&&dy.sets[it.ex])||[];
@@ -691,7 +717,7 @@ const FEEL={1:'sehr schwer',2:'schwer',3:'ok',4:'gut',5:'top'};
 const ENERGY={low:'niedrig',mid:'mittel',high:'hoch'};
 function renderFeedback(d){
   const f=peek(d).feedback||{};
-  return `<div class="card" style="border:2px solid var(--acc)"><h3>Feedback an Sporty</h3><div class="mut small">Antippen, optional kurze Notiz – dann mit einem Tipp an mich schicken.</div>
+  return `<div class="card" id="fbCard" style="border:2px solid var(--acc)"><h3>Feedback an Sporty</h3><div class="mut small">Antippen, optional kurze Notiz – dann mit einem Tipp an mich schicken.</div>
   <div class="lbl">Gefühl</div><div class="chips">${[1,2,3,4,5].map(i=>`<button class="chip sm ${f.feel===i?'on':''}" data-act="fb" data-f="feel" data-v="${i}">${i}</button>`).join('')}</div><div class="mut small">1 = sehr schwer · 3 = ok · 5 = top</div>
   <div class="lbl">Energie</div><div class="chips">${Object.entries(ENERGY).map(([k,v])=>`<button class="chip sm ${f.energy===k?'on':''}" data-act="fb" data-f="energy" data-v="${k}">${v}</button>`).join('')}</div>
   <div class="lbl">Kurze Notiz (optional)</div><input data-act="fbnote" value="${esc(f.note||'')}" placeholder="z. B. Knie ok, Hip Thrust leicht">
@@ -870,6 +896,14 @@ function renderErnaehrung(){
 
 // ===== Sheets =====
 function openSheet(html){$('#sheet').classList.remove('compact');$('#sheetIn').innerHTML=html+'<button class="btn sec" style="margin-top:14px" data-act="closesheet">Schließen</button>';$('#sheet').classList.add('show')}
+// Zahlen-Eingabe: eigenes Fenster statt prompt(). Fokus + select() laufen synchron im Tipp-Handler,
+// nur so öffnet iOS sofort den Ziffernblock (decimal = mit Komma für kg/km/h, numeric = nur Ziffern).
+let NUM_CB=null;
+function numEdit(label,val,dec,cb){const dl=$('#numdlg'),inp=$('#numIn');
+  $('#numLbl').textContent=label;inp.setAttribute('inputmode',dec?'decimal':'numeric');if(dec)inp.removeAttribute('pattern');else inp.setAttribute('pattern','[0-9]*');
+  inp.value=val==null||val===''||isNaN(+val)?'':String(val).replace('.',',');NUM_CB=cb;
+  dl.classList.add('show');inp.focus();try{inp.setSelectionRange(0,inp.value.length)}catch(e){}inp.select()}
+function numClose(){$('#numIn').blur();$('#numdlg').classList.remove('show');NUM_CB=null}
 function closeSheet(){$('#sheet').classList.remove('show','compact')}
 function demo(id){const m=(typeof MEDIA!=='undefined')&&MEDIA[id];
   if(!m||m.none)return `<div class="demo none">Kein Demo-Bild verfügbar.</div>`;
@@ -883,7 +917,7 @@ function credits(){const seen=new Set(),rows=[];
   for(const[id,m] of Object.entries(typeof MEDIA!=='undefined'?MEDIA:{})){if(!m||m.none||!EX[id])continue;const k=m.f[0];if(seen.has(k))continue;seen.add(k);
     rows.push(`<li>${esc(EX[id].n)}: ${m.src==='wger.de'?`„${esc(m.title)}“ von ${esc(m.by)}, <a href="${m.url}" target="_blank" rel="noopener">wger.de</a>, <a href="${m.licUrl}" target="_blank" rel="noopener">${esc(m.lic)}</a> (verkleinert, WebP)`:`<a href="${m.url}" target="_blank" rel="noopener">free-exercise-db</a>, Public Domain`}</li>`)}
   openSheet(`<h2>Info / Bildquellen</h2><div class="mut small">Übungsbilder überwiegend aus <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener">free-exercise-db</a> (yuhonas, Public Domain/Unlicense), verkleinert und als WebP. „Bird Dog“: Settebello via wger.de, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; die bearbeitete Datei steht ebenfalls unter CC BY-SA 4.0. Muskelzuordnung teils nach dem <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">openGym</a>-Katalog (AGPL-3.0 / ExerciseDB MIT), Texte von Sporty.</div><ul class="small" style="padding-left:18px">${rows.join('')}</ul>`)}
-function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Ton bei Pausenende</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><div class="mut small">Ton: iPhone-Stummschalter aus und Lautstärke hoch, sonst sind die Pieptöne nicht hörbar. Der Ton kommt nur, solange Sportify offen im Vordergrund ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Hochformat: Ausrichtungssperre im Kontrollzentrum hilft.</div><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div><button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
+function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Ton bei Pausenende</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><div class="mut small">Ton: iPhone-Stummschalter aus und Lautstärke hoch, sonst sind die Pieptöne nicht hörbar. Der Ton kommt nur, solange Sportify offen im Vordergrund ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div><button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
 // ===== Export / Import =====
 function doExport(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sportify-backup-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Export erstellt')}
 function doImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(data.v===1&&data.days&&S&&S.plan&&!confirm('Backup einspielen? Aktuelle Daten auf diesem Gerät werden ersetzt.'))return;applyData(data);toast('Import erfolgreich');closeSheet();render()}catch(e){alert('Import fehlgeschlagen: '+e.message)}};r.readAsText(f)};i.click()}
@@ -907,10 +941,11 @@ async function hashUpdate(){if(!location.hash.startsWith('#sync='))return;const 
 let TAB='training';
 // render() ersetzt #view komplett – Scroll-Position sichern und wiederherstellen (iOS springt sonst nach oben).
 function render(){
-  const y=window.scrollY,sh=$('#sheetIn').scrollTop;KEEP_SCROLL=true;
+  const y=getY(),sh=$('#sheetIn').scrollTop;KEEP_SCROLL=true;
   renderView();
-  if(KEEP_SCROLL&&Math.abs(window.scrollY-y)>1)window.scrollTo(0,y);
+  if(KEEP_SCROLL&&Math.abs(getY()-y)>1)setY(y);
   $('#sheetIn').scrollTop=sh;
+  if(PENDING_SCROLL){const f=PENDING_SCROLL;PENDING_SCROLL=null;requestAnimationFrame(f)}
 }
 // Gezielt nur eine Übungskarte neu zeichnen (Stepper/RIR) – kein Neuaufbau der Seite.
 function renderCard(exId){
@@ -920,7 +955,7 @@ function renderCard(exId){
   if(isStrength(t)){const k=PLAN.sessions[t].items.findIndex(x=>x.ex===exId);if(k>=0){it=PLAN.sessions[t].items[k];idx=k}}
   if(!it)for(const x of(peek(d).extras||[])){const b=PLAN.extras[x];if(!b||!b.items)continue;const k=b.items.findIndex(z=>z.ex===exId);if(k>=0){it=b.items[k];idx=k;break}}
   if(!it)return render();
-  const y=window.scrollY;els[0].outerHTML=exCard(it,d,idx);if(Math.abs(window.scrollY-y)>1)window.scrollTo(0,y);
+  const y=getY();els[0].outerHTML=exCard(it,d,idx);if(Math.abs(getY()-y)>1)setY(y);
 }
 function renderView(){
   $('#hdrSub').textContent=WDL[parse(TODAY).getDay()]+', '+parse(TODAY).getDate()+'. '+MON[parse(TODAY).getMonth()];
@@ -928,13 +963,15 @@ function renderView(){
   if(!PLAN){$('#view').innerHTML=`<div class="card"><h2>Willkommen bei Sportify</h2><p>Diese App enthält keine persönlichen Daten. Importiere einmalig deine Datei <b>sportify-daten.json</b> (Plan, Log, Gewicht, Garmin-Snapshot) – sie bleibt nur auf diesem Gerät gespeichert.</p><button class="btn big" data-act="import">⤒ Datei importieren</button><p class="mut small">Du hast die Datei von Sporty im Chat bekommen. In der Dateien-App speichern, dann hier auswählen.</p></div>`;return}
   ({training:renderTraining,kalender:renderKalender,fortschritt:renderFortschritt,garmin:renderGarmin,ernaehrung:renderErnaehrung})[TAB]();
 }
-function setTab(t){TAB=t;FOCUS=null;renderView();window.scrollTo(0,0)}
+function setTab(t){TAB=t;FOCUS=null;renderView();setY(0)}
 // ===== Events =====
 function num(v){if(v==null)return null;const x=parseFloat(String(v).replace(',','.'));return isNaN(x)?null:x}
 function setVal(exId,i,patch,d){const dy=day(d);dy.sets=dy.sets||{};const arr=dy.sets[exId]=dy.sets[exId]||[];
   const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId);const p=planned(it,d).sets[i]||[null,null];
   const cur=arr[i]||{w:p[0],r:p[1],rir:null,done:false};arr[i]={...cur,...patch};if(!dy.type)dy.type=typeOf(d);save()}
 function getSet(exId,i,d){const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId);const p=planned(it,d).sets[i]||[null,null];const s=(peek(d).sets&&peek(d).sets[exId]||[])[i]||{};return{w:s.w!==undefined?s.w:p[0],r:s.r!==undefined?s.r:p[1],rir:s.rir??null,done:!!s.done,it}}
+// erster noch offener Satz einer Übung (-1 = alle erledigt)
+function firstOpen(exId,d){const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId);if(!it)return -1;const n=planned(it,d).sets.length;for(let i=0;i<n;i++)if(!getSet(exId,i,d).done)return i;return -1}
 function onSetDone(exId,i){
   const d=CUR,g=getSet(exId,i,d),it=g.it;
   if(g.done){setVal(exId,i,{done:false},d);render();return}
@@ -943,11 +980,17 @@ function onSetDone(exId,i){
   const items=sessionItems(typeOf(d),d);const n=planned(it,d).sets.length;
   const noSS=!!peek(d).noSS;
   if(it.ss&&!noSS){const p=items.find(x=>x.ex===it.ss);const pn=p?planned(p,d).sets.length:0;const ps=p&&i<pn?getSet(p.ex,i,d):null;
-    if(ps&&!ps.done){FOCUS={ex:p.ex,i};SCROLL_FOCUS=true;render();toast('Supersatz → '+EX[p.ex].n+' Satz '+(i+1));vib(40);return}}
+    if(ps&&!ps.done){FOCUS={ex:p.ex,i};SCROLL_FOCUS='set';render();toast('Supersatz → '+EX[p.ex].n+' Satz '+(i+1));vib(40);return}}
   let next='';
-  if(it.ssOf&&!noSS){const a=items.find(x=>x.ex===it.ssOf);if(a&&i+1<planned(a,d).sets.length){FOCUS={ex:a.ex,i:i+1};next=EX[a.ex].n+' Satz '+(i+2)}}
-  if(!next){if(i+1<n){FOCUS={ex:exId,i:i+1};next=EX[exId].n+' Satz '+(i+2)}else{const idx=items.indexOf(it);const nx=items.slice(idx+1).find(x=>!x.ssOf||x.ssOf!==exId);if(nx){FOCUS={ex:nx.ex,i:0};next=EX[nx.ex].n}else FOCUS=null}}
-  SCROLL_FOCUS=!!FOCUS;render();if(!it.rest){if(next)toast('Weiter: '+next);return}startRest(it.rest,'Pause · '+EX[exId].n,next||'Einheit fertig – Feedback an Sporty');
+  let mode='set';
+  if(it.ssOf&&!noSS){const a=items.find(x=>x.ex===it.ssOf);if(a&&i+1<planned(a,d).sets.length&&!getSet(a.ex,i+1,d).done){FOCUS={ex:a.ex,i:i+1};next=EX[a.ex].n+' Satz '+(i+2)}}
+  if(!next){const k=firstOpen(exId,d);
+    if(k>=0){FOCUS={ex:exId,i:k};next=EX[exId].n+' Satz '+(k+1)}
+    else{// Übung fertig → nächste Übung mit offenen Sätzen (Bugfix: items sind Kopien, indexOf(it) war -1 → Sprung zur ersten Übung ganz oben)
+      const idx=items.findIndex(x=>x.ex===exId);const open=x=>x.ex!==exId&&!planned(x,d).skip&&firstOpen(x.ex,d)>=0;
+      const nx=items.slice(idx+1).find(open)||items.slice(0,Math.max(0,idx)).find(open);
+      if(nx){FOCUS={ex:nx.ex,i:firstOpen(nx.ex,d)};next=EX[nx.ex].n;mode='ex'}else{FOCUS=null;mode='end'}}}
+  SCROLL_FOCUS=mode;render();if(!it.rest){if(next)toast('Weiter: '+next);return}startRest(it.rest,'Pause · '+EX[exId].n,next||'Einheit fertig – Feedback an Sporty');
 }
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,v=t.dataset.v,dd=t.dataset.d;
@@ -964,16 +1007,20 @@ document.addEventListener('click',e=>{
     case 'type':{const dy=day(d);dy.type=v;FOCUS=null;save();render();break}
     case 'extra':{const dy=day(d);dy.extras=dy.extras||[];const k=dy.extras.indexOf(v);if(k>=0)dy.extras.splice(k,1);else dy.extras.push(v);save();render();break}
     case 'w':case 'r':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);let x=a==='w'?g.w:g.r;
-      if(dd==='edit'){const y=num(prompt(a==='w'?'Gewicht (kg)':(g.it.unit==='s'?'Sekunden':'Wiederholungen'),x??''));if(y==null)return;x=y}
+      const ap=x=>{setVal(ex,i,{[a]:x},d);renderCard(ex)};
+      if(dd==='edit'){numEdit(a==='w'?'Gewicht (kg)':(g.it.unit==='s'?'Sekunden':'Wiederholungen'),x,a==='w',ap);break}
       else if(a==='w')x=+dd>0?wUp(x):wDn(x);else x=Math.max(0,(x||0)+(+dd)*(g.it.unit==='s'?5:1));
       setVal(ex,i,{[a]:x},d);renderCard(ex);break}
     case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);setVal(ex,i,{rir:g.rir===+v?null:+v},d);renderCard(ex);break}
+    case 'rotflip':localStorage.setItem('sportify.rotflip',t.checked?'1':'0');applyRot();break;
     case 'sound':setSound(t.checked);toast(t.checked?'Ton bei Pausenende an':'Ton aus – nur Blinken');break;
     case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');endBeep();break;
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
     case 'abl':ablauf(v);break;
     case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,rpm:2}[f];
-      if(dd==='edit'){const y=num(prompt('Wert',x??''));if(y==null)return;x=y}else x=Math.round(((x??(f==='hr'?120:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;c[f]=x;if(!dy.type)dy.type='cardio';save();render();break}
+      const ap=x=>{c[f]=x;if(!dy.type)dy.type='cardio';save();render()};
+      if(dd==='edit'){numEdit({walkMin:'Gehen (Min)',ctMin:'Crosstrainer (Min)',incline:'Steigung (%)',kmh:'Tempo (km/h)',ctLevel:'Stufe',hr:'Puls (bpm)',rpm:'Trittfrequenz (rpm)'}[f]||'Wert',x,st<1,ap);break}
+      x=Math.round(((x??(f==='hr'?120:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;ap(x);break}
     case 'cdrpe':{const c=day(d).cardio=day(d).cardio||{};c.rpe=+v;save();render();break}
     case 'cddone':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);for(const k of(walkOnly()?['walkMin','incline','kmh']:['walkMin','incline','kmh','ctMin','ctLevel','rpm']))if(c[k]===undefined)c[k]=r[k];c.done=!c.done;dy.type=dy.type||'cardio';save();render();if(c.done)toast('Gespeichert – Feedback an Sporty nicht vergessen');break}
     case 'cdtimer':{if(walkOnly()){startRunner(PLAN.sessions.cardio.name||'Incline Walk',cardioPhases(d),()=>toast('Incline Walk fertig! Puls & RPE eintragen'));onPhase();break}
@@ -981,7 +1028,7 @@ document.addEventListener('click',e=>{
     case 'ivtimer':startRunner('Intervall',intervalPhases(d),()=>toast('Intervall fertig! Werte & RPE eintragen'));onPhase();break;
     case 'ivrpe':{const iv=day(d).interval=day(d).interval||{};iv.rpe=+v;save();render();break}
     case 'ivdone':{const dy=day(d);const iv=dy.interval=dy.interval||{};const r=intervalRec(d);iv.rounds=[0,1,2,3].map(i=>({incline:iv.rounds?.[i]?.incline??r.incline[i],kmh:iv.rounds?.[i]?.kmh??r.kmh,hr:iv.rounds?.[i]?.hr??null}));iv.done=!iv.done;dy.type=dy.type||'interval';save();render();break}
-    case 'free':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:130);if(dd==='edit'){const y=num(prompt('Wert',x));if(y==null)return;x=y}else x+=(+dd)*(f==='min'?5:1);if(f==='min')x=Math.max(5,x);p[f]=x;save();render();break}
+    case 'free':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:130);const ap=x=>{if(f==='min')x=Math.max(5,x);p[f]=x;save();render()};if(dd==='edit'){numEdit(f==='min'?'Dauer (Min)':'Puls Ø (bpm)',x,false,ap);break}x+=(+dd)*(f==='min'?5:1);ap(x);break}
     case 'freetimer':{const k=t.dataset.k,b=PLAN.extras[k];const p=(peek(d).free||{})[k]||{};const m=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));startRunner(b.name,[{label:b.name,sec:m*60}],null);break}
     case 'freedone':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};p.min=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));p.done=!p.done;save();render();break}
     case 'noss':{const dy=day(d);dy.noSS=!dy.noSS;save();render();break}
@@ -997,7 +1044,7 @@ document.addEventListener('click',e=>{
     case 'cal':{const[y,m]=CALM.split('-').map(Number);const n=new Date(y,m-1+(+dd),1,12);CALM=iso(n).slice(0,7);render();break}
     case 'calday':CALSEL=v;render();break;
     case 'goto':CUR=v;closeSheet();setTab('training');break;
-    case 'nu':{const n=S.nutrition[d]=S.nutrition[d]||{};const f=t.dataset.f;let x=n[f]??(f==='kcal'?1800:100);if(dd==='edit'){const y=num(prompt(f==='kcal'?'kcal':'Eiweiß (g)',x));if(y==null)return;x=y}else x+=(+dd)*(f==='kcal'?50:5);n[f]=Math.max(0,x);n.src=n.src||'manuell';save();render();break}
+    case 'nu':{const n=S.nutrition[d]=S.nutrition[d]||{};const f=t.dataset.f;let x=n[f]??(f==='kcal'?1800:100);const ap=x=>{n[f]=Math.max(0,x);n.src=n.src||'manuell';save();render()};if(dd==='edit'){numEdit(f==='kcal'?'kcal':'Eiweiß (g)',x,false,ap);break}x+=(+dd)*(f==='kcal'?50:5);ap(x);break}
     case 'nuimport':{try{let t2=$('#nuin').value.trim();const m=t2.match(/\{[\s\S]*\}/);const o=JSON.parse(m?m[0]:t2);const nu=o.nutrition||o;let c=0;for(const[k,x] of Object.entries(nu)){if(!/^\d{4}-\d\d-\d\d$/.test(k))continue;S.nutrition[k]={...x,src:'Sporty'};c++}save();toast(c+' Tag(e) importiert');render()}catch(e){alert('Konnte den Text nicht lesen: '+e.message)}break}
   }
 });
@@ -1007,6 +1054,8 @@ document.addEventListener('input',e=>{const t=e.target;const a=t.dataset.act;if(
   if(a==='fbnote'){const f=day(d).feedback=day(d).feedback||{};f.note=t.value;save()}
   if(a==='iv'){const iv=day(d).interval=day(d).interval||{};iv.rounds=iv.rounds||[];const i=+t.dataset.i;iv.rounds[i]=iv.rounds[i]||{};iv.rounds[i][t.dataset.f]=num(t.value);if(!day(d).type)day(d).type='interval';save()}
 });
+$('#numForm').addEventListener('submit',e=>{e.preventDefault();const y=num($('#numIn').value),cb=NUM_CB;numClose();if(y!=null&&cb)cb(y)});
+$('#numCancel').onclick=numClose;$('#numdlg').addEventListener('click',e=>{if(e.target.id==='numdlg')numClose()});
 $('#tPlus').onclick=()=>addTime(15);$('#tPause').onclick=togglePause;$('#tSkip').onclick=()=>nextPhase(false);$('#tStop').onclick=stopRunner;
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
@@ -1015,15 +1064,48 @@ $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()})
 document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
 let LAST_TOUCH=0;document.addEventListener('touchend',e=>{const now=Date.now();const b=e.target.closest('button');if(b&&now-LAST_TOUCH<350){e.preventDefault();b.click()}LAST_TOUCH=now},{passive:false});
 document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
-// Hochformat: Lock wo unterstützt (Android/installierte PWA); iOS: Hinweis-Overlay per CSS
+// Hochformat: echter Lock wo unterstützt (Android/Chrome). iOS ignoriert Manifest + screen.orientation.lock →
+// im Querformat wird die Oberfläche per CSS um ±90° zurückgedreht (html.rot), Scrollen läuft dann in #scr.
 function lockPortrait(){try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{})}catch(e){}}
-lockPortrait();document.addEventListener('visibilitychange',()=>{if(!document.hidden)lockPortrait()});
+const ROT_MQ=matchMedia('(orientation:landscape) and (max-height:500px) and (hover:none) and (pointer:coarse)');
+function rotFlip(){return localStorage.getItem('sportify.rotflip')==='1'}
+function devAngle(){let a=typeof window.orientation==='number'?window.orientation:(screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:90);a=((a%360)+360)%360;return a===270?270:90}
+function applyRot(){
+  let r=ROT_MQ.matches?devAngle():0;if(r&&rotFlip())r=r===90?270:90;
+  const H=document.documentElement,st=H.style;
+  if(r){st.setProperty('--uw',innerHeight+'px');st.setProperty('--uh',innerWidth+'px');st.setProperty('--vh1',(innerWidth/100)+'px')}
+  if(r===ROT)return;
+  const y=LAST_Y;ROT=r;
+  H.classList.toggle('rot',!!r);H.classList.toggle('r90',r===90);H.classList.toggle('r270',r===270);
+  if(!r){st.removeProperty('--uw');st.removeProperty('--uh');st.removeProperty('--vh1')}
+  setY(y);requestAnimationFrame(()=>{if(Math.abs(getY()-y)>1)setY(y)});
+}
+// letzte echte Scroll-Position merken (beim Drehen hat das Fenster sie schon verfälscht, bevor applyRot läuft)
+let LAST_Y=0;function noteY(){if(ROT_MQ.matches===!!ROT)LAST_Y=getY()}
+addEventListener('scroll',noteY,{passive:true});$('#scr').addEventListener('scroll',noteY,{passive:true});
+let ROT_T=null;function rotSoon(){applyRot();clearTimeout(ROT_T);ROT_T=setTimeout(applyRot,250)} // iOS meldet neue Maße teils verzögert
+ROT_MQ.addEventListener?ROT_MQ.addEventListener('change',rotSoon):ROT_MQ.addListener(rotSoon);
+addEventListener('resize',rotSoon);addEventListener('orientationchange',rotSoon);if(screen.orientation&&screen.orientation.addEventListener)screen.orientation.addEventListener('change',rotSoon);
+// Wischen im gedrehten Modus selbst umsetzen: Finger-Bewegung (Bildschirm) → App-Achse, mit Schwung.
+// (Native Scroll-Gesten laufen in gedrehten Containern nicht zuverlässig, Chrome macht daraus z. B. „Zurück“.)
+let TS=null,MOM=0;
+function rotScrollerFor(t){for(let e=t;e&&e.id!=='app';e=e.parentElement){if(e.nodeType!==1)continue;const o=getComputedStyle(e).overflowY;if((o==='auto'||o==='scroll')&&e.scrollHeight>e.clientHeight+1)return e}return $('#scr')}
+function uiDelta(dx,dy){return ROT===90?dx:-dx} // + = Finger bewegt sich in App-Richtung „nach unten“
+document.addEventListener('touchstart',e=>{if(!ROT||e.touches.length!==1)return;cancelAnimationFrame(MOM);const t=e.touches[0];
+  TS={el:rotScrollerFor(e.target),x:t.clientX,y:t.clientY,last:uiDelta(t.clientX,t.clientY),tl:performance.now(),v:0,moved:false}},{passive:true});
+document.addEventListener('touchmove',e=>{if(!ROT||!TS||e.touches.length!==1)return;e.preventDefault();const t=e.touches[0];
+  const u=uiDelta(t.clientX,t.clientY),now=performance.now(),d=u-TS.last;
+  if(!TS.moved&&Math.hypot(t.clientX-TS.x,t.clientY-TS.y)<6)return;TS.moved=true;
+  TS.el.scrollTop-=d;const dt=Math.max(1,now-TS.tl);TS.v=.8*(d/dt)+.2*TS.v;TS.last=u;TS.tl=now},{passive:false});
+document.addEventListener('touchend',e=>{if(!ROT||!TS)return;const el=TS.el;let v=TS.moved&&performance.now()-TS.tl<80?TS.v:0;TS=null;if(Math.abs(v)<.05)return;
+  let t0=performance.now();const step=now=>{const dt=now-t0;t0=now;el.scrollTop-=v*dt;v*=Math.pow(.995,dt);if(Math.abs(v)>.02)MOM=requestAnimationFrame(step)};MOM=requestAnimationFrame(step)},{passive:true});
+lockPortrait();applyRot();document.addEventListener('visibilitychange',()=>{if(!document.hidden){lockPortrait();rotSoon()}});
 load();render();restoreRun();requestAnimationFrame(loop);hashUpdate();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261021-0307';
+const APP_VER='20261021-0335';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1208,11 +1290,11 @@ function badgeCard(){
   ${av.length?`<div class="lbl" style="margin-top:10px">Noch beitreten (Garmin Connect)</div>${av.map(a=>`<div class="mut small">${esc(a.name)}</div>`).join('')}`:''}
   ${no.length?`<details style="margin-top:10px"><summary class="mut small">Passt gerade nicht (${no.length})</summary>${no.map(a=>`<div class="mut small">${esc(a.name)} · ${a.percent!=null?Math.round(a.percent)+' %':'–'}</div>`).join('')}</details>`:''}
   <div class="mut small" style="margin-top:8px">Stand ${new Date(D.updatedAt).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}${BADGE_ERR?' · '+esc(BADGE_ERR):''}</div></div>`}
-function redrawBadgeCard(){const el=$('#badgeCard');if(!el)return;const y=window.scrollY;el.outerHTML=badgeCard();if(Math.abs(window.scrollY-y)>1)window.scrollTo(0,y)}
+function redrawBadgeCard(){const el=$('#badgeCard');if(!el)return;const y=getY();el.outerHTML=badgeCard();if(Math.abs(getY()-y)>1)setY(y)}
 function confetti(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const w=document.createElement('div');w.className='confetti';
   const col=['#2f6b4f','#7ee2a8','#e0b341','#5b3fd1','#e86a5c'];
   for(let i=0;i<36;i++){const s=document.createElement('i');s.style.left=(Math.random()*100)+'%';s.style.background=col[i%col.length];s.style.animationDelay=(Math.random()*.4)+'s';s.style.setProperty('--dx',(Math.random()*80-40)+'px');s.style.transform='rotate('+(Math.random()*360)+'deg)';w.appendChild(s)}
-  document.body.appendChild(w);setTimeout(()=>w.remove(),2600)}
+  ($('#app')||document.body).appendChild(w);setTimeout(()=>w.remove(),2600)}
 function celebrate(D){const rec=(D.earned&&D.earned.recent)||[];let seen=null;try{seen=JSON.parse(localStorage.getItem(BADGE_SEEN)||'null')}catch(e){}
   const keys=rec.map(bKey);
   if(!seen){localStorage.setItem(BADGE_SEEN,JSON.stringify(keys));return}   // erstes Mal: still übernehmen
