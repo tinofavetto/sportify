@@ -83,6 +83,11 @@ nav.tabs button.on{color:var(--acc);font-weight:700}
 #timer .tl{font-size:14px;opacity:.85;display:flex;justify-content:space-between}
 #timer .tt{font-size:68px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;line-height:1.05;margin:4px 0}
 #timer.end .tt{color:#7ee2a8}
+#timer.flash{animation:tFlash .5s ease-in-out 6}
+#timer.flash .tt{animation:tPulse .5s ease-in-out 6}
+@keyframes tFlash{0%,100%{background:#14231b}50%{background:#2f6b4f;box-shadow:0 0 0 6px rgba(126,226,168,.55),0 10px 30px rgba(0,0,0,.3)}}
+@keyframes tPulse{50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){#timer.flash,#timer.flash .tt{animation-duration:1s;animation-iteration-count:3}}
 #timer .bar{height:6px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;margin-bottom:10px}
 #timer .bar i{display:block;height:100%;background:#7ee2a8}
 #timer .tb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -435,57 +440,91 @@ function sessionItems(t,d){
 }
 
 // ===== Audio / Vibration / Wake Lock =====
+// iOS (Safari/Home-Bildschirm-App): AudioContext darf nur in einer Nutzer-Geste starten und wird beim
+// Verlassen der App, Sperren oder Anrufen „interrupted“/„suspended“. Darum bei JEDER Geste wieder aufwecken.
 let AC=null;
-function audioUnlock(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC&&AC.state==='suspended')AC.resume();
-  if(AC&&!AC._u){const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0);AC._u=1}}catch(e){}}
-function beep(freq=880,dur=0.12,vol=0.35,when=0){try{if(!AC)return;const t=AC.currentTime+when,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.02)}catch(e){}}
-function tick(){beep(880,0.1,0.3);vib(60)}
-function endBeep(){beep(1320,0.35,0.5,0);beep(1320,0.35,0.5,0.45);beep(1760,0.6,0.5,0.9);vib([300,120,300,120,500])}
-function phaseBeep(){beep(1100,0.25,0.5,0);beep(1500,0.4,0.5,0.3);vib([250,100,250])}
+const SOUND_KEY='sportify-ton';
+function soundOn(){try{return localStorage.getItem(SOUND_KEY)!=='0'}catch(e){return true}}
+function setSound(on){try{localStorage.setItem(SOUND_KEY,on?'1':'0')}catch(e){}}
+function audioUnlock(){try{
+  if(!AC||AC.state==='closed'){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();AC.onstatechange=()=>{}}
+  if(AC.state!=='running'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}
+  // stiller Puffer in der Geste – iOS „entsperrt“ die Ausgabe erst durch echtes Abspielen
+  const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0)}catch(e){}}
+function audioWake(){try{if(AC&&AC.state!=='running'&&AC.state!=='closed'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
+function beep(freq=880,dur=0.12,vol=0.35,when=0,type='sine'){try{if(!AC||!soundOn())return;audioWake();const t=AC.currentTime+0.02+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.008);g.gain.setValueAtTime(vol,t+Math.max(0.01,dur-0.04));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.03)}catch(e){}}
+function tick(){beep(880,0.09,0.45);vib(60)}
+// Pausenende: 3 kräftige Pieptöne (~880 Hz, Dreieck = lauter wahrgenommen als Sinus) + hoher Schlusston
+function endBeep(){for(let k=0;k<3;k++)beep(880,0.18,0.9,k*0.28,'triangle');beep(1320,0.5,0.9,0.9,'triangle');vib([300,120,300,120,500])}
+function phaseBeep(){beep(1100,0.25,0.8,0,'triangle');beep(1500,0.4,0.8,0.3,'triangle');vib([250,100,250])}
 function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 let WL=null;
 async function wake(on){try{if(on&&'wakeLock' in navigator&&!WL){WL=await navigator.wakeLock.request('screen');WL.addEventListener('release',()=>WL=null)}if(!on&&WL){await WL.release();WL=null}}catch(e){}}
-document.addEventListener('pointerdown',audioUnlock,{passive:true});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&RUN)wake(true)});
+['pointerdown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,audioUnlock,{passive:true,capture:true}));
 
 // ===== Timer-Engine (Pause & geführte Intervalle) =====
-let RUN=null; // {phases:[{label,sec,kind}],i,end,paused,rem,onDone,title,lastSec}
+// Zeiten hängen nur an Zeitstempeln (Date.now), nicht an Ticks – stimmt also auch nach Hintergrund/Sperre.
+let RUN=null; // {phases:[{label,sec,kind}],i,end,paused,rem,onDone,title,lastSec,done,missed}
+const RUN_KEY='sportify-run';
+function persistRun(){try{if(RUN&&!RUN.done&&!RUN.onDone&&RUN.phases.length===1)localStorage.setItem(RUN_KEY,JSON.stringify({title:RUN.title,phases:RUN.phases,end:RUN.end,paused:RUN.paused,rem:RUN.rem}));else localStorage.removeItem(RUN_KEY)}catch(e){}}
 function startRunner(title,phases,onDone){
-  audioUnlock();RUN={title,phases,i:0,end:Date.now()+phases[0].sec*1000,paused:false,rem:0,onDone,lastSec:null,done:false};
-  wake(true);$('#timer').classList.add('show');$('#timer').classList.remove('end');drawTimer();
+  audioUnlock();clearTimeout(END_T);RUN={title,phases,i:0,end:Date.now()+phases[0].sec*1000,paused:false,rem:0,onDone,lastSec:null,done:false,missed:false};
+  wake(true);$('#timer').classList.add('show');$('#timer').classList.remove('end','flash');drawTimer();persistRun();
 }
 function startRest(sec,label,next){startRunner('Pause',[{label:label||'Pause',sec,kind:'rest',next}],null)}
 function remSec(){if(!RUN)return 0;return RUN.paused?RUN.rem:Math.max(0,(RUN.end-Date.now())/1000)}
-function loop(){
-  if(RUN&&!RUN.paused&&!RUN.done){
-    const r=remSec(),s=Math.ceil(r);
-    if(s!==RUN.lastSec){if(s<=3&&s>=1&&RUN.lastSec!=null)tick();RUN.lastSec=s}
-    if(r<=0)nextPhase(true);
-    drawTimer();
-  }
-  requestAnimationFrame(loop);
+function runStep(){
+  if(!RUN||RUN.paused||RUN.done)return;
+  // im Hintergrund abgelaufene Phasen nachholen (zeitstempelbasiert)
+  let adv=false;while(RUN.end<=Date.now()&&RUN.i<RUN.phases.length-1){RUN.i++;RUN.end+=RUN.phases[RUN.i].sec*1000;RUN.lastSec=null;adv=true}
+  if(adv){phaseBeep();if(typeof onPhase==='function')onPhase()}
+  const r=remSec(),s=Math.ceil(r);
+  if(s!==RUN.lastSec){if(s<=3&&s>=1&&RUN.lastSec!=null&&RUN.lastSec>s)tick();RUN.lastSec=s}
+  if(r<=0){finishRun(true);return}
+  drawTimer();
+}
+function loop(){runStep();requestAnimationFrame(loop)}
+setInterval(runStep,250); // Fallback, falls requestAnimationFrame pausiert
+let END_T=null;
+function finishRun(auto){
+  if(!RUN||RUN.done)return;
+  const late=auto?(Date.now()-RUN.end)/1000:0;RUN.missed=document.hidden||late>2;
+  RUN.done=true;RUN.doneAt=Date.now();if(auto)endBeep();
+  const el=$('#timer');el.classList.add('end');el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');drawTimer();persistRun();
+  if(typeof onTimerEnd==='function')try{onTimerEnd(RUN)}catch(e){}
+  const cb=RUN.onDone;clearTimeout(END_T);
+  // verpasstes Ende (App war im Hintergrund) bleibt stehen, bis man schließt; sonst nach 6 s zu
+  if(!RUN.missed)END_T=setTimeout(()=>{if(RUN&&RUN.done)stopRunner()},auto?6000:0);
+  if(cb)cb();
 }
 function nextPhase(auto){
   if(!RUN)return;
-  if(RUN.i<RUN.phases.length-1){RUN.i++;RUN.end=Date.now()+RUN.phases[RUN.i].sec*1000;RUN.paused=false;RUN.lastSec=null;phaseBeep();drawTimer();if(typeof onPhase==='function')onPhase();return}
-  if(auto)endBeep();
-  RUN.done=true;$('#timer').classList.add('end');drawTimer();
-  const cb=RUN.onDone;setTimeout(()=>{if(RUN&&RUN.done){stopRunner()}},auto?2500:0);if(cb)cb();
+  if(RUN.i<RUN.phases.length-1){RUN.i++;RUN.end=Date.now()+RUN.phases[RUN.i].sec*1000;RUN.paused=false;RUN.lastSec=null;phaseBeep();drawTimer();persistRun();if(typeof onPhase==='function')onPhase();return}
+  finishRun(auto);
 }
-function stopRunner(){RUN=null;$('#timer').classList.remove('show','end');wake(false);if(typeof onPhase==='function')onPhase()}
-function addTime(s){if(!RUN||RUN.done)return;if(RUN.paused)RUN.rem+=s;else RUN.end+=s*1000;RUN.lastSec=null;drawTimer()}
-function togglePause(){if(!RUN||RUN.done)return;if(RUN.paused){RUN.end=Date.now()+RUN.rem*1000;RUN.paused=false}else{RUN.rem=remSec();RUN.paused=true}drawTimer()}
+function stopRunner(){clearTimeout(END_T);RUN=null;$('#timer').classList.remove('show','end','flash');wake(false);persistRun();if(typeof onPhase==='function')onPhase()}
+function addTime(s){if(!RUN||RUN.done)return;if(RUN.paused)RUN.rem+=s;else RUN.end+=s*1000;RUN.lastSec=null;drawTimer();persistRun()}
+function togglePause(){if(!RUN||RUN.done)return;if(RUN.paused){RUN.end=Date.now()+RUN.rem*1000;RUN.paused=false}else{RUN.rem=remSec();RUN.paused=true}drawTimer();persistRun()}
 function fmtT(s){s=Math.ceil(s);const m=Math.floor(s/60);return m+':'+pad(s%60)}
 function drawTimer(){
   if(!RUN)return;const p=RUN.phases[RUN.i],r=RUN.done?0:remSec();
   $('#tTitle').textContent=RUN.phases.length>1?(p.label+' · '+(RUN.i+1)+'/'+RUN.phases.length):p.label;
-  $('#tKind').textContent=RUN.done?'Fertig!':(RUN.paused?'pausiert':RUN.title);
+  const ago=RUN.done&&RUN.missed?Math.round((Date.now()-RUN.end)/1000):0;
+  $('#tKind').textContent=RUN.done?(RUN.title==='Pause'?'Pause vorbei!':'Fertig!')+(ago>=5?' · vor '+(ago<60?ago+' s':Math.round(ago/60)+' Min'):''):(RUN.paused?'pausiert':RUN.title);
   $('#tTime').textContent=RUN.done?'0:00':fmtT(r);
-  $('#tBar').style.width=(p.sec?Math.min(100,100*(1-r/p.sec)):0)+'%';
-  const nx=RUN.phases[RUN.i+1];$('#tNext').textContent=RUN.done?'':(nx?'Als Nächstes: '+nx.label+' ('+fmtT(nx.sec)+')':(p.next?'Danach: '+p.next:''));
+  $('#tBar').style.width=(RUN.done?100:(p.sec?Math.min(100,100*(1-r/p.sec)):0))+'%';
+  const nx=RUN.phases[RUN.i+1];$('#tNext').textContent=RUN.done?(p.next?'Jetzt: '+p.next:''):(nx?'Als Nächstes: '+nx.label+' ('+fmtT(nx.sec)+')':(p.next?'Danach: '+p.next:''));
   $('#tPause').textContent=RUN.paused?'Weiter':'Pause';
   $('#tSkip').textContent=RUN.phases.length>1&&RUN.i<RUN.phases.length-1?'Nächste ›':'Skip';
 }
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;
+  if(RUN)wake(true);audioWake();runStep(); // abgelaufen? → Ende-Zustand + Ton/Blinken
+  if(RUN&&RUN.done&&RUN.missed){const el=$('#timer');el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');drawTimer()}});
+// Pausen-Timer überlebt einen Neustart der App (iOS beendet Home-Bildschirm-Apps im Hintergrund gern)
+function restoreRun(){try{const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null');if(!o||!o.phases||!o.phases.length)return;
+  if(!o.paused&&Date.now()-o.end>10*60*1000){localStorage.removeItem(RUN_KEY);return}
+  RUN={title:o.title,phases:o.phases,i:0,end:o.end,paused:!!o.paused,rem:o.rem||0,onDone:null,lastSec:null,done:false,missed:false};
+  $('#timer').classList.add('show');wake(true);runStep();drawTimer()}catch(e){}}
 
 // ===== Training-Tab =====
 let FOCUS=null,SCROLL_FOCUS=false,KEEP_SCROLL=true;
@@ -844,7 +883,7 @@ function credits(){const seen=new Set(),rows=[];
   for(const[id,m] of Object.entries(typeof MEDIA!=='undefined'?MEDIA:{})){if(!m||m.none||!EX[id])continue;const k=m.f[0];if(seen.has(k))continue;seen.add(k);
     rows.push(`<li>${esc(EX[id].n)}: ${m.src==='wger.de'?`„${esc(m.title)}“ von ${esc(m.by)}, <a href="${m.url}" target="_blank" rel="noopener">wger.de</a>, <a href="${m.licUrl}" target="_blank" rel="noopener">${esc(m.lic)}</a> (verkleinert, WebP)`:`<a href="${m.url}" target="_blank" rel="noopener">free-exercise-db</a>, Public Domain`}</li>`)}
   openSheet(`<h2>Info / Bildquellen</h2><div class="mut small">Übungsbilder überwiegend aus <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener">free-exercise-db</a> (yuhonas, Public Domain/Unlicense), verkleinert und als WebP. „Bird Dog“: Settebello via wger.de, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; die bearbeitete Datei steht ebenfalls unter CC BY-SA 4.0. Muskelzuordnung teils nach dem <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">openGym</a>-Katalog (AGPL-3.0 / ExerciseDB MIT), Texte von Sporty.</div><ul class="small" style="padding-left:18px">${rows.join('')}</ul>`)}
-function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div class="mut small">Ton: iPhone-Stummschalter aus, sonst sind die Pieptöne nicht hörbar. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Hochformat: Ausrichtungssperre im Kontrollzentrum hilft.</div><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div><button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
+function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Ton bei Pausenende</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><div class="mut small">Ton: iPhone-Stummschalter aus und Lautstärke hoch, sonst sind die Pieptöne nicht hörbar. Der Ton kommt nur, solange Sportify offen im Vordergrund ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Hochformat: Ausrichtungssperre im Kontrollzentrum hilft.</div><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div><button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
 // ===== Export / Import =====
 function doExport(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sportify-backup-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Export erstellt')}
 function doImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(data.v===1&&data.days&&S&&S.plan&&!confirm('Backup einspielen? Aktuelle Daten auf diesem Gerät werden ersetzt.'))return;applyData(data);toast('Import erfolgreich');closeSheet();render()}catch(e){alert('Import fehlgeschlagen: '+e.message)}};r.readAsText(f)};i.click()}
@@ -929,6 +968,8 @@ document.addEventListener('click',e=>{
       else if(a==='w')x=+dd>0?wUp(x):wDn(x);else x=Math.max(0,(x||0)+(+dd)*(g.it.unit==='s'?5:1));
       setVal(ex,i,{[a]:x},d);renderCard(ex);break}
     case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);setVal(ex,i,{rir:g.rir===+v?null:+v},d);renderCard(ex);break}
+    case 'sound':setSound(t.checked);toast(t.checked?'Ton bei Pausenende an':'Ton aus – nur Blinken');break;
+    case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');endBeep();break;
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
     case 'abl':ablauf(v);break;
     case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,rpm:2}[f];
@@ -977,12 +1018,12 @@ document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.pre
 // Hochformat: Lock wo unterstützt (Android/installierte PWA); iOS: Hinweis-Overlay per CSS
 function lockPortrait(){try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{})}catch(e){}}
 lockPortrait();document.addEventListener('visibilitychange',()=>{if(!document.hidden)lockPortrait()});
-load();render();requestAnimationFrame(loop);hashUpdate();
+load();render();restoreRun();requestAnimationFrame(loop);hashUpdate();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261020-0619';
+const APP_VER='20261021-0307';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
