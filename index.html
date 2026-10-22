@@ -973,11 +973,21 @@ function exCard(it,d,idx){
   });
   return h+`</div>`;
 }
+// Fester Aufwärmblock (ca. 8 Min) vor jeder Krafteinheit – abhaken oder mit Timer durchgehen
+function warmSteps(t,d){const it=(PLAN.sessions[t].items||[]).find(x=>!x.bw&&x.unit!=='s')||null;let ramp='Rampensatz vor der ersten schweren Übung: ca. 50 % × 10';
+  if(it){const p=planned(it,d),ws=(p&&p.sets||[]).map(x=>x&&x[0]).filter(x=>x!=null),w=ws.length?Math.max(...ws):null;ramp=`Rampensatz ${EX[it.ex]?EX[it.ex].n:''}: ca. 50 %${w?' ('+nf(roundW(w/2))+' kg)':''} × 10`}
+  return[{t:'Locker Cardio',l:'3 Min locker Cardio (Laufband oder Rad)',sec:180},{t:'Mobilität',l:'Mobilität: Katze-Kuh 8×, Hüftkreisen 8 je Seite, Armkreisen 10 je Richtung',sec:120,ex:'catcow'},
+    {t:'Jefferson Curls 2 × 6–8',l:'Jefferson Curls 2 × 6–8 auf der Bank, leichte Kettlebell (8–12 kg), 3 s runter / 3 s hoch. Stopp bei Kribbeln/Taubheit im Bein, an schlechten Rücken-Tagen weglassen.',sec:90},
+    {t:'Aktivierung',l:'Aktivierung: Glute Bridge 12×, Band Pull-Apart oder leichte Face Pulls 12×',sec:60,ex:'bridge1'},{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]}
+function warmCard(t,d){const dy=peek(d),w=dy.warm||[],st=warmSteps(t,d),n=st.filter((x,i)=>w[i]).length;
+  return `<div class="card"><div class="exhead"><div><h3>Aufwärmen (ca. 8 Min)</h3><div class="meta">${n}/${st.length} erledigt</div></div><button class="abl" data-act="warmtimer">▶ Timer</button></div>`+
+  st.map((x,i)=>`<label class="tgl" style="align-items:flex-start"><input type="checkbox" data-act="warmck" data-v="${i}" ${w[i]?'checked':''}><span>${esc(x.l)}${x.ex&&EX[x.ex]?` <a href="#" data-act="abl" data-v="${x.ex}">Ablauf</a>`:''}</span></label>`).join('')+
+  (PLAN.warmup?`<div class="mut small">${esc(PLAN.warmup)}</div>`:'')+`</div>`}
 function renderStrength(t,d){
   const ses=PLAN.sessions[t];let h='';
   const dy=peek(d);
   if(ses.why)h+=`<div class="coach"><b>Begründung der Empfehlungen:</b> ${esc(ses.why)}</div>`;
-  if(PLAN.warmup)h+=`<div class="coach"><b>Aufwärmen:</b> ${esc(PLAN.warmup)}</div>`;
+  h+=warmCard(t,d);
   h+=`<div class="small" style="margin:8px 0"><div class="mut">${esc(PLAN.supersetNote||'')}</div><button class="chip sm ${dy.noSS?'on':''}" data-act="noss" style="margin-top:6px">${dy.noSS?'Supersätze: aus (antippen zum Einschalten)':'Supersätze: an (antippen zum Ausschalten)'}</button></div>`;
   ses.items.forEach((it,i)=>h+=exCard(it,d,i));
   return h;
@@ -1399,6 +1409,8 @@ document.addEventListener('click',e=>{
     case 'gearundo':gearUndo(v);break;
     case 'sound':setSound(t.checked);toast(t.checked?'Ton bei Pausenende an':'Ton aus – nur Blinken');break;
     case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');endBeep();break;
+    case 'warmck':{const dy=day(d);dy.warm=dy.warm||[];dy.warm[+v]=t.checked;save();render();break}
+    case 'warmtimer':{const st=warmSteps(typeOf(d),d);startRunner('Aufwärmen',st.map(x=>({label:x.t||x.l,sec:x.sec})),()=>{const dy=day(d);dy.warm=st.map(()=>true);save();render();toast('Aufgewärmt – los geht’s!')});break}
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
     case 'abl':ablauf(v);break;
     case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,rpm:2}[f];
@@ -1489,7 +1501,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261022-0444';
+const APP_VER='20261022-0455';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
