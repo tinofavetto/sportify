@@ -1478,7 +1478,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261023-0423';
+const APP_VER='20261023-0508';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1713,6 +1713,30 @@ async function loadGarmin(force){const c=hookCfg();if(!c||c.mode!=='gh'||GSYNC_B
   finally{GSYNC_BUSY=false}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadGarmin()});
 setTimeout(()=>loadGarmin(true),1200);
+// ===== Plan automatisch: sportify-logs/plan/current.json ({kind:'sportify-plan',version,updatedAt,plan}) =====
+// Neuer als der Plan auf dem Handy (plan._ver, gilt auch für Pläne aus dem Update-Code)? → übernehmen wie beim Code-Import:
+// nur der Plan wird ersetzt, Verlauf, Geräte und Einstellungen bleiben. Ohne GitHub-Schlüssel: weiter per Update-Code.
+const PSYNC_KEY='sportify.psync';let PSYNC_BUSY=false;
+async function loadPlan(force){const c=hookCfg();if(!c||c.mode!=='gh'||PSYNC_BUSY||!S||!S.plan)return;
+  let i={};try{i=JSON.parse(localStorage.getItem(PSYNC_KEY)||'{}')||{}}catch(e){}
+  if(!force&&i.checkedAt&&Date.now()-i.checkedAt<3*60e3)return;
+  PSYNC_BUSY=true;
+  try{const r=await ghFetch(c,'plan/current.json',{method:'GET'},'?ref=main');if(!r.ok)return;
+    const j=await r.json();i.checkedAt=Date.now();
+    if(j.sha&&j.sha===i.sha){localStorage.setItem(PSYNC_KEY,JSON.stringify(i));return}
+    const txt=j.content?b64dec(j.content):null;if(!txt)return;
+    const data=JSON.parse(txt);if(!data||data.kind!=='sportify-plan'||!data.plan||!data.plan.sessions||!data.version)return;
+    i.sha=j.sha||null;localStorage.setItem(PSYNC_KEY,JSON.stringify(i));
+    const have=String((S.plan&&S.plan._ver)||'');
+    if(String(data.version)<=have)return;
+    data.plan._ver=String(data.version);
+    applyData({kind:'sportify-update',v:1,exported:(data.updatedAt||'').slice(0,10)||TODAY,plan:data.plan});
+    toast('Neuer Plan von Sporty übernommen');
+    if(!gsyncBusyUI())render();
+  }catch(e){/* offline o. ä.: alter Plan bleibt */}
+  finally{PSYNC_BUSY=false}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadPlan()});
+setTimeout(()=>loadPlan(true),1600);
 
 </script>
 </body>
