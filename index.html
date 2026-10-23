@@ -191,13 +191,13 @@ html.rot.r270{--sat:env(safe-area-inset-right);--sab:12px;--sal:0px;--sar:env(sa
 <nav class="tabs"><button data-tab="training"><b>🏋️</b>Training</button><button data-tab="kalender"><b>📅</b>Kalender</button><button data-tab="fortschritt"><b>📈</b>Fortschritt</button><button data-tab="garmin"><b>⌚</b>Garmin</button><button data-tab="ernaehrung"><b>🥗</b>Ernährung</button></nav>
 </div>
 <script>
-const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Rear_Delt_Raise"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
+const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rear_Delt_Fly", "note": "Bild zeigt die beidarmige Kabel-Variante – einarmig geht genauso."}, "inclinefly": {"f": ["img/inclinefly-0.webp", "img/inclinefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Flyes"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
 
 let PLAN=null,SEED=null,GARMIN=null,SEED_DATE='0000-00-00';
 const EMBED=/*__EMBED__*/null;
 // Übungsbibliothek. Muskeldaten nach openGym-Katalog (IDs), Ablauf & Cues auf Deutsch selbst geschrieben.
 const EX={
- bss:{m2:['Beinbeuger'],n:'Bulgarian Split Squat',og:'2290',m:['Quadrizeps','Po'],legs:1,
+ bss:{ph:1,m2:['Beinbeuger'],n:'Bulgarian Split Squat',og:'2290',m:['Quadrizeps','Po'],legs:1,
   how:['Hinterer Fuß mit dem Spann auf der Bank, vorderer Fuß gut einen großen Schritt davor.','Kurzhanteln seitlich hängen lassen, Oberkörper leicht nach vorn geneigt, Rumpf fest.','Senkrecht nach unten sinken, bis das hintere Knie knapp über dem Boden ist.','Über die ganze vordere Fußsohle hochdrücken. Erst alle Wdh. eine Seite, dann wechseln.'],
   cues:['Vorderes Knie in Richtung Fußspitze, nicht nach innen','Mehr Vorlage = mehr Po','Rücken lang, kein Hohlkreuz']},
  legcurl:{n:'Beinbeuger liegend',og:'0586',m:['Beinbeuger'],legs:1,
@@ -206,19 +206,19 @@ const EX={
  kickback:{n:'Kabel-Kickback (Po)',og:'5120',m:['Po'],legs:1,
   how:['Fußmanschette am unteren Kabel, leicht nach vorn gebeugt an der Station festhalten.','Standbein leicht gebeugt, Rumpf fest.','Arbeitsbein gestreckt bzw. leicht gebeugt nach hinten oben führen – aus dem Po, nicht aus dem Rücken.','Oben 1 Sekunde Po anspannen, kontrolliert zurück.'],
   cues:['Becken bleibt gerade, nicht aufdrehen','Kein Hohlkreuz am Ende der Bewegung','Lieber kleiner Weg, saubere Spannung']},
- inclinedb:{m2:['Trizeps'],n:'Schrägbankdrücken Kurzhantel',og:'0314',m:['Brust','Schultern'],
+ inclinedb:{ph:1,m2:['Trizeps'],n:'Schrägbankdrücken Kurzhantel',og:'0314',m:['Brust','Schultern'],
   how:['Bank auf ca. 30° stellen, Kurzhanteln auf den Oberschenkeln, mit den Knien hochkippen.','Schulterblätter zurück und runter, Füße fest am Boden.','Hanteln auf Höhe obere Brust absenken, Ellbogen ca. 45° vom Körper.','Nach oben über die Schultern drücken, oben nicht zusammenschlagen.'],
   cues:['Schulterblätter bleiben hinten','Unterarme senkrecht','2 Sekunden runter']},
  row:{m2:['Bizeps'],n:'Rudern brustgestützt',og:'9698',m:['Oberer Rücken','Lat'],
   how:['Brust auf die Schrägbank bzw. das Polster legen, Füße stabil.','Hanteln/Griffe hängen mit langen Armen.','Ellbogen nah am Körper Richtung Hüfte ziehen, Schulterblätter zusammen.','Kurz halten, langsam lang werden lassen.'],
   cues:['Brust bleibt am Polster – schont den unteren Rücken','Schultern weg von den Ohren','Ziehen mit den Ellbogen, nicht mit den Händen']},
- arnold:{m2:['Trizeps'],n:'Arnold Press',og:'2137',m:['Schultern'],
+ arnold:{ph:1,m2:['Trizeps'],n:'Arnold Press',og:'2137',m:['Schultern'],
   how:['Aufrecht sitzen (Lehne steil), Hanteln vor den Schultern, Handflächen zu dir.','Beim Hochdrücken die Hände nach außen drehen.','Oben Handflächen nach vorn, Arme fast gestreckt.','Auf dem gleichen Weg zurückdrehen und absenken.'],
   cues:['Rücken an der Lehne, kein Hohlkreuz','Rumpf fest','Kontrolliert drehen, nicht schwingen']},
  ohtri:{n:'Trizeps Überkopf Kabel',og:'0194',m:['Trizeps'],
   how:['Seil am Kabel, mit dem Rücken zum Kabel in Schrittstellung stellen.','Seil hinter dem Kopf, Ellbogen zeigen nach vorn oben.','Unterarme nach vorn oben strecken, Oberarme bleiben ruhig.','Langsam zurück in die Dehnung.'],
   cues:['Ellbogen eng und fix','Rumpf fest, Rippen unten – kein Hohlkreuz','Volle Dehnung unten']},
- latraise:{n:'Seitheben',og:'0334',m:['Schultern'],
+ latraise:{ph:1,n:'Seitheben',og:'0334',m:['Schultern'],
   how:['Stehend oder sitzend, Hanteln seitlich, Ellbogen leicht gebeugt.','Arme seitlich bis Schulterhöhe heben, kleiner Finger leicht oben.','Kurz halten, langsam absenken.'],
   cues:['Schultern nicht hochziehen','Kein Schwung aus dem Rücken','Lieber leichter und sauber']},
  legpress:{m2:['Beinbeuger'],n:'Beinpresse',og:'0739',m:['Quadrizeps','Po'],legs:1,
@@ -233,7 +233,7 @@ const EX={
  latpull:{m2:['Bizeps'],n:'Latzug',og:'2330',m:['Lat'],
   how:['Knie unter dem Polster fixieren, Stange etwas breiter als schulterbreit greifen.','Leicht zurücklehnen, Brust raus.','Stange zur oberen Brust ziehen, Ellbogen nach unten hinten.','Langsam nach oben lang werden lassen.'],
   cues:['Nicht mit Schwung aus dem Rücken','Schultern zuerst nach unten','Stange vor dem Kopf, nie in den Nacken']},
- shoulderdb:{m2:['Trizeps'],n:'Schulterdrücken KH sitzend',og:'0405',m:['Schultern'],
+ shoulderdb:{ph:1,m2:['Trizeps'],n:'Schulterdrücken KH sitzend',og:'0405',m:['Schultern'],
   how:['Lehne fast senkrecht, Rücken anlehnen, Hanteln auf Schulterhöhe.','Rumpf fest, Füße am Boden.','Hanteln über den Kopf drücken, oben leicht zueinander.','Kontrolliert bis Ohrhöhe absenken.'],
   cues:['Rücken bleibt an der Lehne','Kein Hohlkreuz beim Drücken','Unterarme senkrecht']},
  pushdown:{n:'Trizepsdrücken Kabel',og:'0201',m:['Trizeps'],
@@ -245,16 +245,16 @@ const EX={
  dips:{m2:['Brust','Schultern'],n:'Dips (Maschine oder Bank)',og:'0019',m:['Trizeps'],
   how:['Maschine: Gewicht/Unterstützung wählen, Griffe neben dem Körper. Bank: Hände hinter dir auf der Bankkante, Beine angewinkelt.','Schultern bewusst unten und hinten halten.','Absenken bis die Ellbogen ca. 90° haben.','Über die Handballen hochdrücken.'],
   cues:['Schultern unten lassen','Nicht tiefer als 90°','Ellbogen zeigen nach hinten']},
- curl:{n:'Bizeps-Curls Kurzhantel',og:'0294',m:['Bizeps'],
+ curl:{ph:1,n:'Bizeps-Curls Kurzhantel',og:'0294',m:['Bizeps'],
   how:['Aufrecht stehen, Hanteln seitlich, Handflächen nach vorn.','Ellbogen am Körper, Hanteln Richtung Schulter beugen.','Oben kurz anspannen, langsam ablassen.'],
   cues:['Ellbogen ruhig, kein Schwung','Rumpf fest','Ganz ablassen']},
  facepull:{m2:['Oberer Rücken'],n:'Face Pulls am Kabel',og:'5656',m:['Hintere Schulter'],
   how:['Seil am Kabel auf Kopf- bis Augenhöhe, mit Daumen hinten greifen.','Einen Schritt zurück, Rumpf fest.','Seil zum Gesicht ziehen, Hände dabei auseinander und nach hinten außen drehen.','Kurz halten, kontrolliert zurück.'],
   cues:['Ellbogen hoch, auf Schulterhöhe','Schultern weg von den Ohren','Leichtes Gewicht, saubere Haltung']},
- inclinedb30:{m2:['Trizeps'],n:'Schrägbankdrücken KH 30° (Bank)',og:'0314',m:['Brust','Schultern'],
+ inclinedb30:{ph:1,m2:['Trizeps'],n:'Schrägbankdrücken KH 30° (Bank)',og:'0314',m:['Brust','Schultern'],
   how:['Verstellbare Bank auf ca. 30° (2.–3. Raste), Kurzhanteln auf den Oberschenkeln, mit den Knien hochkippen.','Schulterblätter zurück und runter, Füße fest am Boden.','Hanteln auf Höhe obere Brust absenken, Ellbogen ca. 45° vom Körper.','Nach oben über die Schultern drücken. Gewicht = pro Hantel.'],
   cues:['Bank 30°, nicht steiler','Schulterblätter bleiben hinten','2 Sekunden runter']},
- row1:{m2:['Bizeps','Hintere Schulter'],n:'Einarmiges Kurzhantelrudern',og:null,m:['Lat','Oberer Rücken'],
+ row1:{ph:1,m2:['Bizeps','Hintere Schulter'],n:'Einarmiges Kurzhantelrudern',og:null,m:['Lat','Oberer Rücken'],
   how:['Knie und Hand derselben Seite auf die Bank, anderer Fuß seitlich am Boden.','Rücken gerade wie ein Tisch, Hantel hängt unter der Schulter.','Ellbogen nah am Körper Richtung Hüfte ziehen.','Langsam ablassen. Erst alle Wdh. eine Seite, dann wechseln.'],
   cues:['Rücken neutral, nicht aufdrehen','Zur Hüfte ziehen, nicht zur Brust','Abstützen entlastet den unteren Rücken']},
  cablefly:{m2:['Schultern'],n:'Kabelflys (mittlere Höhe)',og:null,m:['Brust'],
@@ -263,9 +263,12 @@ const EX={
  cableflylow:{m2:['Schultern'],n:'Kabelflys tief nach hoch',og:null,m:['Obere Brust'],
   how:['Beide Rollen ganz unten, Griffe fassen, einen Schritt nach vorn.','Arme leicht gebeugt neben den Hüften.','In einem Bogen nach vorn oben bis Kinnhöhe zusammenführen.','Langsam zurück.'],
   cues:['Hände enden vor dem Kinn','Schultern unten lassen','Leichtes Gewicht, volle Kontrolle']},
- revfly:{m2:['Oberer Rücken'],n:'Reverse Flys (brustgestützt)',og:null,m:['Hintere Schulter'],
-  how:['Bauchlage auf der Bank (flach oder leicht schräg), Kurzhanteln hängen nach unten.','Arme leicht gebeugt seitlich anheben bis auf Schulterhöhe.','Kurz halten, langsam ablassen.'],
-  cues:['Brust bleibt auf der Bank – schont den Rücken','Daumen leicht nach unten, Schultern weg von den Ohren','Leicht und sauber, kein Schwung']},
+ inclinefly:{ph:1,m2:['Schultern'],n:'Schrägbank-Flys Kurzhantel',og:null,m:['Obere Brust'],
+  how:['Bank auf ca. 30° (wie beim Schrägbankdrücken), Kurzhanteln über der Brust, Handflächen zueinander.','Arme leicht gebeugt, Schulterblätter zurück und runter.','In einem weiten Bogen langsam seitlich absenken, bis die Brust leicht gedehnt ist (Ellbogen etwa auf Bankhöhe).','Im gleichen Bogen wieder über der Brust zusammenführen – nicht drücken.'],
+  cues:['Leicht! Nur zum Vorermüden der Brust','Ellbogen-Winkel bleibt gleich','Dehnung kontrolliert, nicht fallen lassen']},
+ revfly:{m2:['Oberer Rücken'],n:'Reverse Flys',og:null,m:['Hintere Schulter'],
+  how:['Am Kabel (gleiche Station wie Trizeps): Rolle auf Schulterhöhe, einarmig mit der Gegenhand greifen. Alternativ in Bauchlage auf der Bank mit Kurzhanteln.','Arm leicht gebeugt in einem Bogen seitlich nach hinten ziehen bis auf Schulterhöhe.','Kurz halten, langsam zurück.'],
+  cues:['Rumpf ruhig, nicht aufdrehen – schont den Rücken','Daumen leicht nach unten, Schultern weg von den Ohren','Leicht und sauber, kein Schwung']},
  calf:{n:'Wadenheben einbeinig',og:'0409',m:['Waden'],legs:1,
   how:['Auf einem Bein, Fußballen auf einer Stufe/Platte, Ferse frei. Gewicht in der Hand oder an der Maschine.','Ferse langsam unter die Kante absenken (Dehnung).','So hoch wie möglich auf den Ballen drücken, oben 1 Sekunde halten.','Kontrolliert ab. Dann Seite wechseln.'],
   cues:['Knie leicht gebeugt, aber fix','Volle Bewegung, kein Wippen','Mit einer Hand festhalten – Sprunggelenk sicher']},
@@ -357,17 +360,24 @@ function applyData(data){
     S.lastUpdate=data.exported||TODAY;
   }else if(data&&data.v===1&&data.days){S=data}
   else throw new Error('Unbekanntes Dateiformat');
-  bindData();save();
+  bindData();migrateData();save();
 }
 function mergeGarmin(a,b){if(!b)return a||null;if(!a)return JSON.parse(JSON.stringify(b));const o={...a,...b};
   const by=(x,y,key)=>{const m=new Map();for(const r of (x||[]))m.set(key(r),r);for(const r of (y||[]))m.set(key(r),r);return [...m.values()].sort((p,q)=>key(p)<key(q)?-1:key(p)>key(q)?1:0)};
   for(const k of ['sleep','days','scale'])if(Array.isArray(b[k])||Array.isArray(a[k]))o[k]=by(a[k],b[k],r=>String(r.date));
   if(Array.isArray(b.activities)||Array.isArray(a.activities))o.activities=by(a.activities,b.activities,r=>r.date+' '+(r.time||'')+' '+(r.name||''));
   if(a.snapshot&&b.snapshot&&a.snapshot>b.snapshot)o.snapshot=a.snapshot;return o}
+// Einmalige Korrektur: Am 23.10. stand in der App noch der alte Tag B – das einarmige KH-Rudern wurde unter „Rudern brustgestützt“ (row)
+// gespeichert (Gerät „Einarmiges Kurzhantelrudern“). Diese Sätze gehören zu row1 (eigene Historie, Gewicht pro Hand).
+function migrateData(){if(!S||!S.days)return;S.mig=S.mig||{};if(S.mig.row1_1023)return;
+  const dy=S.days['2026-10-23'],devs=S.devAll||{};
+  if(dy&&dy.sets&&dy.sets.row&&!dy.sets.row1&&dy.sets.row.some(z=>z&&z.dev&&devs[z.dev]&&/einarmig/i.test(devs[z.dev].name||''))){
+    dy.sets.row1=dy.sets.row.map(z=>{if(!z)return z;const c={...z};delete c.dev;delete c.adj;return c});delete dy.sets.row}
+  S.mig.row1_1023=1;save()}
 function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00';TYPE_LABEL.cardio='Incline Walk'}
 function load(){try{const t=localStorage.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){}
   if(!S||!S.plan){if(EMBED){applyData(EMBED);return}if(!S)S=emptyState()}
-  bindData()}
+  bindData();migrateData()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Speichern fehlgeschlagen')}}
 function day(d){return S.days[d]||(S.days[d]={})}
 function peek(d){return S.days[d]||{}}
@@ -420,7 +430,7 @@ function progress(sets,it,ex){
   return w.map(s=>{
     if(s.w==null)return[null,allTop?lo:Math.min(hi,s.r+1)];
     if(allTop||rirHigh){// Steigerung am Gerät abrunden; reicht der Schritt nicht, erst Wdh. rauf (außer Wdh. schon klar über Ziel → nächster Schritt)
-      if(!stepCfg(it.ex)){const inc=s.w<10?1:(legs?5:2.5);return[s.w+inc,lo]}
+      if(!stepCfg(it.ex)){let inc=s.w<10?1:(legs?5:2.5);if(it.maxInc)inc=Math.min(inc,it.maxInc);return[s.w+inc,lo]}
       const nw=gearInc(it.ex,s.w);if(nw>s.w+1e-6)return[nw,lo];
       if(s.r>=hi+3){const up=gearUp(it.ex,s.w);if(up>s.w)return[up,lo]}
       return[s.w,Math.min(hi+2,s.r+1)]}
@@ -436,7 +446,8 @@ function exHistory(exId,before,dv){if(dv===undefined)dv=devId(exId);
 function e1rm(w,r){return w&&r?w*(1+r/30):0}
 function recFor(it,d){
   const ex=EX[it.ex];
-  const h=exHistory(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE);
+  // recFrom (Plan-Item): Einheiten bis einschließlich dieses Datums nicht für die Progression nutzen (z. B. RIR nicht erfasst, neue Übungsreihenfolge) → Plan-Empfehlung gilt
+  const h=exHistory(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE&&!(it.recFrom&&x.date<=it.recFrom));
   let base=it.rec.map(a=>a.slice()),src='plan';
   const dv=devCur(it.ex);if(dv&&!h.length&&dv.startW!=null){base=it.rec.map(([w,r])=>[w==null?null:dv.startW,r]);src='dev'}
   if(h.length){const p=progress(h[h.length-1].sets,it,ex);if(p){base=p;src='prog';
@@ -634,29 +645,23 @@ let AC=null;
 const SOUND_KEY='sportify-ton';
 function soundOn(){try{return localStorage.getItem(SOUND_KEY)!=='0'}catch(e){return true}}
 function setSound(on){try{localStorage.setItem(SOUND_KEY,on?'1':'0')}catch(e){}}
-// Audio-Sitzung (iOS 16.4+/Safari 17, navigator.audioSession): Hörbuch/Musik anderer Apps dürfen NIE angehalten werden.
-// - 'playback' (bisher) = exklusive Medien-Sitzung → iOS pausiert Hörbuch/Podcast/Musik. Darum nie mehr verwenden.
-// - 'ambient' = AVAudioSessionCategoryAmbient: mischt sich mit anderer Wiedergabe (Pieptöne, Fanfare). Folgt dem Stummschalter.
-// - 'transient' nur während Kurt spricht: läuft über der anderen Wiedergabe, die höchstens kurz leiser wird (Ducking);
-//   danach sofort zurück auf 'ambient', damit iOS die andere App wieder voll laut spielen lässt.
-// - Kein <audio>/<video>, keine Endlos-Stille, keine Media-Session-Metadaten → die App übernimmt nie „Jetzt läuft“.
-// Ohne audioSession-API (ältere iOS): AudioContext ist dort ebenfalls „ambient“ (mischbar).
-const MIX_KEY='sportify-musik'; // alter Schalter, wird nicht mehr ausgewertet (immer mischen)
-let AS_SPEAK=false;
-function audioSessionSet(t){try{const as=navigator.audioSession;if(!as||!('type' in as))return;const want=t||(AS_SPEAK?'transient':'ambient');if(as.type!==want)as.type=want}catch(e){}}
-function audioSpeakStart(){AS_SPEAK=true;audioSessionSet()}
-function audioSpeakEnd(){AS_SPEAK=false;audioSessionSet()}
+// Audio-Sitzung (iOS 16.4+/Safari 17, navigator.audioSession): immer 'ambient' = mischt sich mit Musik/Hörbuch,
+// nie 'playback'/'transient' → andere Apps werden nicht angehalten. Keine Sprachausgabe, kein <audio>, keine Media-Session.
+// Ein einziger AudioContext, erst in einer Nutzer-Geste erzeugt und danach wiederverwendet; nur sehr kurze Sinustöne.
+function audioSessionSet(){try{const as=navigator.audioSession;if(as&&'type' in as&&as.type!=='ambient')as.type='ambient'}catch(e){}}
 function audioUnlock(){try{audioSessionSet();
-  if(!AC||AC.state==='closed'){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();AC.onstatechange=()=>{}}
-  if(AC.state!=='running'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}
+  if(!AC||AC.state==='closed'){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C()}
+  else if(AC.state==='running')return;
+  const p=AC.resume&&AC.resume();if(p&&p.catch)p.catch(()=>{});
   // stiller Puffer in der Geste – iOS „entsperrt“ die Ausgabe erst durch echtes Abspielen
   const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0)}catch(e){}}
 function audioWake(){try{audioSessionSet();if(AC&&AC.state!=='running'&&AC.state!=='closed'){const p=AC.resume();if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
-function beep(freq=880,dur=0.12,vol=0.35,when=0,type='sine'){try{if(!AC||!soundOn())return;audioWake();const t=AC.currentTime+0.02+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.008);g.gain.setValueAtTime(vol,t+Math.max(0.01,dur-0.04));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.03)}catch(e){}}
-function tick(){voiceStop();beep(880,0.09,0.45);vib(60)}
-// Pausenende: 3 kräftige Pieptöne (~880 Hz, Dreieck = lauter wahrgenommen als Sinus) + hoher Schlusston
-function endBeep(){voiceStop();for(let k=0;k<3;k++)beep(880,0.18,0.9,k*0.28,'triangle');beep(1320,0.5,0.9,0.9,'triangle');vib([300,120,300,120,500])}
-function phaseBeep(){beep(1100,0.25,0.8,0,'triangle');beep(1500,0.4,0.8,0.3,'triangle');vib([250,100,250])}
+function beep(freq=880,dur=0.08,vol=0.5,when=0){try{if(!AC||!soundOn())return;audioWake();const t=AC.currentTime+0.01+when,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.005);g.gain.setValueAtTime(vol,t+Math.max(0.01,dur-0.02));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+dur+0.02)}catch(e){}}
+// Pausen-Timer: 1 Piep bei 10 s, dann kurz bei 3 – 2 – 1. Sonst nichts (kein Ton bei 0, keine Ansage).
+function beep10(){beep(880,0.12,0.5);vib(80)}
+function tick(){beep(1000,0.07,0.5);vib(40)}
+function endBeep(){}
+function phaseBeep(){beep(1200,0.12,0.5);vib(120)}  // nur Intervall-Timer: Phasenwechsel
 // Vibration nur wo es sie gibt (Android); iOS kennt navigator.vibrate nicht → gar nicht erst aufrufen
 const CAN_VIB=typeof navigator.vibrate==='function'&&!/iP(hone|ad|od)/.test(navigator.userAgent)&&!(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 function vib(p){if(!CAN_VIB)return;try{navigator.vibrate(p)}catch(e){}}
@@ -681,7 +686,7 @@ function runStep(){
   let adv=false;while(RUN.end<=Date.now()&&RUN.i<RUN.phases.length-1){RUN.i++;RUN.end+=RUN.phases[RUN.i].sec*1000;RUN.lastSec=null;adv=true}
   if(adv){phaseBeep();if(typeof onPhase==='function')onPhase()}
   const r=remSec(),s=Math.ceil(r);
-  if(s!==RUN.lastSec){if(s<=3&&s>=1&&RUN.lastSec!=null&&RUN.lastSec>s)tick();voiceCountdown(s,RUN.lastSec);RUN.lastSec=s}
+  if(s!==RUN.lastSec){const fresh=RUN.lastSec!=null&&RUN.lastSec>s&&RUN.lastSec-s<=2;if(fresh&&s>=1&&s<=3)tick();else if(fresh&&s===10&&RUN.phases[RUN.i].sec>=15)beep10();RUN.lastSec=s}
   if(r<=0){finishRun(true);return}
   drawTimer();
 }
@@ -728,13 +733,12 @@ function restoreRun(){try{const o=JSON.parse(localStorage.getItem(RUN_KEY)||'nul
   RUN={title:o.title,phases:o.phases,i:0,end:o.end,paused:!!o.paused,rem:o.rem||0,onDone:null,lastSec:null,done:false,missed:false};
   $('#timer').classList.add('show');wake(true);runStep();drawTimer()}catch(e){}}
 
-// ===== Coach: automatische Satz-Auswertung → Anpassung des nächsten Satzes → Sprach-Feedback =====
+// ===== Coach: automatische Satz-Auswertung → Anpassung des nächsten Satzes (Hinweise als Text) =====
 // Keine Extra-Eingabe: ausgewertet werden Gewicht, geschaffte Wdh. und RIR (Reserve) des Satzes. Ohne RIR-Eingabe gilt 2 (Standard).
-const VOICE_KEY='sportify-sprache',V10_KEY='sportify-sprache10',VNAME_KEY='sportify-stimme',AUTO_KEY='sportify-auto',VRATE_KEY='sportify-tempo';
+const AUTO_KEY='sportify-auto';
 const flag=(k,def)=>{try{const v=localStorage.getItem(k);return v==null?def:v==='1'}catch(e){return def}};
 const setFlag=(k,on)=>{try{localStorage.setItem(k,on?'1':'0')}catch(e){}};
-function voiceOn(){return flag(VOICE_KEY,true)}function v10On(){return flag(V10_KEY,true)}function autoOn(){return flag(AUTO_KEY,true)}
-function vRate(){const r=parseFloat(localStorage.getItem(VRATE_KEY));return r>0.5&&r<1.6?r:1}
+function autoOn(){return flag(AUTO_KEY,true)}
 
 // --- Regeln (reine Funktion, testbar) ---
 // x: w (kg, null = Körpergewicht/Zeit), r (geschafft), t (Ziel-Wdh.), lo/hi (Bereich), rir, rirDef (RIR nicht eingegeben → 2),
@@ -810,30 +814,11 @@ function coachApply(exId,i,d){
   a[i+1]={w:cur.w==null?null:nw,r:res.nr,rir:null,done:false,adj:{from:cur,to:{w:cur.w==null?null:nw,r:res.nr},v:res.v,by:i}};save();res.applied=true;return res}
 function coachUndo(exId,i,d){const a=day(d).sets&&day(d).sets[exId];if(!a||!a[i]||!a[i].adj||a[i].done)return false;delete a[i];save();return true}
 
-// --- Sprache ---
-const SP=('speechSynthesis' in window)?window.speechSynthesis:null;let SP_UNLOCK=false,SAYN=Math.floor(Math.random()*7),SAY_T=[],UTTS=[];
-function deVoices(){if(!SP)return[];try{return SP.getVoices().filter(v=>/^de([-_]|$)/i.test(v.lang))}catch(e){return[]}}
-function pickVoice(){const vs=deVoices();if(!vs.length)return null;const want=localStorage.getItem(VNAME_KEY);if(want){const v=vs.find(v=>v.voiceURI===want||v.name===want);if(v)return v}
-  const sc=v=>{const s=(v.name+' '+v.voiceURI).toLowerCase();let p=0;if(/premium/.test(s))p+=4;if(/enhanced|erweitert|verbessert/.test(s))p+=3;if(/anna/.test(s))p+=2;if(/de[-_]de/i.test(v.lang))p+=1;
-    if(/eddy|flo\b|grandma|grandpa|oma|opa|reed|rocko|sandy|shelley|bahh|bells|boing|bubbles|cellos|wobble|jester|organ|trinoids|whisper|zarvox|albert|bad news|good news/.test(s))p-=6;return p};
-  return vs.slice().sort((a,b)=>sc(b)-sc(a))[0]}
-const MOOD={rekord:{rate:1.1,pitch:1.2},stark:{rate:1.05,pitch:1.1},neutral:{rate:1,pitch:1},zaeh:{rate:0.95,pitch:0.95}};
-function voiceStop(){SAY_T.forEach(clearTimeout);SAY_T=[];try{if(SP&&(SP.speaking||SP.pending))SP.cancel()}catch(e){}speakDone()}
-// Ansage: nur solange gesprochen wird 'transient' (andere Wiedergabe kurz leiser), danach zurück auf 'ambient'
-let SPK_T=null;function speakDone(){clearTimeout(SPK_T);SPK_T=null;if(typeof audioSpeakEnd==='function')audioSpeakEnd()}
-function speakWatch(){clearTimeout(SPK_T);SPK_T=setTimeout(function w(){if(SP&&(SP.speaking||SP.pending))SPK_T=setTimeout(w,300);else speakDone()},400)}
-// parts: Text oder Liste von Sätzen (je eine Äußerung → kleine Pausen); mood steuert Tempo/Tonhöhe relativ zum gewählten Tempo
-function say(parts,mood){if(!SP||!voiceOn()||!parts||!parts.length)return;const list=Array.isArray(parts)?parts.filter(Boolean):[parts];const m=MOOD[mood]||MOOD.neutral;
-  const go=()=>{const v=pickVoice();UTTS=list.map(t=>{const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';if(v)u.voice=v;u.rate=Math.min(1.6,vRate()*m.rate);u.pitch=m.pitch;u.volume=1;return u});
-    if(typeof audioSpeakStart==='function')audioSpeakStart();const last=UTTS[UTTS.length-1];if(last){last.onend=speakWatch;last.onerror=speakDone}
-    for(const u of UTTS)SP.speak(u);speakWatch()};
-  try{const busy=SP.speaking||SP.pending;voiceStop();
-    if(mood==='rekord'&&soundOn()&&AC){fanfare();SAY_T.push(setTimeout(go,950))}else if(busy)SAY_T.push(setTimeout(go,80));else go();SP_UNLOCK=true}catch(e){}}
-// kurze Fanfare (4 steigende Töne, < 1 s), folgt dem Schalter „Ton“
-function fanfare(){[523,659,784,1047].forEach((f,k)=>beep(f,k===3?0.34:0.13,0.7,k*0.15,'triangle'))}
-// iOS: Sprachausgabe erst nach speak() in einer Nutzer-Geste – stilles Mini-Wort beim ersten Tipp
-function voiceUnlock(){if(SP_UNLOCK||!SP||!voiceOn())return;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;u.lang='de-DE';SP.speak(u);SP_UNLOCK=true}catch(e){}}
-['touchend','click'].forEach(ev=>document.addEventListener(ev,voiceUnlock,{passive:true,capture:true}));
+// --- Sprachausgabe entfernt (stoppte auf dem iPhone Musik/Hörbuch). say() bleibt als stummer Platzhalter. ---
+let SAYN=Math.floor(Math.random()*7);
+function say(){}
+function voiceStop(){}
+function voiceUnlock(){}
 function pick(a){SAYN++;return a[SAYN%a.length]}
 const kg=w=>nf(w)+' Kilo',wdh=r=>r+(r===1?' Wiederholung':' Wiederholungen'),sek=s=>s%60===0&&s>=60?(s/60)+(s===60?' Minute':' Minuten'):s+' Sekunden';
 const amount=(r,isS)=>isS?sek(r):wdh(r);
@@ -868,9 +853,6 @@ function coachMore(exId,i,d,g,it){if(it.bw||it.unit==='s'||g.w==null)return null
 function finishLine(d){let n=0,vol=0;for(const it of sessionItems(typeOf(d),d))for(const s of(((peek(d).sets||{})[it.ex])||[]))if(s&&s.done){n++;if(s.w&&s.r&&it.unit!=='s')vol+=s.w*s.r}
   const T=vol>=1000?nf(Math.round(vol/100)/10)+' Tonnen':null;
   return [pick(['Einheit geschafft!','Fertig für heute!','Das war’s, stark!']),`${n} Sätze${T?', '+T+' bewegt':''}.`,pick(['Feedback an Sporty nicht vergessen.','Jetzt trinken und kurz Feedback geben.'])]}
-// „Noch 10 Sekunden“ (nur Satzpausen ab 20 s, nur wenn gerade nichts gesprochen wird)
-function voiceCountdown(s,prev){if(!RUN||RUN.title!=='Pause'||!v10On()||!voiceOn())return;const p=RUN.phases[RUN.i];if(!p||p.sec<20)return;
-  if(s===10&&prev!=null&&prev>10&&!(SP&&(SP.speaking||SP.pending)))say('Noch 10 Sekunden.')}
 
 // ===== Training-Tab =====
 let FOCUS=null,SCROLL_FOCUS=false,KEEP_SCROLL=true;
@@ -893,6 +875,8 @@ function scrollFocus(mode){
   if(mode==='set'){if(top>=y+tg&&top+h<=y+vh-bg)return;const room=vh-tg-bg;setY(top-tg-Math.max(0,(room-h)/2),true);return}
   setY(top-tg,true);
 }
+// Gewichtsangabe: Kurzhanteln immer pro Hand (jede Hantel einzeln), Kabel einarmig je Seite
+const wUnit=it=>it.wu||(EX[it.ex]&&EX[it.ex].ph?'kg pro Hand':'kg');
 const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="minus">−</button><div class="v" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="plus">+</button></div>`;
 function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:PLAN.goal.start}
 function stepsFor(d){return GARMIN?GARMIN.days.find(x=>x.date===d):null}
@@ -945,7 +929,7 @@ function exCard(it,d,idx){
   if(it.ss||it.ssOf)badges+=` <span class="badge ss">Supersatz</span>`;
   if(it.isNew)badges+=` <span class="badge new">neu, von Sporty</span>`;
   if(it.optional)badges+=` <span class="badge dl">optional</span>`;
-  let h=`<div class="card ex ${p.skip?'skip':''}" id="ex-${it.ex}"><div class="exhead"><div><h3>${esc(ex.n)}${badges}</h3><div class="meta">${p.sets.length}${p.sets.length!==it.sets?' (statt '+it.sets+')':''} × ${rng}${isS?' s':''}${it.side?' '+it.side:''} · ${it.rest?'Pause '+it.rest+' s':'ohne Pause'}${it.restStd?' <span class="badge est">Pause nicht im Plan · Standard</span>':''}</div></div><div class="exbtns"><button class="abl" data-act="abl" data-v="${it.ex}">▶ Ablauf</button>${noW?'':`<div class="row" style="gap:6px;justify-content:flex-end;margin-top:6px"><button class="abl sm" data-act="wsopen" data-v="${it.ex}" aria-label="Gewichtsschritte">⚙︎</button><button class="abl sm" data-act="gearopen" data-v="${it.ex}" aria-label="Gerät wechseln">⇄ Gerät</button></div>`}</div></div>`;
+  let h=`<div class="card ex ${p.skip?'skip':''}" id="ex-${it.ex}"><div class="exhead"><div><h3>${esc(ex.n)}${badges}</h3><div class="meta">${p.sets.length}${p.sets.length!==it.sets?' (statt '+it.sets+')':''} × ${rng}${isS?' s':''}${it.side?' '+it.side:''}${!noW&&wUnit(it)!=='kg'?' · <b>'+wUnit(it)+'</b>':''} · ${it.rest?'Pause '+it.rest+' s':'ohne Pause'}${it.restStd?' <span class="badge est">Pause nicht im Plan · Standard</span>':''}</div></div><div class="exbtns"><button class="abl" data-act="abl" data-v="${it.ex}">▶ Ablauf</button>${noW?'':`<div class="row" style="gap:6px;justify-content:flex-end;margin-top:6px"><button class="abl sm" data-act="wsopen" data-v="${it.ex}" aria-label="Gewichtsschritte">⚙︎</button><button class="abl sm" data-act="gearopen" data-v="${it.ex}" aria-label="Gerät wechseln">⇄ Gerät</button></div>`}</div></div>`;
   {const dv=devCur(it.ex),sc=stepCfg(it.ex);if(dv)h+=`<div class="devline">🔁 Gerät: <b>${esc(dv.name)}</b>${dv.pending?' <span class="badge est">Sporty prüft</span>':''} · ${esc(stepsText(sc))}${p.src==='dev'?'<div>Erster Satz zum Antasten'+(dv.startW!=null?' mit '+nf(dv.startW)+' kg':'')+' – danach passt Sportify per RIR an.</div>':''}</div>`;
    else if(sc&&!noW)h+=`<div class="mut small">⚙︎ ${esc(stepsText(sc))}</div>`}
   if(it.note)h+=`<div class="mut small" style="margin-top:4px">${esc(it.note)}</div>`;
@@ -961,7 +945,7 @@ function exCard(it,d,idx){
     const adj=s.adj&&!done?s.adj:null,mood=done&&s.mood?s.mood:null;
     h+=`<div class="set ${foc?'focus':''} ${adj?'adj':''}" data-set="${it.ex}-${i}"><div class="setrow"><div class="setno">${i+1}</div>`;
     if(noW)h+=`<div class="mut small" style="text-align:center">${isS?'Zeit':'Körpergewicht'}</div>`;
-    else h+=stepper('w',w==null?'<span style="color:#aaa">kg</span>':nf(w),'kg',a);
+    else h+=stepper('w',w==null?'<span style="color:#aaa">kg</span>':nf(w),wUnit(it),a);
     h+=stepper('r',r,isS?'s':'Wdh.',a);
     h+=`<button class="ok ${done?'done':''}" data-act="ok" ${a}>✓</button></div>`;
     if(adj)h+=`<div class="adjrow"><span class="badge adjb">angepasst</span> <span>${adj.from.w!=null&&adj.from.w!==w?nf(adj.from.w)+' → <b>'+nf(w)+' kg</b>':''}${adj.from.r!==r?(adj.from.w!=null&&adj.from.w!==w?' · ':'')+adj.from.r+' → <b>'+r+'</b> Wdh.':''}</span><button class="chip sm" data-act="adjundo" ${a}>↺ Rückgängig</button></div>`;
@@ -974,7 +958,7 @@ function exCard(it,d,idx){
   return h+`</div>`;
 }
 // Fester Aufwärmblock (ca. 8 Min) vor jeder Krafteinheit – abhaken oder mit Timer durchgehen
-function warmSteps(t,d){const it=(PLAN.sessions[t].items||[]).find(x=>!x.bw&&x.unit!=='s')||null;let ramp='Rampensatz vor der ersten schweren Übung: ca. 50 % × 10';
+function warmSteps(t,d){const it=(PLAN.sessions[t].items||[]).find(x=>!x.bw&&x.unit!=='s'&&!x.noRamp)||null;let ramp='Rampensatz vor der ersten schweren Übung: ca. 50 % × 10';
   if(it){const p=planned(it,d),ws=(p&&p.sets||[]).map(x=>x&&x[0]).filter(x=>x!=null),w=ws.length?Math.max(...ws):null;ramp=`Rampensatz ${EX[it.ex]?EX[it.ex].n:''}: ca. 50 %${w?' ('+nf(roundW(w/2))+' kg)':''} × 10`}
   return[{t:'Locker Cardio',l:'3 Min locker Cardio (Laufband oder Rad)',sec:180},{t:'Mobilität',l:'Mobilität: Katze-Kuh 8×, Hüftkreisen 8 je Seite, Armkreisen 10 je Richtung',sec:120,ex:'catcow'},
     {t:'Jefferson Curls 2 × 6–8',l:'Jefferson Curls 2 × 6–8 auf der Bank, leichte Kettlebell (8–12 kg), 3 s runter / 3 s hoch. Stopp bei Kribbeln/Taubheit im Bein, an schlechten Rücken-Tagen weglassen.',sec:90},
@@ -1281,7 +1265,7 @@ function credits(){const seen=new Set(),rows=[];
   for(const[id,m] of Object.entries(typeof MEDIA!=='undefined'?MEDIA:{})){if(!m||m.none||!EX[id])continue;const k=m.f[0];if(seen.has(k))continue;seen.add(k);
     rows.push(`<li>${esc(EX[id].n)}: ${m.src==='wger.de'?`„${esc(m.title)}“ von ${esc(m.by)}, <a href="${m.url}" target="_blank" rel="noopener">wger.de</a>, <a href="${m.licUrl}" target="_blank" rel="noopener">${esc(m.lic)}</a> (verkleinert, WebP)`:`<a href="${m.url}" target="_blank" rel="noopener">free-exercise-db</a>, Public Domain`}</li>`)}
   openSheet(`<h2>Info / Bildquellen</h2><div class="mut small">Übungsbilder überwiegend aus <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener">free-exercise-db</a> (yuhonas, Public Domain/Unlicense), verkleinert und als WebP. „Bird Dog“: Settebello via wger.de, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; die bearbeitete Datei steht ebenfalls unter CC BY-SA 4.0. Muskelzuordnung teils nach dem <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">openGym</a>-Katalog (AGPL-3.0 / ExerciseDB MIT), Texte von Sporty.</div><ul class="small" style="padding-left:18px">${rows.join('')}</ul>`)}
-function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Ton bei Pausenende</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label class="tgl" style="flex:1"><input type="checkbox" data-act="voice" ${voiceOn()?'checked':''}><span>Sprach-Feedback</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="voicetest">🗣️ Test</button></div><label class="tgl"><input type="checkbox" data-act="v10" ${v10On()?'checked':''}><span>„Noch 10 Sekunden“ ansagen</span></label><label class="tgl"><input type="checkbox" data-act="auto" ${autoOn()?'checked':''}><span>Automatisch anpassen (nächster Satz)</span></label><div class="mut small" style="margin:4px 0 8px">🎧 Musik und Hörbücher laufen weiter: Töne mischen sich darunter, bei Ansagen wird nur kurz leiser. Töne folgen dem Stummschalter.</div><div class="lbl">Sprechtempo</div><div class="chips">${[['0.9','ruhig'],['1','normal'],['1.12','zügig']].map(([v,n])=>`<button class="chip sm ${Math.abs(vRate()-v)<.01?'on':''}" data-act="vrate" data-v="${v}">${n}</button>`).join('')}</div>${deVoices().length?`<div class="lbl">Stimme</div><select id="vname"><option value="">Automatisch (${esc((pickVoice()||{}).name||'–')})</option>${deVoices().map(v=>`<option value="${esc(v.voiceURI)}" ${localStorage.getItem(VNAME_KEY)===v.voiceURI?'selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')}</select>`:'<div class="mut small">Keine deutsche Stimme gefunden – iPhone: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch (z. B. Anna, Premium laden).</div>'}<div class="mut small">Ton & Sprache: Lautstärke hoch. Ab iOS 17 sind Pausenton und Rekord-Fanfare auch bei Stummschalter zu hören (außer „Musik nicht unterbrechen“ ist an). Die Sprache folgt je nach iOS-Version dem Stummschalter. Beides nur, solange Sportify offen im Vordergrund ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div>${PLAN?wstepsOverview():''}<button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
+function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Piep im Pausen-Timer</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><label class="tgl"><input type="checkbox" data-act="auto" ${autoOn()?'checked':''}><span>Automatisch anpassen (nächster Satz)</span></label><div class="mut small" style="margin:4px 0 8px">🎧 Musik und Hörbücher laufen weiter: Pausen-Timer piept nur kurz (1× bei 10 s, dann 3 – 2 – 1), keine Sprachausgabe. Töne folgen dem Stummschalter und sind nur zu hören, solange Sportify im Vordergrund offen ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div>${PLAN?wstepsOverview():''}<button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
 // ===== Export / Import =====
 function doExport(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sportify-backup-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Export erstellt')}
 function doImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(data.v===1&&data.days&&S&&S.plan&&!confirm('Backup einspielen? Aktuelle Daten auf diesem Gerät werden ersetzt.'))return;applyData(data);toast('Import erfolgreich');closeSheet();render()}catch(e){alert('Import fehlgeschlagen: '+e.message)}};r.readAsText(f)};i.click()}
@@ -1339,7 +1323,6 @@ function firstOpen(exId,d){const it=sessionItems(typeOf(d),d).find(x=>x.ex===exI
 function onSetDone(exId,i){
   const d=CUR,g=getSet(exId,i,d),it=g.it;
   if(g.done){setVal(exId,i,{done:false},d);coachUndo(exId,i+1,d);render();return}
-  voiceUnlock();
   setVal(exId,i,{w:g.w,r:g.r,rir:g.rir??2,rirDef:g.rir==null,done:true,at:Date.now(),dev:devId(exId)},d);
   const dy=day(d);if(mods(d).tags.length)dy.modded=true;save();
   const items=sessionItems(typeOf(d),d);const n=planned(it,d).sets.length;
@@ -1378,7 +1361,7 @@ document.addEventListener('click',e=>{
     case 'extra':{const dy=day(d);dy.extras=dy.extras||[];const k=dy.extras.indexOf(v);if(k>=0)dy.extras.splice(k,1);else dy.extras.push(v);save();render();break}
     case 'w':case 'r':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);let x=a==='w'?g.w:g.r;
       const ap=x=>{setVal(ex,i,{[a]:x,adj:undefined},d);renderCard(ex)};
-      if(dd==='edit'){numEdit(a==='w'?'Gewicht (kg)':(g.it.unit==='s'?'Sekunden':'Wiederholungen'),x,a==='w',ap);break}
+      if(dd==='edit'){numEdit(a==='w'?'Gewicht ('+wUnit(g.it)+')':(g.it.unit==='s'?'Sekunden':'Wiederholungen'),x,a==='w',ap);break}
       else if(a==='w')x=+dd>0?gearUp(ex,x):gearDn(ex,x);else x=Math.max(0,(x||0)+(+dd)*(g.it.unit==='s'?5:1));
       setVal(ex,i,{[a]:x},d);renderCard(ex);break}
     case 'rir':{const ex=t.dataset.ex,i=+t.dataset.i,g=getSet(ex,i,d);const nv=g.rir===+v&&!(peek(d).sets[ex][i]||{}).rirDef?null:+v;
@@ -1389,14 +1372,8 @@ document.addEventListener('click',e=>{
       renderCard(ex);break}
     case 'adjundo':{const ex=t.dataset.ex,i=+t.dataset.i;if(coachUndo(ex,i,d))toast('Anpassung zurückgenommen');renderCard(ex);break}
     case 'rotflip':localStorage.setItem('sportify.rotflip',t.checked?'1':'0');applyRot();break;
-    case 'voice':setFlag(VOICE_KEY,t.checked);if(t.checked){voiceUnlock();say('Sprach-Feedback an.')}else voiceStop();break;
-    case 'v10':setFlag(V10_KEY,t.checked);break;
     case 'auto':setFlag(AUTO_KEY,t.checked);toast(t.checked?'Nächster Satz wird automatisch angepasst':'Nur Vorschläge, keine automatische Anpassung');break;
     case 'musik':break;
-    case 'vrate':localStorage.setItem(VRATE_KEY,v);menu();say('So klingt das Tempo.');break;
-    case 'voicetest':{if(!voiceOn()){toast('Sprach-Feedback ist aus');break}const moods=['stark','rekord','zaeh','neutral'],m=moods[SAYN%4];SAYN++;
-      say({stark:['Stark, 12 statt 10 Wiederholungen.','Nächster Satz mit 42,5 Kilo.','Tipp: unten kurz halten.'],rekord:['Neuer Rekord!','42,5 Kilo, 15 Wiederholungen.','Der Eisenbrecher schlägt zu!'],
-        zaeh:['Okay. Der war zäh.','Nächster Satz 40 Kilo.','Du packst das.'],neutral:['Satz 2 von 3 geschafft.','Tipp: beim Drücken ausatmen.','90 Sekunden Pause.']}[m],m);toast('Test: '+m);break}
     case 'wsopen':wstepsSheet(v);break;
     case 'wspre':{WS_TMP=JSON.parse(v);const li=$('#wsList');if(li)li.value='';wstepsDraw();break}
     case 'wsauto':WS_TMP=null;S.wsteps&&delete S.wsteps[devKey(WS_EX)];save();closeSheet();render();toast('Gewichtsschritte: automatisch');break;
@@ -1408,7 +1385,7 @@ document.addEventListener('click',e=>{
     case 'gearunknown':gearApply(v,'unknown',null,null,null);break;
     case 'gearundo':gearUndo(v);break;
     case 'sound':setSound(t.checked);toast(t.checked?'Ton bei Pausenende an':'Ton aus – nur Blinken');break;
-    case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');endBeep();break;
+    case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');beep10();setTimeout(tick,700);setTimeout(tick,1400);setTimeout(tick,2100);break;
     case 'warmck':{const dy=day(d);dy.warm=dy.warm||[];dy.warm[+v]=t.checked;save();render();break}
     case 'warmtimer':{const st=warmSteps(typeOf(d),d);startRunner('Aufwärmen',st.map(x=>({label:x.t||x.l,sec:x.sec})),()=>{const dy=day(d);dy.warm=st.map(()=>true);save();render();toast('Aufgewärmt – los geht’s!')});break}
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
@@ -1451,7 +1428,7 @@ document.addEventListener('input',e=>{const t=e.target;const a=t.dataset.act;if(
 });
 $('#numForm').addEventListener('submit',e=>{e.preventDefault();const y=num($('#numIn').value),cb=NUM_CB;numClose();if(y!=null&&cb)cb(y)});
 $('#numCancel').onclick=numClose;
-document.addEventListener('change',e=>{if(e.target.id==='vname'){localStorage.setItem(VNAME_KEY,e.target.value);say('Hallo, so klinge ich.')}});$('#numdlg').addEventListener('click',e=>{if(e.target.id==='numdlg')numClose()});
+$('#numdlg').addEventListener('click',e=>{if(e.target.id==='numdlg')numClose()});
 $('#tPlus').onclick=()=>addTime(15);$('#tPause').onclick=togglePause;$('#tSkip').onclick=()=>nextPhase(false);$('#tStop').onclick=stopRunner;
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
@@ -1501,7 +1478,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261022-0455';
+const APP_VER='20261023-0423';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
