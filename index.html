@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#f3f1ec">
 <title>Sportify</title>
 <style>
-:root{--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom);--sal:env(safe-area-inset-left);--sar:env(safe-area-inset-right);--vh1:1vh;--bg:#f3f1ec;--card:#fff;--ink:#1d1d1b;--mut:#6b6a66;--line:#e4e1da;--chip:#f1efea;--acc:#2f6b4f;--acc2:#e6f0ea;--warn:#b7791f;--warnbg:#fff6e5;--bad:#b42318;--badbg:#fdecea;--new:#5b3fd1;--newbg:#efebff}
+:root{--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom);--sal:env(safe-area-inset-left);--sar:env(safe-area-inset-right);--vh1:1vh;--bg:#f3f1ec;--card:#fff;--ink:#1d1d1b;--mut:#6b6a66;--line:#e4e1da;--chip:#f1efea;--acc:#2f6b4f;--acc2:#e6f0ea;--warn:#8f5d00;--ctl:#8a8780;--warnbg:#fff6e5;--bad:#b42318;--badbg:#fdecea;--new:#5b3fd1;--newbg:#efebff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;max-width:100%;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
 #scr{padding:var(--sat) var(--sar) calc(76px + var(--sab)) var(--sal)}
@@ -31,7 +31,7 @@ main{padding:0 14px}
 .chip{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:9px 14px;font-size:15px;color:var(--ink);min-height:40px}
 .chip.on{background:var(--acc2);border-color:var(--acc);color:var(--acc);font-weight:600}
 .chip.bad.on{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
-.chip.sm{padding:6px 10px;min-height:34px;font-size:14px;min-width:38px}
+.chip.sm{padding:6px 10px;min-height:44px;font-size:14px;min-width:38px}
 .btn{border:0;border-radius:14px;padding:13px 16px;font-size:16px;font-weight:600;background:var(--acc);color:#fff;width:100%}
 .btn.sec{background:var(--chip);color:var(--ink);border:1px solid var(--line)}
 .btn.big{padding:16px;font-size:18px}
@@ -52,30 +52,30 @@ main{padding:0 14px}
 .ex.skip{opacity:.5}
 .exhead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
 .exhead .meta{color:var(--mut);font-size:14px}
-.abl{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;font-size:15px;white-space:nowrap}
+.abl{border:1px solid var(--ctl);background:#fff;color:var(--ink);border-radius:12px;padding:8px 12px;font-size:15px;white-space:nowrap;min-height:44px}
 .set{border-top:1px solid var(--line);padding:10px 0 6px}
-.set.focus{background:#f3f8ff;margin:0 -14px;padding:10px 14px 6px}
+.set.focus{background:var(--acc2);margin:4px -10px;padding:8px 7px 6px;border:3px solid var(--acc);border-radius:12px;box-shadow:inset 5px 0 0 var(--acc)}
 .setrow{display:grid;grid-template-columns:20px minmax(0,1fr) minmax(0,1fr) 56px;gap:8px;align-items:center}
 .setno{color:var(--mut);font-size:14px;text-align:center}
-.stp{display:flex;align-items:center;background:var(--chip);border:1px solid var(--line);border-radius:12px;height:48px;overflow:hidden}
+.stp{display:flex;align-items:center;background:var(--chip);border:1px solid var(--ctl);border-radius:12px;height:48px;overflow:hidden}
 .stp button{border:0;background:transparent;width:34px;height:100%;font-size:22px;color:var(--ink)}
 .stp .v{flex:1;text-align:center;font-size:18px;font-weight:600;line-height:1.1}
-.stp .v small{display:block;font-size:10px;font-weight:500;color:var(--mut)}
-.ok{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--chip);font-size:24px;color:var(--mut)}
+.stp .v small{display:block;font-size:11px;font-weight:500;color:var(--mut)}
+.ok{height:48px;border-radius:12px;border:1px solid var(--ctl);background:var(--chip);font-size:24px;color:var(--mut)}
 .ok.done{background:var(--acc);border-color:var(--acc);color:#fff}
 .rir{display:flex;gap:6px;margin:6px 0 0 28px;align-items:center}
 .rir span{font-size:12px;color:var(--mut);margin-right:2px}
-.rir .chip{flex:1;padding:4px 0;min-height:32px;font-size:14px;text-align:center}
+.rir .chip{flex:1;padding:4px 0;min-height:40px;font-size:14px;text-align:center}
 .hint{font-size:13px;color:var(--acc);margin-top:4px}
 .coach{font-size:13px;color:#4b4a45;background:#f7f6f2;border-radius:10px;padding:8px 10px;margin-top:6px}
-input,textarea,select{font:inherit;font-size:16px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--chip);width:100%;color:var(--ink)}
+input,textarea,select{font:inherit;font-size:16px;border:1px solid var(--ctl);border-radius:12px;padding:10px 12px;background:var(--chip);width:100%;color:var(--ink)}
 textarea{min-height:70px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
 .kv:last-child{border-bottom:0}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + var(--sab));z-index:20}
-nav.tabs button{flex:1;border:0;background:none;font-size:11px;color:var(--mut);padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button{flex:1;border:0;background:none;font-size:12px;min-height:48px;color:var(--mut);padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav.tabs button b{font-size:20px;font-weight:400}
 nav.tabs button.on{color:var(--acc);font-weight:700}
 #timer{position:fixed;left:8px;right:8px;bottom:calc(70px + var(--sab));background:#14231b;color:#fff;border-radius:20px;padding:12px 14px 14px;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
@@ -106,7 +106,7 @@ nav.tabs button.on{color:var(--acc);font-weight:700}
 .cal .d.out{opacity:.35}
 .cal .d.dl{box-shadow:inset 0 -3px 0 #c9c3b5}
 .cal .d i{display:block;font-style:normal;font-size:11px;font-weight:700;margin-top:2px}
-.tA{color:#2f6b4f}.tB{color:#1f5f9e}.tC{color:#b7791f}.tI{color:#b42318}.tR{color:#888}
+.tA{color:#2f6b4f}.tB{color:#1f5f9e}.tC{color:#8f5d00}.tI{color:#b42318}.tR{color:#888}
 .dot{display:inline-block;width:6px;height:6px;border-radius:3px;background:#999;margin-right:2px}
 .bars{display:flex;align-items:flex-end;gap:3px;height:90px;margin-top:6px}
 .bars div{flex:1;background:var(--acc);border-radius:3px 3px 0 0;position:relative;min-height:2px}
@@ -117,19 +117,28 @@ td,th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}
 th{color:var(--mut);font-weight:500;font-size:12px}
 .mbar{display:grid;grid-template-columns:110px 1fr 28px;gap:8px;align-items:center;font-size:14px;margin:4px 0}
 .mbar i{display:block;height:10px;background:var(--acc);border-radius:5px}
-.phase{display:grid;grid-template-columns:1fr auto;gap:4px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
-.phase.cur{font-weight:700;color:var(--acc)}
+.phases{list-style:none;margin:0;padding:0}
+.phase{display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;padding:7px 4px;border-bottom:1px solid var(--line);font-size:15px;border-radius:0}
+.phase .pt{font-variant-numeric:tabular-nums}
+.phase .pdone{display:none}
+.phase.past{color:var(--mut)}.phase.past .pdone{display:inline;margin-right:6px;color:var(--acc);font-weight:700}
+.phase.cur{background:var(--acc2);color:var(--ink);font-weight:700;border:3px solid var(--acc);border-radius:12px;box-shadow:inset 6px 0 0 var(--acc);padding:10px 10px 10px 14px;margin:6px -6px;font-size:16px}
+.nowtag{display:none;background:var(--acc);color:#fff;border-radius:6px;padding:2px 7px;margin-right:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;vertical-align:1px}
+.phase.cur .nowtag,.nowtag.set-now{display:inline-block}
+.nowtag.set-now{margin:0 0 6px 0}
+.phase:focus,.set:focus{outline:none}
+.phase:focus-visible,.set:focus-visible{outline:3px solid #1f5f9e;outline-offset:2px}
 .rnd{display:grid;grid-template-columns:36px 1fr 1fr 1fr;gap:6px;align-items:center;margin:6px 0}
 .rnd input{padding:8px;text-align:center}
 .toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + var(--sat));background:#222;color:#fff;padding:10px 16px;border-radius:12px;z-index:60;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 .tgl{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:15px}.tgl input{width:20px;height:20px;flex:none;margin:0}
-.abl.sm{padding:6px 10px;font-size:14px}
+.abl.sm{padding:6px 10px;font-size:14px;min-height:40px}
 .exbtns{display:flex;flex-direction:column;align-items:flex-end}
 .devline{font-size:13px;background:#eef4ff;border:1px solid #cddcf5;color:#1f3f6e;border-radius:10px;padding:6px 10px;margin-top:6px}
 .set.adj{background:#fff8e1;margin:0 -14px;padding:10px 14px 6px;box-shadow:inset 3px 0 0 #e0a800}
 .adjrow{display:flex;align-items:center;gap:8px;margin:6px 0 0 28px;font-size:13px;flex-wrap:wrap}.adjrow .chip{margin-left:auto}
-.badge.adjb{background:#e0a800;color:#fff}
+.badge.adjb{background:#e0a800;color:#1d1d1b}
 .rir .chip.def{border-style:dashed;border-color:var(--acc);color:var(--acc)}
 .moodtag{margin:4px 0 0 28px;font-size:12px;font-weight:600}.m-stark{color:var(--acc)}.m-zaeh{color:#8a5a00}.m-neutral{color:var(--mut)}
 .set{position:relative}
@@ -152,6 +161,14 @@ th{color:var(--mut);font-weight:500;font-size:12px}
 .checkin select{font:inherit;font-size:16px;font-weight:600;padding:6px 8px;border-radius:10px;border:1px solid #d8d3c7;background:var(--chip,#eee);color:inherit;max-width:150px}
 .checkin .ci-w{flex-basis:100%;margin-top:-2px}
 button,a,select,input,textarea,label,[data-act]{touch-action:manipulation}
+/* Barrierefreiheit: sichtbarer Tastatur-Fokus, Screenreader-Text, laufender Timer-Knopf */
+:focus-visible{outline:3px solid #1f5f9e;outline-offset:2px}
+#timer :focus-visible,.btn.running:focus-visible{outline-color:#7ee2a8}
+.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#tStop{display:block;margin:6px auto 0;min-height:44px;padding:10px 18px;background:none;border:0;color:rgba(255,255,255,.85);font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.running{background:#14231b!important;color:#fff!important;border-color:#14231b!important;font-variant-numeric:tabular-nums}
+.running.paused{background:var(--warnbg)!important;color:var(--warn)!important;border:2px solid var(--warn)!important}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.stamp{animation:none}.confetti{display:none}.toast{transition:none}}
 input,textarea,select{font-size:16px!important}
 .stp button,.ok,.chip,.btn,nav.tabs button,.iconbtn{-webkit-user-select:none;user-select:none}
 /* Querformat (iPhone): iOS ignoriert die Drehsperre der PWA – die App-Oberfläche wird per CSS zurückgedreht,
@@ -168,7 +185,7 @@ html.rot.r270{--sat:env(safe-area-inset-right);--sab:12px;--sal:0px;--sar:env(sa
 .sheet.compact .in{border-radius:18px;max-height:none;overflow:hidden;padding:10px 12px 12px;max-width:420px}
 .sheet.compact .demo{max-height:calc(var(--vh1)*60);margin:6px 0 0}
 .demohd{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:16px}
-.demox{border:0;background:var(--chip);border-radius:999px;width:36px;height:36px;font-size:16px;color:var(--ink);flex:none}
+.demox{border:0;background:var(--chip);border-radius:999px;width:44px;height:44px;font-size:16px;color:var(--ink);flex:none}
 .cfg textarea{min-height:90px;font-family:ui-monospace,Menlo,monospace}
 .cfg .res{margin-top:8px}
 .bt{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -184,11 +201,11 @@ html.rot.r270{--sat:env(safe-area-inset-right);--sab:12px;--sal:0px;--sar:env(sa
 <body>
 <div id="app"><div id="scr"><header><div><h1>Sportify</h1><div class="sub" id="hdrSub"></div></div><button class="iconbtn" data-act="menu" aria-label="Menü">⋯</button></header>
 <main id="view"></main></div>
-<div id="timer"><div class="tl"><span id="tTitle"></span><span id="tKind"></span></div><div class="tt" id="tTime">0:00</div><div class="bar"><i id="tBar"></i></div><div class="nx" id="tNext"></div><div class="tb"><button id="tPlus">+15 s</button><button id="tPause">Pause</button><button id="tSkip">Skip</button></div><button id="tStop" style="display:block;margin:8px auto 0;background:none;border:0;color:#fff;opacity:.7;font-size:14px">Timer schließen</button></div>
+<div id="timer" role="region" aria-label="Timer"><div class="tl"><span id="tTitle"></span><span id="tKind"></span></div><div class="tt" id="tTime" role="timer" aria-live="off" aria-atomic="true">0:00</div><div class="bar"><i id="tBar"></i></div><div class="nx" id="tNext"></div><div class="tb"><button id="tPlus" aria-label="15 Sekunden mehr">+15 s</button><button id="tPause">Pause</button><button id="tSkip">Skip</button></div><button id="tStop">Timer schließen</button><div id="tLive" class="sr" aria-live="polite" aria-atomic="true"></div></div>
 <div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="numdlg" id="numdlg"><form class="in" id="numForm" autocomplete="off"><div class="lbl" id="numLbl"></div><input id="numIn" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false"><div class="row"><button type="button" class="btn sec" id="numCancel">Abbrechen</button><button type="submit" class="btn">OK</button></div></form></div>
-<nav class="tabs"><button data-tab="training"><b>🏋️</b>Training</button><button data-tab="kalender"><b>📅</b>Kalender</button><button data-tab="fortschritt"><b>📈</b>Fortschritt</button><button data-tab="garmin"><b>⌚</b>Garmin</button><button data-tab="ernaehrung"><b>🥗</b>Ernährung</button></nav>
+<nav class="tabs" aria-label="Bereiche"><button data-tab="training"><b aria-hidden="true">🏋️</b>Training</button><button data-tab="kalender"><b aria-hidden="true">📅</b>Kalender</button><button data-tab="fortschritt"><b aria-hidden="true">📈</b>Fortschritt</button><button data-tab="garmin"><b aria-hidden="true">⌚</b>Garmin</button><button data-tab="ernaehrung"><b aria-hidden="true">🥗</b>Ernährung</button></nav>
 </div>
 <script>
 const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rear_Delt_Fly", "note": "Bild zeigt die beidarmige Kabel-Variante – einarmig geht genauso."}, "inclinefly": {"f": ["img/inclinefly-0.webp", "img/inclinefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Flyes"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
@@ -673,9 +690,10 @@ async function wake(on){try{if(on&&'wakeLock' in navigator&&!WL){WL=await naviga
 // Zeiten hängen nur an Zeitstempeln (Date.now), nicht an Ticks – stimmt also auch nach Hintergrund/Sperre.
 let RUN=null; // {phases:[{label,sec,kind}],i,end,paused,rem,onDone,title,lastSec,done,missed}
 const RUN_KEY='sportify-run';
-function persistRun(){try{if(RUN&&!RUN.done&&!RUN.onDone&&RUN.phases.length===1)localStorage.setItem(RUN_KEY,JSON.stringify({title:RUN.title,phases:RUN.phases,end:RUN.end,paused:RUN.paused,rem:RUN.rem}));else localStorage.removeItem(RUN_KEY)}catch(e){}}
-function startRunner(title,phases,onDone){
-  audioUnlock();clearTimeout(END_T);RUN={title,phases,i:0,end:Date.now()+phases[0].sec*1000,paused:false,rem:0,onDone,lastSec:null,done:false,missed:false};
+function persistRun(){try{if(RUN&&!RUN.done&&!RUN.onDone&&RUN.phases.length===1)localStorage.setItem(RUN_KEY,JSON.stringify({title:RUN.title,phases:RUN.phases,end:RUN.end,paused:RUN.paused,rem:RUN.rem,src:RUN.src||null}));else localStorage.removeItem(RUN_KEY)}catch(e){}}
+// src = Kennung des Start-Knopfs (z. B. 'ivtimer'), damit dieser Knopf den laufenden Timer anzeigt statt neu zu starten
+function startRunner(title,phases,onDone,src){
+  audioUnlock();clearTimeout(END_T);RUN={title,phases,i:0,end:Date.now()+phases[0].sec*1000,paused:false,rem:0,onDone,lastSec:null,done:false,missed:false,src:src||null};
   wake(true);$('#timer').classList.add('show');$('#timer').classList.remove('end','flash');drawTimer();persistRun();
 }
 function startRest(sec,label,next){startRunner('Pause',[{label:label||'Pause',sec,kind:'rest',next}],null)}
@@ -684,7 +702,7 @@ function runStep(){
   if(!RUN||RUN.paused||RUN.done)return;
   // im Hintergrund abgelaufene Phasen nachholen (zeitstempelbasiert)
   let adv=false;while(RUN.end<=Date.now()&&RUN.i<RUN.phases.length-1){RUN.i++;RUN.end+=RUN.phases[RUN.i].sec*1000;RUN.lastSec=null;adv=true}
-  if(adv){phaseBeep();if(typeof onPhase==='function')onPhase()}
+  if(adv){phaseBeep();if(typeof onPhase==='function')onPhase(true)}
   const r=remSec(),s=Math.ceil(r);
   if(s!==RUN.lastSec){const fresh=RUN.lastSec!=null&&RUN.lastSec>s&&RUN.lastSec-s<=2;if(fresh&&s>=1&&s<=3)tick();else if(fresh&&s===10&&RUN.phases[RUN.i].sec>=15)beep10();RUN.lastSec=s}
   if(r<=0){finishRun(true);return}
@@ -706,10 +724,10 @@ function finishRun(auto){
 }
 function nextPhase(auto){
   if(!RUN)return;
-  if(RUN.i<RUN.phases.length-1){RUN.i++;RUN.end=Date.now()+RUN.phases[RUN.i].sec*1000;RUN.paused=false;RUN.lastSec=null;phaseBeep();drawTimer();persistRun();if(typeof onPhase==='function')onPhase();return}
+  if(RUN.i<RUN.phases.length-1){RUN.i++;RUN.end=Date.now()+RUN.phases[RUN.i].sec*1000;RUN.paused=false;RUN.lastSec=null;phaseBeep();drawTimer();persistRun();if(typeof onPhase==='function')onPhase(true);return}
   finishRun(auto);
 }
-function stopRunner(){clearTimeout(END_T);RUN=null;$('#timer').classList.remove('show','end','flash');wake(false);persistRun();if(typeof onPhase==='function')onPhase()}
+function stopRunner(){clearTimeout(END_T);RUN=null;$('#timer').classList.remove('show','end','flash');wake(false);persistRun();if(typeof onPhase==='function')onPhase();syncTimerBtns()}
 function addTime(s){if(!RUN||RUN.done)return;if(RUN.paused)RUN.rem+=s;else RUN.end+=s*1000;RUN.lastSec=null;drawTimer();persistRun()}
 function togglePause(){if(!RUN||RUN.done)return;if(RUN.paused){RUN.end=Date.now()+RUN.rem*1000;RUN.paused=false}else{RUN.rem=remSec();RUN.paused=true}drawTimer();persistRun()}
 function fmtT(s){s=Math.ceil(s);const m=Math.floor(s/60);return m+':'+pad(s%60)}
@@ -723,14 +741,26 @@ function drawTimer(){
   const nx=RUN.phases[RUN.i+1];$('#tNext').textContent=RUN.done?(p.next?'Jetzt: '+p.next:''):(nx?'Als Nächstes: '+nx.label+' ('+fmtT(nx.sec)+')':(p.next?'Danach: '+p.next:''));
   $('#tPause').textContent=RUN.paused?'Weiter':'Pause';
   $('#tSkip').textContent=RUN.phases.length>1&&RUN.i<RUN.phases.length-1?'Nächste ›':'Skip';
+  syncTimerBtns();
 }
+// Start-Knöpfe (▶ Timer starten) spiegeln den laufenden Timer: „⏸ Pause · 3:12“ / „▶ Weiter · 3:12“, danach wieder Original-Text.
+// Vorher waren die Knöpfe statisches HTML aus render…() und wussten nichts vom Timer → „Timer starten“ blieb stehen (und startete neu).
+function timerSrcOf(b){const a=b.dataset.act;return a==='freetimer'?'freetimer:'+b.dataset.k:a}
+function syncTimerBtns(){document.querySelectorAll('[data-tsrc]').forEach(b=>{
+  if(b.dataset.label==null)b.dataset.label=b.textContent;
+  const on=!!(RUN&&!RUN.done&&RUN.src&&RUN.src===timerSrcOf(b));
+  const txt=on?(RUN.paused?'▶\uFE0E Weiter':'⏸\uFE0E Pause')+' · '+fmtT(remSec())+(RUN.phases.length>1?' · '+(RUN.i+1)+'/'+RUN.phases.length:''):b.dataset.label;
+  if(b.textContent!==txt)b.textContent=txt;
+  b.classList.toggle('running',on);b.classList.toggle('paused',on&&RUN.paused);
+  if(on)b.setAttribute('aria-pressed',RUN.paused?'false':'true');else b.removeAttribute('aria-pressed');
+  const al=on?(RUN.paused?'Timer pausiert, fortsetzen':'Timer läuft, pausieren'):'';if(al)b.setAttribute('aria-label',al);else b.removeAttribute('aria-label')})}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;
   if(RUN)wake(true);audioWake();runStep(); // abgelaufen? → Ende-Zustand + Ton/Blinken
   if(RUN&&RUN.done&&RUN.missed){const el=$('#timer');el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');drawTimer()}});
 // Pausen-Timer überlebt einen Neustart der App (iOS beendet Home-Bildschirm-Apps im Hintergrund gern)
 function restoreRun(){try{const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null');if(!o||!o.phases||!o.phases.length)return;
   if(!o.paused&&Date.now()-o.end>10*60*1000){localStorage.removeItem(RUN_KEY);return}
-  RUN={title:o.title,phases:o.phases,i:0,end:o.end,paused:!!o.paused,rem:o.rem||0,onDone:null,lastSec:null,done:false,missed:false};
+  RUN={title:o.title,phases:o.phases,i:0,end:o.end,paused:!!o.paused,rem:o.rem||0,onDone:null,lastSec:null,done:false,missed:false,src:o.src||null};
   $('#timer').classList.add('show');wake(true);runStep();drawTimer()}catch(e){}}
 
 // ===== Coach: automatische Satz-Auswertung → Anpassung des nächsten Satzes (Hinweise als Text) =====
@@ -860,11 +890,13 @@ let FOCUS=null,SCROLL_FOCUS=false,KEEP_SCROLL=true;
 let ROT=0,PENDING_SCROLL=null;
 function scroller(){return ROT?$('#scr'):(document.scrollingElement||document.documentElement)}
 function getY(){return scroller().scrollTop}
-function setY(y,smooth){const s=scroller();y=Math.max(0,Math.min(y,s.scrollHeight-viewH()));if(smooth&&s.scrollTo)s.scrollTo({top:y,behavior:'smooth'});else s.scrollTop=y}
+function setY(y,smooth){const s=scroller();y=Math.max(0,Math.min(y,s.scrollHeight-viewH()));if(smooth&&s.scrollTo&&!(typeof RM==='function'&&RM()))s.scrollTo({top:y,behavior:'smooth'});else s.scrollTop=y}
 function viewH(){return ROT?$('#scr').clientHeight:innerHeight}
 function yOf(el){const s=ROT?$('#scr'):null;let y=0;for(let e=el;e&&e!==s&&e!==document.body;e=e.offsetParent)y+=e.offsetTop;return y}
 function topGap(){return (parseFloat(getComputedStyle($('#scr')).paddingTop)||0)+12}
-function bottomGap(){const t=$('#timer');return (RUN&&t.classList.contains('show')?t.offsetHeight+80:90)}
+// Platz, den das feste Timer-Panel unten verdeckt (inkl. Home-Indikator/Safe-Area) – aktive Elemente landen darüber
+function bottomGap(){const t=$('#timer');if(!(RUN&&t.classList.contains('show')))return 90;
+  if(!ROT){const r=t.getBoundingClientRect();if(r.height)return Math.max(90,innerHeight-r.top+12)}return t.offsetHeight+80}
 // mode 'set' = nächster Satz (nur scrollen, wenn nicht gut sichtbar) · 'ex' = nächste Übung oben zeigen · 'end' = Feedback-Karte
 function scrollFocus(mode){
   let el=null;
@@ -872,19 +904,22 @@ function scrollFocus(mode){
   else if(FOCUS)el=mode==='ex'?document.getElementById('ex-'+FOCUS.ex):document.querySelector(`[data-set="${FOCUS.ex}-${FOCUS.i}"]`);
   if(!el)return;
   const y=getY(),top=yOf(el),h=el.offsetHeight,vh=viewH(),tg=topGap(),bg=bottomGap();
-  if(mode==='set'){if(top>=y+tg&&top+h<=y+vh-bg)return;const room=vh-tg-bg;setY(top-tg-Math.max(0,(room-h)/2),true);return}
-  setY(top-tg,true);
+  if(mode==='set'){if(!(top>=y+tg&&top+h<=y+vh-bg)){const room=vh-tg-bg;setY(top-tg-Math.max(0,(room-h)/2),true)}}
+  else setY(top-tg,true);
+  // Fokus auf den aktiven Satz (Container, tabindex=-1) – nie auf ein Eingabefeld, nie während getippt wird
+  const f=FOCUS?document.querySelector(`[data-set="${FOCUS.ex}-${FOCUS.i}"]`):el;
+  if(f&&f.focus&&!(typeof isTyping==='function'&&isTyping()))try{f.focus({preventScroll:true})}catch(e){}
 }
 // Gewichtsangabe: Kurzhanteln immer pro Hand (jede Hantel einzeln), Kabel einarmig je Seite
 const wUnit=it=>it.wu||(EX[it.ex]&&EX[it.ex].ph?'kg pro Hand':'kg');
-const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="minus">−</button><div class="v" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="plus">+</button></div>`;
+const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="${sub?esc(String(sub))+' ':''}weniger">−</button><div class="v" role="button" tabindex="0" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="${sub?esc(String(sub))+' ':''}mehr">+</button></div>`;
 function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:PLAN.goal.start}
 function stepsFor(d){return GARMIN?GARMIN.days.find(x=>x.date===d):null}
 
 function renderTraining(){
   const d=CUR,dy=peek(d),t=typeOf(d),m=mods(d),wd=parse(d).getDay();
   let h='';
-  h+=`<div class="row sp" style="margin-top:4px"><button class="iconbtn" data-act="day" data-d="-1">‹</button><div style="text-align:center"><b>${WDL[wd]}, ${de(d)}</b><div class="mut small">Woche ${weekNo(d)} seit Planstart${isDeload(d)?' · <b>Deload</b>':''}${d===TODAY?' · heute':''}</div></div><button class="iconbtn" data-act="day" data-d="1">›</button></div>`;
+  h+=`<div class="row sp" style="margin-top:4px"><button class="iconbtn" data-act="day" data-d="-1" aria-label="Vortag">‹</button><div style="text-align:center"><b>${WDL[wd]}, ${de(d)}</b><div class="mut small">Woche ${weekNo(d)} seit Planstart${isDeload(d)?' · <b>Deload</b>':''}${d===TODAY?' · heute':''}</div></div><button class="iconbtn" data-act="day" data-d="1" aria-label="Nächster Tag">›</button></div>`;
   if(d!==TODAY)h+=`<div style="text-align:center;margin-top:6px"><button class="chip sm" data-act="today">Zu heute springen</button></div>`;
   // Check-in
   const sc=scaleFor(d),lsc=lastScale(d);
@@ -943,9 +978,9 @@ function exCard(it,d,idx){
     const foc=FOCUS&&FOCUS.ex===it.ex&&FOCUS.i===i;
     const a=`data-ex="${it.ex}" data-i="${i}"`;
     const adj=s.adj&&!done?s.adj:null,mood=done&&s.mood?s.mood:null;
-    h+=`<div class="set ${foc?'focus':''} ${adj?'adj':''}" data-set="${it.ex}-${i}"><div class="setrow"><div class="setno">${i+1}</div>`;
+    h+=`<div class="set ${foc?'focus':''} ${adj?'adj':''}" data-set="${it.ex}-${i}" tabindex="-1"${foc?' aria-current="step"':''}>${foc?'<div class="nowtag set-now">Jetzt · Satz '+(i+1)+'</div>':''}<div class="setrow"><div class="setno">${i+1}</div>`;
     if(noW)h+=`<div class="mut small" style="text-align:center">${isS?'Zeit':'Körpergewicht'}</div>`;
-    else h+=stepper('w',w==null?'<span style="color:#aaa">kg</span>':nf(w),wUnit(it),a);
+    else h+=stepper('w',w==null?'<span style="color:var(--mut)">kg</span>':nf(w),wUnit(it),a);
     h+=stepper('r',r,isS?'s':'Wdh.',a);
     h+=`<button class="ok ${done?'done':''}" data-act="ok" ${a}>✓</button></div>`;
     if(adj)h+=`<div class="adjrow"><span class="badge adjb">angepasst</span> <span>${adj.from.w!=null&&adj.from.w!==w?nf(adj.from.w)+' → <b>'+nf(w)+' kg</b>':''}${adj.from.r!==r?(adj.from.w!=null&&adj.from.w!==w?' · ':'')+adj.from.r+' → <b>'+r+'</b> Wdh.':''}</span><button class="chip sm" data-act="adjundo" ${a}>↺ Rückgängig</button></div>`;
@@ -964,7 +999,7 @@ function warmSteps(t,d){const it=(PLAN.sessions[t].items||[]).find(x=>!x.bw&&x.u
     {t:'Jefferson Curls 2 × 6–8',l:'Jefferson Curls 2 × 6–8 auf der Bank, leichte Kettlebell (8–12 kg), 3 s runter / 3 s hoch. Stopp bei Kribbeln/Taubheit im Bein, an schlechten Rücken-Tagen weglassen.',sec:90},
     {t:'Aktivierung',l:'Aktivierung: Glute Bridge 12×, Band Pull-Apart oder leichte Face Pulls 12×',sec:60,ex:'bridge1'},{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]}
 function warmCard(t,d){const dy=peek(d),w=dy.warm||[],st=warmSteps(t,d),n=st.filter((x,i)=>w[i]).length;
-  return `<div class="card"><div class="exhead"><div><h3>Aufwärmen (ca. 8 Min)</h3><div class="meta">${n}/${st.length} erledigt</div></div><button class="abl" data-act="warmtimer">▶ Timer</button></div>`+
+  return `<div class="card"><div class="exhead"><div><h3>Aufwärmen (ca. 8 Min)</h3><div class="meta">${n}/${st.length} erledigt</div></div><button class="abl" data-act="warmtimer" data-tsrc>▶ Timer</button></div>`+
   st.map((x,i)=>`<label class="tgl" style="align-items:flex-start"><input type="checkbox" data-act="warmck" data-v="${i}" ${w[i]?'checked':''}><span>${esc(x.l)}${x.ex&&EX[x.ex]?` <a href="#" data-act="abl" data-v="${x.ex}">Ablauf</a>`:''}</span></label>`).join('')+
   (PLAN.warmup?`<div class="mut small">${esc(PLAN.warmup)}</div>`:'')+`</div>`}
 function renderStrength(t,d){
@@ -998,7 +1033,7 @@ function renderFree(k,d){
   <div class="lbl">Dauer (Min)</div>${stepper('free',p.min??def,'Min',`data-k="${k}" data-f="min"`)}
   <div class="grid2"><div><div class="lbl">Puls Ø</div>${stepper('free',p.hr??'–','bpm',`data-k="${k}" data-f="hr"`)}</div><div><div class="lbl">HF max</div>${stepper('free',p.hrMax??'–','bpm',`data-k="${k}" data-f="hrMax"`)}</div></div>${garminHrNote(p)}
   <input style="margin-top:8px" data-act="freenote" data-k="${k}" value="${esc(p.note||'')}" placeholder="Werte/Notiz (z. B. Gerät, Strecke)">
-  <div class="row" style="margin-top:10px"><button class="btn sec" data-act="freetimer" data-k="${k}">▶ Timer ${p.min??def} Min</button><button class="btn ${p.done?'':'sec'}" data-act="freedone" data-k="${k}">${p.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
+  <div class="row" style="margin-top:10px"><button class="btn sec" data-act="freetimer" data-k="${k}" data-tsrc>▶ Timer ${p.min??def} Min</button><button class="btn ${p.done?'':'sec'}" data-act="freedone" data-k="${k}">${p.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
 }
 
 // ===== Cardio & Intervall =====
@@ -1027,10 +1062,10 @@ function renderCardio(d){
   const ses=cardioSes();
   let h=`<div class="card"><div class="exhead"><div><h3>${ses.name}</h3><div class="meta">${ses.desc}</div></div><button class="abl" data-act="abl" data-v="walk">▶ Ablauf</button></div><div class="coach">Coach: ${esc(ses.coach)}</div>
   <div class="lbl">Incline Walk</div><div class="grid3">${stepper('cd',v('walkMin'),'Min','data-f="walkMin"')}${stepper('cd',nf(v('incline')),'% Basis','data-f="incline"')}${stepper('cd',nf(v('kmh')),'km/h','data-f="kmh"')}</div>
-  <div class="lbl">Ablauf (Signalton bei jedem Wechsel)</div><div id="phases">${cardioPhases(d).map((p,i)=>`<div class="phase" data-ph="${i}"><span>${p.label}</span><span>${fmtT(p.sec)}</span></div>`).join('')}</div>
+  <div class="lbl">Ablauf (Signalton bei jedem Wechsel)</div>${phaseList(cardioPhases(d))}
   <div class="grid2"><div><div class="lbl">Puls Ø</div>${stepper('cd',c.hr??'–','bpm','data-f="hr"')}</div><div><div class="lbl">HF max</div>${stepper('cd',c.hrMax??'–','bpm','data-f="hrMax"')}</div></div>${garminHrNote(c)}
   <div class="lbl">Anstrengung (RPE 1–10)</div>${rpeChips('cdrpe',c.rpe)}
-  <div class="row" style="margin-top:10px"><button class="btn sec" data-act="cdtimer">▶ Geführter Timer</button><button class="btn ${c.done?'':'sec'}" data-act="cddone">${c.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
+  <div class="row" style="margin-top:10px"><button class="btn sec" data-act="cdtimer" data-tsrc>▶ Geführter Timer</button><button class="btn ${c.done?'':'sec'}" data-act="cddone">${c.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
   return h;
 }
 // Incline Walk: Aufwärmen (erste Minuten flacher), danach Wechsel an jeder vollen 5-Min-Marke zwischen Basis- und Hoch-Steigung.
@@ -1051,15 +1086,38 @@ function renderInterval(d){
   const pk=Object.keys(S.days).filter(k=>k<d&&S.days[k].interval&&S.days[k].interval.rounds).sort().pop();const prev=pk?S.days[pk].interval.rounds:[];
   let h=`<div class="card"><div class="exhead"><div><h3>${s.name}</h3><div class="meta">${s.desc} · ${s.warm} Min Aufwärmen / ${s.cool} Min Cool-down</div></div><button class="abl" data-act="abl" data-v="walk">▶ Ablauf</button></div>
   <div class="coach">Coach: ${esc(s.coach)}</div>${r.src==='up'?'<div class="hint">Letztes Mal Puls < 165 und RPE ≤ 7 → Steigung je Runde +1 %.</div>':''}
-  <button class="btn big" style="margin:10px 0" data-act="ivtimer">▶ Intervall-Timer starten (${Math.round(intervalPhases(d).reduce((a,p)=>a+p.sec,0)/60)} Min)</button>
-  <div id="phases">${intervalPhases(d).map((p,i)=>`<div class="phase" data-ph="${i}"><span>${p.label}</span><span>${fmtT(p.sec)}</span></div>`).join('')}</div>
+  <button class="btn big" style="margin:10px 0" data-act="ivtimer" data-tsrc>▶ Intervall-Timer starten (${Math.round(intervalPhases(d).reduce((a,p)=>a+p.sec,0)/60)} Min)</button>
+  ${phaseList(intervalPhases(d))}
   <div class="lbl" style="margin-top:10px">Werte je harter Runde</div><div class="rnd mut small"><span></span><span>Steigung %</span><span>km/h</span><span>Puls</span></div>`;
   rounds.forEach((x,i)=>{h+=`<div class="rnd"><b>R${i+1}</b><input inputmode="decimal" data-act="iv" data-i="${i}" data-f="incline" value="${nf(x.incline)}"><input inputmode="decimal" data-act="iv" data-i="${i}" data-f="kmh" value="${nf(x.kmh)}"><input inputmode="numeric" data-act="iv" data-i="${i}" data-f="hr" value="${x.hr??''}" placeholder="${prev[i]?prev[i].hr:''}"></div>`});
   h+=(iv.hr!=null||iv.hrMax!=null?`<div class="kv small" style="margin-top:6px"><span>Ganze Einheit</span><span>${iv.hr!=null?'Ø '+iv.hr+' bpm':''}${iv.hr!=null&&iv.hrMax!=null?' · ':''}${iv.hrMax!=null?'max '+iv.hrMax+' bpm':''}</span></div>`:'')+garminHrNote(iv,iv.lapsHr?'Puls je Runde = HF max der Runde laut Garmin.':'');
   h+=`<div class="lbl">Anstrengung (RPE 1–10)</div>${rpeChips('ivrpe',iv.rpe)}<button class="btn ${iv.done?'':'sec'}" style="margin-top:8px" data-act="ivdone">${iv.done?'✓ erledigt':'✓ Einheit erledigt'}</button></div>`;
   return h;
 }
-function onPhase(){document.querySelectorAll('.phase').forEach(e=>e.classList.toggle('cur',!!(RUN&&RUN.phases.length>1&&+e.dataset.ph===RUN.i)))}
+// Ablauf-Liste: aktive Phase deutlich markiert (dicker Rahmen + „Jetzt“, nicht nur Farbe), aria-current="step",
+// erledigte Phasen mit ✓. tabindex=-1 = per Skript fokussierbar, aber nicht in der Tab-Reihenfolge.
+function phaseList(ph){return `<ol id="phases" class="phases" aria-label="Ablauf">${ph.map((p,i)=>`<li class="phase${p.kind==='hard'?' hard':''}" data-ph="${i}" tabindex="-1"><span class="pl"><b class="nowtag" aria-hidden="true">Jetzt</b><span class="pdone" aria-hidden="true">✓</span>${p.label}</span><span class="pt">${fmtT(p.sec)}</span></li>`).join('')}</ol>`}
+const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+function isTyping(){const a=document.activeElement;return !!(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))}
+// Aktives Element mittig in den freien Bereich zwischen oberem Rand und Timer-Panel (fixed unten) scrollen, danach Fokus
+// ohne Scrollen setzen. Nie ein Eingabefeld fokussieren und nie Fokus aus einem Feld nehmen, in dem gerade getippt wird (iOS-Tastatur).
+function revealEl(el,force){if(!el||isTyping())return; // tippt er gerade (z. B. Puls), nichts verschieben
+  const y=getY(),top=yOf(el),h=el.offsetHeight,vh=viewH(),tg=topGap(),bg=bottomGap();
+  const visible=top>=y+tg&&top+h<=y+vh-bg;
+  if(force||!visible){const room=vh-tg-bg;setY(top-tg-Math.max(0,(room-h)/2),true)}
+  if(!isTyping()&&el.focus)try{el.focus({preventScroll:true})}catch(e){}}
+let LAST_PH=null;
+// scroll=true nur bei echtem Phasenwechsel/Start; nach render() nur Markierung wiederherstellen (vorher ging sie dabei verloren).
+function onPhase(scroll){const act=!!(RUN&&RUN.phases.length>1);let cur=null;
+  document.querySelectorAll('#phases .phase').forEach(e=>{const i=+e.dataset.ph,on=act&&i===RUN.i;
+    e.classList.toggle('cur',on);e.classList.toggle('past',act&&i<RUN.i);
+    if(on){e.setAttribute('aria-current','step');cur=e}else e.removeAttribute('aria-current')});
+  const key=act?RUN.title+'#'+RUN.i:null;
+  if(act&&key!==LAST_PH){const p=RUN.phases[RUN.i];announce('Jetzt: '+p.label+', '+fmtT(p.sec))}
+  LAST_PH=key;
+  if(scroll&&cur)requestAnimationFrame(()=>revealEl(cur,true))}
+// Ansage nur für Screenreader (VoiceOver), höflich und nur bei Phasenwechsel – nicht jede Sekunde. Kein Ton, keine Sprachausgabe.
+function announce(t){const e=document.getElementById('tLive');if(!e)return;e.textContent='';setTimeout(()=>{e.textContent=t},60)}
 
 // ===== Feedback & Text für Sporty =====
 const FEEL={1:'sehr schwer',2:'schwer',3:'ok',4:'gut',5:'top'};
@@ -1185,7 +1243,7 @@ function weightChart(){
   const X=k=>pl+(w-pl-pr)*diffDays(x0,k)/span,Y=v=>pt+(h-pt-pb)*(hi-v)/(hi-lo);
   let s=`<svg viewBox="0 0 ${w} ${h}" width="100%" style="display:block">`;
   for(let v=Math.ceil(lo);v<=hi;v++){s+=`<line x1="${pl}" x2="${w-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eee"/><text x="${pl-4}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="#888">${v}</text>`}
-  s+=`<line x1="${pl}" x2="${w-pr}" y1="${Y(PLAN.goal.mid)}" y2="${Y(PLAN.goal.mid)}" stroke="#b7791f" stroke-dasharray="4 3"/><text x="${w-pr}" y="${Y(PLAN.goal.mid)-3}" font-size="10" text-anchor="end" fill="#b7791f">Ziel ${PLAN.goal.mid}</text>`;
+  s+=`<line x1="${pl}" x2="${w-pr}" y1="${Y(PLAN.goal.mid)}" y2="${Y(PLAN.goal.mid)}" stroke="#b7791f" stroke-dasharray="4 3"/><text x="${w-pr}" y="${Y(PLAN.goal.mid)-3}" font-size="10" text-anchor="end" fill="#8f5d00">Ziel ${PLAN.goal.mid}</text>`;
   s+=`<polyline fill="none" stroke="#9cbfac" stroke-width="1.5" points="${W.map(([k,v])=>X(k)+','+Y(v)).join(' ')}"/>`;
   W.forEach(([k,v])=>s+=`<circle cx="${X(k)}" cy="${Y(v)}" r="3" fill="${isScale(k)?'#2f6b4f':'#fff'}" stroke="#2f6b4f" stroke-width="1.5"/>`);
   if(T){const a=T.from<x0?x0:T.from;s+=`<line x1="${X(a)}" y1="${Y(T.at(a))}" x2="${X(T.last)}" y2="${Y(T.smoothed)}" stroke="#1f5f9e" stroke-width="3" stroke-linecap="round"/>`}
@@ -1296,6 +1354,8 @@ function render(){
   if(KEEP_SCROLL&&Math.abs(getY()-y)>1)setY(y);
   $('#sheetIn').scrollTop=sh;
   if(PENDING_SCROLL){const f=PENDING_SCROLL;PENDING_SCROLL=null;requestAnimationFrame(f)}
+  // nach Neuaufbau: Markierung der aktiven Phase und Zustand der Timer-Knöpfe wiederherstellen (ohne Scrollen)
+  if(typeof onPhase==='function')onPhase(false);syncTimerBtns();
 }
 // Gezielt nur eine Übungskarte neu zeichnen (Stepper/RIR) – kein Neuaufbau der Seite.
 function renderCard(exId){
@@ -1309,7 +1369,7 @@ function renderCard(exId){
 }
 function renderView(){
   $('#hdrSub').textContent=WDL[parse(TODAY).getDay()]+', '+parse(TODAY).getDate()+'. '+MON[parse(TODAY).getMonth()];
-  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===TAB));
+  document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.tab===TAB;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   if(!PLAN){$('#view').innerHTML=`<div class="card"><h2>Willkommen bei Sportify</h2><p>Diese App enthält keine persönlichen Daten. Importiere einmalig deine Datei <b>sportify-daten.json</b> (Plan, Log, Gewicht, Garmin-Snapshot) – sie bleibt nur auf diesem Gerät gespeichert.</p><button class="btn big" data-act="import">⤒ Datei importieren</button><p class="mut small">Du hast die Datei von Sporty im Chat bekommen. In der Dateien-App speichern, dann hier auswählen.</p></div>`;return}
   ({training:renderTraining,kalender:renderKalender,fortschritt:renderFortschritt,garmin:renderGarmin,ernaehrung:renderErnaehrung})[TAB]();
 }
@@ -1352,6 +1412,8 @@ document.addEventListener('click',e=>{
   if(t.tagName==='A')e.preventDefault();
   if(a==='note'||a==='fbnote'||a==='iv'||a==='freenote')return;
   const d=CUR;
+  // Start-Knopf des gerade laufenden Timers = Pause/Weiter (statt Neustart von vorn)
+  if(t.hasAttribute('data-tsrc')&&RUN&&!RUN.done&&RUN.src===timerSrcOf(t)){togglePause();return}
   switch(a){
     case 'day':CUR=addDays(CUR,+dd);FOCUS=null;render();break;
     case 'today':CUR=TODAY;render();break;
@@ -1389,7 +1451,7 @@ document.addEventListener('click',e=>{
     case 'sound':setSound(t.checked);toast(t.checked?'Ton bei Pausenende an':'Ton aus – nur Blinken');break;
     case 'soundtest':audioUnlock();if(!soundOn())toast('Ton ist aus');beep10();setTimeout(tick,700);setTimeout(tick,1400);setTimeout(tick,2100);break;
     case 'warmck':{const dy=day(d);dy.warm=dy.warm||[];dy.warm[+v]=t.checked;save();render();break}
-    case 'warmtimer':{const st=warmSteps(typeOf(d),d);startRunner('Aufwärmen',st.map(x=>({label:x.t||x.l,sec:x.sec})),()=>{const dy=day(d);dy.warm=st.map(()=>true);save();render();toast('Aufgewärmt – los geht’s!')});break}
+    case 'warmtimer':{const st=warmSteps(typeOf(d),d);startRunner('Aufwärmen',st.map(x=>({label:x.t||x.l,sec:x.sec})),()=>{const dy=day(d);dy.warm=st.map(()=>true);save();render();toast('Aufgewärmt – los geht’s!')},'warmtimer');break}
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
     case 'abl':ablauf(v);break;
     case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,hrMax:1,rpm:2}[f];
@@ -1398,12 +1460,12 @@ document.addEventListener('click',e=>{
       x=Math.round(((x??(f==='hr'?120:f==='hrMax'?135:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;ap(x);break}
     case 'cdrpe':{const c=day(d).cardio=day(d).cardio||{};c.rpe=+v;save();render();break}
     case 'cddone':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);for(const k of['walkMin','incline','kmh'])if(c[k]===undefined)c[k]=r[k];c.done=!c.done;dy.type=dy.type||'cardio';save();render();if(c.done)toast('Gespeichert – Feedback an Sporty nicht vergessen');break}
-    case 'cdtimer':{startRunner(cardioSes().name||'Incline Walk',cardioPhases(d),()=>toast('Incline Walk fertig! Puls & RPE eintragen'));onPhase();break}
-    case 'ivtimer':startRunner('Intervall',intervalPhases(d),()=>toast('Intervall fertig! Werte & RPE eintragen'));onPhase();break;
+    case 'cdtimer':{startRunner(cardioSes().name||'Incline Walk',cardioPhases(d),()=>toast('Incline Walk fertig! Puls & RPE eintragen'),'cdtimer');onPhase(true);break}
+    case 'ivtimer':startRunner('Intervall',intervalPhases(d),()=>toast('Intervall fertig! Werte & RPE eintragen'),'ivtimer');onPhase(true);break;
     case 'ivrpe':{const iv=day(d).interval=day(d).interval||{};iv.rpe=+v;save();render();break}
     case 'ivdone':{const dy=day(d);const iv=dy.interval=dy.interval||{};const r=intervalRec(d);iv.rounds=[0,1,2,3].map(i=>({incline:iv.rounds?.[i]?.incline??r.incline[i],kmh:iv.rounds?.[i]?.kmh??r.kmh,hr:iv.rounds?.[i]?.hr??null}));iv.done=!iv.done;dy.type=dy.type||'interval';save();render();break}
     case 'free':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:f==='hrMax'?145:130);const ap=x=>{if(f==='min')x=Math.max(5,x);p[f]=x;save();render()};if(dd==='edit'){numEdit(f==='min'?'Dauer (Min)':f==='hrMax'?'HF max (bpm)':'Puls Ø (bpm)',x,false,ap);break}x+=(+dd)*(f==='min'?5:1);ap(x);break}
-    case 'freetimer':{const k=t.dataset.k,b=PLAN.extras[k];const p=(peek(d).free||{})[k]||{};const m=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));startRunner(b.name,[{label:b.name,sec:m*60}],null);break}
+    case 'freetimer':{const k=t.dataset.k,b=PLAN.extras[k];const p=(peek(d).free||{})[k]||{};const m=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));startRunner(b.name,[{label:b.name,sec:m*60}],null,'freetimer:'+k);break}
     case 'freedone':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};p.min=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));p.done=!p.done;save();render();break}
     case 'noss':{const dy=day(d);dy.noSS=!dy.noSS;save();render();break}
     case 'fb':{const dy=day(d);const f=dy.feedback=dy.feedback||{};const k=t.dataset.f;const val=k==='feel'?+v:v;f[k]=f[k]===val?undefined:val;save();render();break}
@@ -1431,6 +1493,8 @@ document.addEventListener('input',e=>{const t=e.target;const a=t.dataset.act;if(
 $('#numForm').addEventListener('submit',e=>{e.preventDefault();const y=num($('#numIn').value),cb=NUM_CB;numClose();if(y!=null&&cb)cb(y)});
 $('#numCancel').onclick=numClose;
 $('#numdlg').addEventListener('click',e=>{if(e.target.id==='numdlg')numClose()});
+// Tastatur: „Klick-Flächen“ ohne <button> (role=button) per Enter/Leertaste auslösen
+document.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target;if(!t||t.tagName==='BUTTON'||t.tagName==='A'||t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT')return;if(t.getAttribute('role')==='button'&&t.dataset.act){e.preventDefault();t.click()}});
 $('#tPlus').onclick=()=>addTime(15);$('#tPause').onclick=togglePause;$('#tSkip').onclick=()=>nextPhase(false);$('#tStop').onclick=stopRunner;
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
@@ -1480,7 +1544,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261024-0611';
+const APP_VER='20261024-0722';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
