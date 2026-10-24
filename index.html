@@ -995,7 +995,8 @@ function renderExtras(d,t){
 function renderFree(k,d){
   const b=PLAN.extras[k],dy=peek(d),p=(dy.free&&dy.free[k])||{},z=b.zone2&&GARMIN&&GARMIN.hrZones?GARMIN.hrZones.cycling:null;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);
   return `<div class="card"><div class="mut">${esc(b.desc||'')}</div>${z?`<div class="banner info small">Zone 2 (deine Garmin-Radzonen): <b>${z.z2}–${z.z3-1} bpm</b>. Darüber: Tempo raus.</div>`:''}
-  <div class="grid2"><div><div class="lbl">Dauer (Min)</div>${stepper('free',p.min??def,'Min',`data-k="${k}" data-f="min"`)}</div><div><div class="lbl">Puls Ø</div>${stepper('free',p.hr??'–','bpm',`data-k="${k}" data-f="hr"`)}</div></div>
+  <div class="lbl">Dauer (Min)</div>${stepper('free',p.min??def,'Min',`data-k="${k}" data-f="min"`)}
+  <div class="grid2"><div><div class="lbl">Puls Ø</div>${stepper('free',p.hr??'–','bpm',`data-k="${k}" data-f="hr"`)}</div><div><div class="lbl">HF max</div>${stepper('free',p.hrMax??'–','bpm',`data-k="${k}" data-f="hrMax"`)}</div></div>${garminHrNote(p)}
   <input style="margin-top:8px" data-act="freenote" data-k="${k}" value="${esc(p.note||'')}" placeholder="Werte/Notiz (z. B. Gerät, Strecke)">
   <div class="row" style="margin-top:10px"><button class="btn sec" data-act="freetimer" data-k="${k}">▶ Timer ${p.min??def} Min</button><button class="btn ${p.done?'':'sec'}" data-act="freedone" data-k="${k}">${p.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
 }
@@ -1027,7 +1028,7 @@ function renderCardio(d){
   let h=`<div class="card"><div class="exhead"><div><h3>${ses.name}</h3><div class="meta">${ses.desc}</div></div><button class="abl" data-act="abl" data-v="walk">▶ Ablauf</button></div><div class="coach">Coach: ${esc(ses.coach)}</div>
   <div class="lbl">Incline Walk</div><div class="grid3">${stepper('cd',v('walkMin'),'Min','data-f="walkMin"')}${stepper('cd',nf(v('incline')),'% Basis','data-f="incline"')}${stepper('cd',nf(v('kmh')),'km/h','data-f="kmh"')}</div>
   <div class="lbl">Ablauf (Signalton bei jedem Wechsel)</div><div id="phases">${cardioPhases(d).map((p,i)=>`<div class="phase" data-ph="${i}"><span>${p.label}</span><span>${fmtT(p.sec)}</span></div>`).join('')}</div>
-  <div class="lbl">Puls Ø</div>${stepper('cd',v('hr')??'–','bpm','data-f="hr"')}
+  <div class="grid2"><div><div class="lbl">Puls Ø</div>${stepper('cd',c.hr??'–','bpm','data-f="hr"')}</div><div><div class="lbl">HF max</div>${stepper('cd',c.hrMax??'–','bpm','data-f="hrMax"')}</div></div>${garminHrNote(c)}
   <div class="lbl">Anstrengung (RPE 1–10)</div>${rpeChips('cdrpe',c.rpe)}
   <div class="row" style="margin-top:10px"><button class="btn sec" data-act="cdtimer">▶ Geführter Timer</button><button class="btn ${c.done?'':'sec'}" data-act="cddone">${c.done?'✓ erledigt':'✓ Erledigt'}</button></div></div>`;
   return h;
@@ -1054,6 +1055,7 @@ function renderInterval(d){
   <div id="phases">${intervalPhases(d).map((p,i)=>`<div class="phase" data-ph="${i}"><span>${p.label}</span><span>${fmtT(p.sec)}</span></div>`).join('')}</div>
   <div class="lbl" style="margin-top:10px">Werte je harter Runde</div><div class="rnd mut small"><span></span><span>Steigung %</span><span>km/h</span><span>Puls</span></div>`;
   rounds.forEach((x,i)=>{h+=`<div class="rnd"><b>R${i+1}</b><input inputmode="decimal" data-act="iv" data-i="${i}" data-f="incline" value="${nf(x.incline)}"><input inputmode="decimal" data-act="iv" data-i="${i}" data-f="kmh" value="${nf(x.kmh)}"><input inputmode="numeric" data-act="iv" data-i="${i}" data-f="hr" value="${x.hr??''}" placeholder="${prev[i]?prev[i].hr:''}"></div>`});
+  h+=(iv.hr!=null||iv.hrMax!=null?`<div class="kv small" style="margin-top:6px"><span>Ganze Einheit</span><span>${iv.hr!=null?'Ø '+iv.hr+' bpm':''}${iv.hr!=null&&iv.hrMax!=null?' · ':''}${iv.hrMax!=null?'max '+iv.hrMax+' bpm':''}</span></div>`:'')+garminHrNote(iv,iv.lapsHr?'Puls je Runde = HF max der Runde laut Garmin.':'');
   h+=`<div class="lbl">Anstrengung (RPE 1–10)</div>${rpeChips('ivrpe',iv.rpe)}<button class="btn ${iv.done?'':'sec'}" style="margin-top:8px" data-act="ivdone">${iv.done?'✓ erledigt':'✓ Einheit erledigt'}</button></div>`;
   return h;
 }
@@ -1085,11 +1087,11 @@ function sessionText(d){
   for(const it of items){const arr=(dy.sets&&dy.sets[it.ex]||[]).filter(s=>s&&s.done);if(!arr.length)continue;
     if(it.block!==cur&&PLAN.extras[it.block]){L.push('+ '+PLAN.extras[it.block].name);}cur=it.block;
     L.push(`${EX[it.ex].n}: ${arr.map(s=>setStr(s,it.unit)).join(' · ')}`)}
-  if(t==='cardio'&&dy.cardio&&dy.cardio.ctMin==null){const c={...cardioRec(d),...dy.cardio},sg=cardioSes().segments;L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.kmh)} km/h · Steigung ${nf(c.incline)}/${nf(c.incline+sg.step)} % im Wechsel (Aufwärmen ${nf(c.incline-sg.warmDrop)} %)${c.hr!=null?' | Puls Ø '+c.hr:''}${c.rpe?' | RPE '+c.rpe:''}`)}
+  if(t==='cardio'&&dy.cardio&&dy.cardio.ctMin==null){const c={...cardioRec(d),...dy.cardio},sg=cardioSes().segments;L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.kmh)} km/h · Steigung ${nf(c.incline)}/${nf(c.incline+sg.step)} % im Wechsel (Aufwärmen ${nf(c.incline-sg.warmDrop)} %)${c.hr!=null?' | Puls Ø '+c.hr:''}${c.hrMax!=null?' · max '+c.hrMax:''}${c.rpe?' | RPE '+c.rpe:''}`)}
   else if(t==='cardio'&&dy.cardio){const c={...dy.cardio}; // alter Eintrag (bis 15.10. evtl. mit Crosstrainer) – nur lesen
-    L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.incline)} % · ${nf(c.kmh)} km/h${c.ctMin!=null?` | Crosstrainer ${c.ctMin} Min${c.ctLevel!=null?' · Widerstand '+c.ctLevel:''}${c.rpm!=null?' · '+c.rpm+' U/min':''}`:''}${c.hr!=null?' | Puls Ø '+c.hr:''}${c.rpe?' | RPE '+c.rpe:''}`)}
-  if(t==='interval'&&dy.interval){const iv=dy.interval,r=intervalRec(d);L.push('Intervall: '+[0,1,2,3].map(i=>{const x=(iv.rounds&&iv.rounds[i])||{};return `R${i+1} ${nf(x.incline??r.incline[i])} % · ${nf(x.kmh??r.kmh)} km/h${x.hr!=null?' · Puls '+x.hr:''}`}).join(' | ')+(iv.rpe?' · RPE '+iv.rpe:''))}
-  for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;L.push(`${PLAN.extras[k]?PLAN.extras[k].name:k}: ${p.min??''} Min${p.hr!=null?' · Puls Ø '+p.hr:''}${p.note?' · '+p.note:''}${p.done?' ✓':''}`)}
+    L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.incline)} % · ${nf(c.kmh)} km/h${c.ctMin!=null?` | Crosstrainer ${c.ctMin} Min${c.ctLevel!=null?' · Widerstand '+c.ctLevel:''}${c.rpm!=null?' · '+c.rpm+' U/min':''}`:''}${c.hr!=null?' | Puls Ø '+c.hr:''}${c.hrMax!=null?' · max '+c.hrMax:''}${c.rpe?' | RPE '+c.rpe:''}`)}
+  if(t==='interval'&&dy.interval){const iv=dy.interval,r=intervalRec(d);L.push('Intervall: '+[0,1,2,3].map(i=>{const x=(iv.rounds&&iv.rounds[i])||{};return `R${i+1} ${nf(x.incline??r.incline[i])} % · ${nf(x.kmh??r.kmh)} km/h${x.hr!=null?' · Puls '+x.hr:''}`}).join(' | ')+(iv.hr!=null?' · Puls Ø '+iv.hr:'')+(iv.hrMax!=null?' · max '+iv.hrMax:'')+(iv.rpe?' · RPE '+iv.rpe:''))}
+  for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;L.push(`${PLAN.extras[k]?PLAN.extras[k].name:k}: ${p.min??''} Min${p.hr!=null?' · Puls Ø '+p.hr:''}${p.hrMax!=null?' · max '+p.hrMax:''}${p.note?' · '+p.note:''}${p.done?' ✓':''}`)}
   if(dy.note)L.push('Notiz: '+dy.note);
   const f=dy.feedback||{};const fb=[];if(f.feel)fb.push('Gefühl '+f.feel+'/5 ('+FEEL[f.feel]+')');if(f.energy)fb.push('Energie '+ENERGY[f.energy]);if(f.note)fb.push(f.note);
   if(fb.length)L.push('Feedback: '+fb.join(' · '));
@@ -1390,17 +1392,17 @@ document.addEventListener('click',e=>{
     case 'warmtimer':{const st=warmSteps(typeOf(d),d);startRunner('Aufwärmen',st.map(x=>({label:x.t||x.l,sec:x.sec})),()=>{const dy=day(d);dy.warm=st.map(()=>true);save();render();toast('Aufgewärmt – los geht’s!')});break}
     case 'ok':onSetDone(t.dataset.ex,+t.dataset.i);break;
     case 'abl':ablauf(v);break;
-    case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,rpm:2}[f];
+    case 'cd':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);const f=t.dataset.f;let x=c[f]!==undefined?c[f]:r[f];const st={walkMin:1,ctMin:1,incline:0.5,kmh:0.1,ctLevel:1,hr:1,hrMax:1,rpm:2}[f];
       const ap=x=>{c[f]=x;if(!dy.type)dy.type='cardio';save();render()};
-      if(dd==='edit'){numEdit({walkMin:'Gehen (Min)',incline:'Steigung Basis (%)',kmh:'Tempo (km/h)',hr:'Puls (bpm)'}[f]||'Wert',x,st<1,ap);break}
-      x=Math.round(((x??(f==='hr'?120:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;ap(x);break}
+      if(dd==='edit'){numEdit({walkMin:'Gehen (Min)',incline:'Steigung Basis (%)',kmh:'Tempo (km/h)',hr:'Puls Ø (bpm)',hrMax:'HF max (bpm)'}[f]||'Wert',x,st<1,ap);break}
+      x=Math.round(((x??(f==='hr'?120:f==='hrMax'?135:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;ap(x);break}
     case 'cdrpe':{const c=day(d).cardio=day(d).cardio||{};c.rpe=+v;save();render();break}
     case 'cddone':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);for(const k of['walkMin','incline','kmh'])if(c[k]===undefined)c[k]=r[k];c.done=!c.done;dy.type=dy.type||'cardio';save();render();if(c.done)toast('Gespeichert – Feedback an Sporty nicht vergessen');break}
     case 'cdtimer':{startRunner(cardioSes().name||'Incline Walk',cardioPhases(d),()=>toast('Incline Walk fertig! Puls & RPE eintragen'));onPhase();break}
     case 'ivtimer':startRunner('Intervall',intervalPhases(d),()=>toast('Intervall fertig! Werte & RPE eintragen'));onPhase();break;
     case 'ivrpe':{const iv=day(d).interval=day(d).interval||{};iv.rpe=+v;save();render();break}
     case 'ivdone':{const dy=day(d);const iv=dy.interval=dy.interval||{};const r=intervalRec(d);iv.rounds=[0,1,2,3].map(i=>({incline:iv.rounds?.[i]?.incline??r.incline[i],kmh:iv.rounds?.[i]?.kmh??r.kmh,hr:iv.rounds?.[i]?.hr??null}));iv.done=!iv.done;dy.type=dy.type||'interval';save();render();break}
-    case 'free':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:130);const ap=x=>{if(f==='min')x=Math.max(5,x);p[f]=x;save();render()};if(dd==='edit'){numEdit(f==='min'?'Dauer (Min)':'Puls Ø (bpm)',x,false,ap);break}x+=(+dd)*(f==='min'?5:1);ap(x);break}
+    case 'free':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:f==='hrMax'?145:130);const ap=x=>{if(f==='min')x=Math.max(5,x);p[f]=x;save();render()};if(dd==='edit'){numEdit(f==='min'?'Dauer (Min)':f==='hrMax'?'HF max (bpm)':'Puls Ø (bpm)',x,false,ap);break}x+=(+dd)*(f==='min'?5:1);ap(x);break}
     case 'freetimer':{const k=t.dataset.k,b=PLAN.extras[k];const p=(peek(d).free||{})[k]||{};const m=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));startRunner(b.name,[{label:b.name,sec:m*60}],null);break}
     case 'freedone':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};p.min=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));p.done=!p.done;save();render();break}
     case 'noss':{const dy=day(d);dy.noSS=!dy.noSS;save();render();break}
@@ -1478,7 +1480,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261023-0508';
+const APP_VER='20261024-0611';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1707,12 +1709,13 @@ async function loadGarmin(force){const c=hookCfg();if(!c||c.mode!=='gh'||GSYNC_B
     if(!txt)return;   // Datei > 1 MB liefert die Contents-API ohne Inhalt – push-garmin.py hält sie klein (60 Tage)
     const data=JSON.parse(txt);if(!data||data.kind!=='sportify-update')return;
     applyData(data);
+    try{if(garminHrFill())toast('⌚ Puls von Garmin ins Log übernommen')}catch(e){console.warn('garminHrFill',e)}
     localStorage.setItem(GSYNC_KEY,JSON.stringify({sha:j.sha||null,updatedAt:data.updatedAt||data.exported||null,checkedAt:Date.now()}));
     if(!gsyncBusyUI())render();else{const h=$('#gsyncHint');if(h)h.outerHTML=gsyncHint()}
   }catch(e){/* offline o. ä.: still, letzter Stand bleibt */}
   finally{GSYNC_BUSY=false}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadGarmin()});
-setTimeout(()=>loadGarmin(true),1200);
+setTimeout(()=>{try{if(garminHrFill()&&!gsyncBusyUI())render()}catch(e){}loadGarmin(true)},1200);
 // ===== Plan automatisch: sportify-logs/plan/current.json ({kind:'sportify-plan',version,updatedAt,plan}) =====
 // Neuer als der Plan auf dem Handy (plan._ver, gilt auch für Pläne aus dem Update-Code)? → übernehmen wie beim Code-Import:
 // nur der Plan wird ersetzt, Verlauf, Geräte und Einstellungen bleiben. Ohne GitHub-Schlüssel: weiter per Update-Code.
@@ -1737,6 +1740,44 @@ async function loadPlan(force){const c=hookCfg();if(!c||c.mode!=='gh'||PSYNC_BUS
   finally{PSYNC_BUSY=false}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadPlan()});
 setTimeout(()=>loadPlan(true),1600);
+// ===== Puls aus Garmin automatisch ins Log (nur Ausdauer: Incline Walk, Intervall, Peloton/Extra-Cardio/Spaziergang) =====
+// Quelle: GARMIN.activities (kommt mit garmin/latest.json). Füllt NUR leere Felder (hr = Ø, hrMax = max) – selbst getippte Werte bleiben.
+// Intervall: hat die Garmin-Aktivität Runden (laps aus get_activity_splits), bekommt jede harte Runde ihr Runden-HF-max als „Puls“.
+// Schon gesendete Einheiten gehen danach still als Update an Sporty (gleiche Datei im privaten Repo).
+const HR_CARDIO=/walk|run|treadmill|cardio|cycl|bik|spin|ellip|hik|stair|row/i,HR_NOT=/strength|yoga|pilates|breath|meditat/i;
+function gActsFor(d){return((GARMIN&&GARMIN.activities)||[]).filter(a=>a&&a.date===d&&a.type&&HR_CARDIO.test(a.type)&&!HR_NOT.test(a.type)&&(a.min||0)>=15&&(a.hr||a.hrmax))}
+function pickAct(list,want,used){let c=list.filter(a=>!used.has(a.id));
+  if(want.kind==='bike')c=c.filter(a=>/cycl|bik|spin/i.test(a.type));else if(want.kind==='walk')c=c.filter(a=>!/cycl|bik|spin/i.test(a.type));
+  if(!c.length)return null;const sc=a=>(/^sporty/i.test(a.name||'')?-1000:0)+Math.abs((a.min||0)-(want.min||30));
+  return c.slice().sort((x,y)=>sc(x)-sc(y))[0]}
+function hardLaps(laps,s){if(!Array.isArray(laps)||!laps.length||!s)return null;const hs=(s.hard||4)*60,n=s.rounds||4;
+  let h=laps.filter(l=>l&&Math.abs((l.sec||0)-hs)<=Math.max(20,hs*.1));
+  if(h.length!==n&&laps.length===2*n+1)h=laps.filter((l,i)=>i%2===1);
+  return h.length===n?h:null}
+function garminHrNote(o,extra){return o&&o.garminHr?`<div class="mut small" style="margin-top:4px">⌚ Puls von Garmin übernommen${o.garminHr.time?' ('+esc(o.garminHr.time)+' Uhr)':''}. ${extra||''}</div>`:''}
+function garminHrFill(){if(!S||!S.days||!GARMIN||!GARMIN.activities||!PLAN)return;
+  const since=addDays(TODAY,-7),changed=[];
+  for(const d of Object.keys(S.days).filter(k=>k>=since&&k<=TODAY).sort()){const dy=S.days[d];if(!dy)continue;const acts=gActsFor(d);if(!acts.length)continue;
+    const used=new Set(),before=JSON.stringify(dy);
+    const put=(o,a)=>{let n=0;if(o.hr==null&&a.hr){o.hr=Math.round(a.hr);n++}if(o.hrMax==null&&a.hrmax){o.hrMax=Math.round(a.hrmax);n++}
+      if(n||(o.garminHr&&o.garminHr.id===a.id))o.garminHr={id:a.id,time:a.time||null,min:a.min||null};used.add(a.id);return n};
+    if(dy.interval){const s=PLAN.sessions&&PLAN.sessions.interval,iv=dy.interval;
+      const a=pickAct(acts,{kind:'walk',min:s?(s.warm+s.rounds*s.hard+(s.rounds-1)*s.easy+s.cool):35},used);
+      if(a){put(iv,a);const hl=hardLaps(a.laps,s);
+        if(hl){const r=intervalRec(d);iv.rounds=iv.rounds||[];let n=0;
+          for(let i=0;i<hl.length;i++){const x=iv.rounds[i]=iv.rounds[i]||{};if(x.incline==null)x.incline=r.incline[i];if(x.kmh==null)x.kmh=r.kmh;
+            if(x.hr==null&&hl[i].hrmax){x.hr=Math.round(hl[i].hrmax);n++}}
+          if(n){iv.lapsHr=true;iv.garminHr=iv.garminHr||{id:a.id,time:a.time||null,min:a.min||null}}}}}
+    if(dy.cardio){const a=pickAct(acts,{kind:'walk',min:dy.cardio.walkMin||cardioSes().rec.walkMin||30},used);if(a)put(dy.cardio,a)}
+    for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;const nm=(PLAN.extras&&PLAN.extras[k]&&PLAN.extras[k].name)||k;
+      const kind=/peloton|rad|bike|cycl|spin/i.test(k+' '+nm)?'bike':/walk|spazier|wander|geh/i.test(k+' '+nm)?'walk':null;
+      const a=pickAct(acts,{kind,min:p.min||30},used);if(a)put(p,a)}
+    if(JSON.stringify(dy)!==before)changed.push(d)}
+  if(!changed.length)return false;
+  save();
+  if(hookCfg()){const q=outbox();let n=0;for(const d of changed){const dy=S.days[d];if(!dy.sentAt)continue;const p=sessionPayload(d);q[p.session.id]=p;n++}
+    if(n){setOutbox(q);flushOutbox(true)}}
+  return true}
 
 </script>
 </body>
