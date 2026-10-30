@@ -466,7 +466,7 @@ function recFor(it,d){
   // recFrom (Plan-Item): Einheiten bis einschließlich dieses Datums nicht für die Progression nutzen (z. B. RIR nicht erfasst, neue Übungsreihenfolge) → Plan-Empfehlung gilt
   const h=exHistory(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE&&!(it.recFrom&&x.date<=it.recFrom));
   let base=it.rec.map(a=>a.slice()),src='plan';
-  const dv=devCur(it.ex);if(dv&&!h.length&&dv.startW!=null){base=it.rec.map(([w,r])=>[w==null?null:dv.startW,r]);src='dev'}
+  const dv=devCur(it.ex),dvW=devStartW(it,dv);if(dv&&!h.length&&dvW!=null){base=it.rec.map(([w,r])=>[w==null?null:dvW,r]);src=it.devStart&&dvW!==dv.startW?'devplan':'dev'}
   if(h.length){const p=progress(h[h.length-1].sets,it,ex);if(p){base=p;src='prog';
     // Stagnation: 3 Einheiten ohne Fortschritt
     const all=exHistory(it.ex,d).filter(x=>!x.dy.modded);
@@ -539,6 +539,9 @@ function gearCat(id){return GEAR_CAT.find(c=>c.id===id)||null}
 function gearFind(name){const s=String(name||'').trim().toLowerCase();return GEAR_CAT.find(c=>c.n.toLowerCase()===s)||null}
 function devCur(exId){return S&&S.dev&&S.dev[exId]||null}
 function devId(exId){const d=devCur(exId);return d?d.id:null}
+// Arbeitsgewicht am Ersatzgerät, solange dort noch keine progressionsrelevante Einheit (ohne Deload/Schlaf-Modifikator) geloggt ist:
+// Plan-Item devStart {<Anfrage-ID oder Geräte-ID>: kg} (von Sporty) vor dem Startgewicht der Gerätezuordnung/Umrechnung
+function devStartW(it,dv){if(!dv)return null;const o=it&&it.devStart;if(o){const v=o[dv.reqId]!=null?o[dv.reqId]:o[dv.id];if(v!=null)return +v}return dv.startW!=null?dv.startW:null}
 function devKey(exId){const d=devCur(exId);return d?exId+'@'+d.id:exId}
 function devName(id){return id&&S&&S.devAll&&S.devAll[id]?S.devAll[id].name:null}
 function stepCfg(exId){const c=S&&S.wsteps&&S.wsteps[devKey(exId)];return c&&(c.step>0||(c.list&&c.list.length))?c:null}
@@ -965,7 +968,7 @@ function exCard(it,d,idx){
   if(it.isNew)badges+=` <span class="badge new">neu, von Sporty</span>`;
   if(it.optional)badges+=` <span class="badge dl">optional</span>`;
   let h=`<div class="card ex ${p.skip?'skip':''}" id="ex-${it.ex}"><div class="exhead"><div><h3>${esc(ex.n)}${badges}</h3><div class="meta">${p.sets.length}${p.sets.length!==it.sets?' (statt '+it.sets+')':''} × ${rng}${isS?' s':''}${it.side?' '+it.side:''}${!noW&&wUnit(it)!=='kg'?' · <b>'+wUnit(it)+'</b>':''} · ${it.rest?'Pause '+it.rest+' s':'ohne Pause'}${it.restStd?' <span class="badge est">Pause nicht im Plan · Standard</span>':''}</div></div><div class="exbtns"><button class="abl" data-act="abl" data-v="${it.ex}">▶ Ablauf</button>${noW?'':`<div class="row" style="gap:6px;justify-content:flex-end;margin-top:6px"><button class="abl sm" data-act="wsopen" data-v="${it.ex}" aria-label="Gewichtsschritte">⚙︎</button><button class="abl sm" data-act="gearopen" data-v="${it.ex}" aria-label="Gerät wechseln">⇄ Gerät</button></div>`}</div></div>`;
-  {const dv=devCur(it.ex),sc=stepCfg(it.ex);if(dv)h+=`<div class="devline">🔁 Gerät: <b>${esc(dv.name)}</b>${dv.pending?' <span class="badge est">Sporty prüft</span>':''} · ${esc(stepsText(sc))}${p.src==='dev'?'<div>Erster Satz zum Antasten'+(dv.startW!=null?' mit '+nf(dv.startW)+' kg':'')+' – danach passt Sportify per RIR an.</div>':''}</div>`;
+  {const dv=devCur(it.ex),sc=stepCfg(it.ex);if(dv)h+=`<div class="devline">🔁 Gerät: <b>${esc(dv.name)}</b>${dv.pending?' <span class="badge est">Sporty prüft</span>':''} · ${esc(stepsText(sc))}${p.src==='dev'?'<div>Erster Satz zum Antasten'+(dv.startW!=null?' mit '+nf(dv.startW)+' kg':'')+' – danach passt Sportify per RIR an.</div>':p.src==='devplan'?'<div>Arbeitsgewicht von Sporty für dieses Gerät: '+nf(devStartW(it,dv))+' kg – danach passt Sportify per RIR an.</div>':''}</div>`;
    else if(sc&&!noW)h+=`<div class="mut small">⚙︎ ${esc(stepsText(sc))}</div>`}
   if(it.note)h+=`<div class="mut small" style="margin-top:4px">${esc(it.note)}</div>`;
   if(it.isNew)h+=`<div class="banner new small" style="margin:6px 0">Neu, von Sporty: ${esc(it.isNew)}</div>`;
@@ -1544,7 +1547,7 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261024-0722';
+const APP_VER='20261030-0620';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
