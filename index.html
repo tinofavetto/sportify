@@ -208,10 +208,35 @@ html.rot.r270{--sat:env(safe-area-inset-right);--sab:12px;--sal:0px;--sar:env(sa
 <nav class="tabs" aria-label="Bereiche"><button data-tab="training"><b aria-hidden="true">🏋️</b>Training</button><button data-tab="kalender"><b aria-hidden="true">📅</b>Kalender</button><button data-tab="fortschritt"><b aria-hidden="true">📈</b>Fortschritt</button><button data-tab="garmin"><b aria-hidden="true">⌚</b>Garmin</button><button data-tab="ernaehrung"><b aria-hidden="true">🥗</b>Ernährung</button></nav>
 </div>
 <script>
-const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rear_Delt_Fly", "note": "Bild zeigt die beidarmige Kabel-Variante – einarmig geht genauso."}, "inclinefly": {"f": ["img/inclinefly-0.webp", "img/inclinefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Flyes"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
+const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rear_Delt_Fly", "note": "Bild zeigt die beidarmige Kabel-Variante – einarmig geht genauso."}, "inclinefly": {"f": ["img/inclinefly-0.webp", "img/inclinefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Flyes"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "legcurls": {"f": ["img/legcurls-0.webp", "img/legcurls-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Leg_Curl"}, "legext": {"f": ["img/legext-0.webp", "img/legext-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Extensions"}, "adductor": {"f": ["img/adductor-0.webp", "img/adductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Adductor"}, "hipthrustm": {"f": ["img/hipthrustm-0.webp", "img/hipthrustm-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust", "note": "Bild zeigt die Langhantel-Variante – du machst die gleiche Bewegung an der Hip-Thrust-Maschine."}, "rowm": {"f": ["img/rowm-0.webp", "img/rowm-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Cable_Rows"}, "abcrunch": {"f": ["img/abcrunch-0.webp", "img/abcrunch-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Ab_Crunch_Machine"}, "pallof": {"f": ["img/pallof-0.webp", "img/pallof-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Pallof_Press"}, "plankpt": {"f": ["img/plankpt-0.webp", "img/plankpt-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Plank", "note": "Becken zusätzlich leicht einrollen (Steißbein Richtung Fersen)."}, "revcrunch": {"f": ["img/revcrunch-0.webp", "img/revcrunch-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Reverse_Crunch"}, "quadstretch": {"f": ["img/quadstretch-0.webp", "img/quadstretch-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/On_Your_Side_Quad_Stretch"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
 
 let PLAN=null,SEED=null,GARMIN=null,SEED_DATE='0000-00-00';
 const EMBED=/*__EMBED__*/null;
+// ===== Profile (mehrere Nutzer auf einer App) =====
+// Tino = Standardprofil: Speicher-Schlüssel und Repo-Pfade exakt wie bisher. Weitere Profile (Steffi) bekommen eigene
+// localStorage-Schlüssel (sportify.u.<id>.…) und einen eigenen Ordner im privaten Repo (users/<id>/…). Plan, Log, Verlauf,
+// Progression, Geräte, Badges: alles getrennt. Garmin nur für Profile mit garmin:true.
+// Auswahl: Link ?user=steffi (merkt sich das Gerät), Menü ⋯ → Profil, oder einmalige Abfrage beim ersten Öffnen auf einem neuen Gerät.
+const USERS={tino:{name:'Tino',garmin:true},steffi:{name:'Steffi',garmin:false}};
+const USER_KEY='sportify.user';
+const LS_SHARED=new Set([USER_KEY,'sportify.hook','sportify-ton','sportify.rotflip']);   // Geräte-Einstellungen (inkl. GitHub-Schlüssel) gelten für alle Profile
+const USER=(()=>{let u=null;
+  try{const q=(new URLSearchParams(location.search).get('user')||'').toLowerCase();if(USERS[q]){u=q;localStorage.setItem(USER_KEY,q)}}catch(e){}
+  if(!u)try{u=localStorage.getItem(USER_KEY)}catch(e){}
+  if(!USERS[u]){u=null;   // noch nie gewählt: Gerät mit vorhandenen Sportify-Daten (Tinos iPhone) bleibt still bei Tino
+    let has=!!EMBED;try{has=has||!!localStorage.getItem('sportify.v1')||!!localStorage.getItem('sportify.hook')}catch(e){}
+    if(has){u='tino';try{localStorage.setItem(USER_KEY,u)}catch(e){}}}
+  return u})();
+const UID=USER||'tino';
+function uName(){return (USERS[UID]||{}).name||UID}
+function uGarmin(){return !!(USERS[UID]||{}).garmin}
+function uKey(k){return UID==='tino'||LS_SHARED.has(k)?k:'sportify.u.'+UID+'.'+k}
+function uPath(p){return UID==='tino'?p:'users/'+UID+'/'+p}
+const LS={getItem:k=>localStorage.getItem(uKey(k)),setItem:(k,v)=>localStorage.setItem(uKey(k),v),removeItem:k=>localStorage.removeItem(uKey(k))};
+function setUser(u){if(!USERS[u])return;try{localStorage.setItem(USER_KEY,u)}catch(e){}
+  const q=new URLSearchParams(location.search);q.delete('user');const s=q.toString();location.replace(location.pathname+(s?'?'+s:'')+location.hash)}
+function userPicker(){return `<div class="card"><h2>Wer trainiert hier?</h2><p class="mut">Jedes Profil hat eigenen Plan, eigenes Log und eigenen Verlauf. Die Auswahl merkt sich dieses Gerät, wechseln geht jederzeit im Menü (⋯).</p>
+  <div class="grid2" style="margin-top:8px">${Object.entries(USERS).map(([k,x])=>`<button class="btn big${k===USER?'':' sec'}" data-act="user" data-v="${k}">${x.name}${k===USER?' ✓':''}</button>`).join('')}</div></div>`}
 // Übungsbibliothek. Muskeldaten nach openGym-Katalog (IDs), Ablauf & Cues auf Deutsch selbst geschrieben.
 const EX={
  bss:{ph:1,m2:['Beinbeuger'],n:'Bulgarian Split Squat',og:'2290',m:['Quadrizeps','Po'],legs:1,
@@ -321,7 +346,38 @@ const EX={
   cues:['Steigung ist die Stellschraube, nicht das Tempo','Gehen, nicht joggen','Bei Stich sofort abbrechen']},
  ct:{n:'Crosstrainer',og:'2141',m:['Cardio'],
   how:['Aufrecht stehen, Füße ganz auf den Pedalen.','Locker, gleichmäßige Trittfrequenz, Arme arbeiten mit.'],
-  cues:['Locker: Sprechen muss möglich sein','Fersen nicht abheben']}
+  cues:['Locker: Sprechen muss möglich sein','Fersen nicht abheben']},
+ // ---- Geräte/Kabel/Matte (ohne Freihantel), u. a. für weitere Profile ----
+ legcurls:{n:'Beinbeuger sitzend (Maschine)',og:null,m:['Beinrückseite'],legs:1,
+  how:['Knie auf Höhe der Drehachse, Polster über den Knien fest, Unterschenkel-Polster knapp über der Ferse.','Fersen kontrolliert nach unten-hinten ziehen, unten kurz halten.','Langsam (2–3 s) zurück, Gewicht nicht ablegen.'],
+  cues:['Becken bleibt fest im Sitz','Fußspitzen zu dir','Nicht ruckartig']},
+ legext:{n:'Beinstrecker (Maschine)',og:null,m:['Oberschenkel vorn'],legs:1,
+  how:['Knie auf Höhe der Drehachse, Polster vorn knapp über dem Fußgelenk.','Beine kontrolliert strecken, oben kurz anspannen.','Langsam zurück, nicht abprallen lassen.'],
+  cues:['Rücken an der Lehne, Griffe festhalten','Oben nicht ins Knie „einrasten“','Langsam runter']},
+ adductor:{n:'Adduktoren-Maschine',og:null,m:['Innenschenkel'],m2:['Po'],legs:1,
+  how:['Aufrecht sitzen, Polster innen an den Knien.','Beine kontrolliert zusammendrücken, kurz halten.','Langsam öffnen, nur so weit, wie es angenehm dehnt.'],
+  cues:['Rücken an der Lehne','Kein Schwung','Langsam öffnen']},
+ hipthrustm:{n:'Hip Thrust Maschine',og:null,m:['Po'],m2:['Beinrückseite'],legs:1,
+  how:['Oberer Rücken am Polster, Gurt/Polster über dem Hüftknochen, Füße hüftbreit, Schienbeine oben senkrecht.','Becken leicht einrollen, dann die Hüfte über den Po nach oben schieben, oben 1–2 s fest anspannen.','Kontrolliert absenken, unten nicht ablegen.'],
+  cues:['Kinn zur Brust, Blick nach vorn','Oben kein Hohlkreuz – Rippen runter, Becken eingerollt','Druck über die Fersen']},
+ rowm:{n:'Rudern sitzend (Kabel/Maschine)',og:null,m:['Rücken'],m2:['Hintere Schulter','Bizeps'],
+  how:['Aufrecht sitzen, Füße fest, Arme lang.','Griff zum Bauch ziehen, Schulterblätter nach hinten-unten.','Kontrolliert nach vorn, Arme wieder lang.'],
+  cues:['Rippen runter, kein Hohlkreuz','Nicht mit dem Oberkörper schwingen','Schultern weg von den Ohren']},
+ abcrunch:{n:'Bauchmaschine (Crunch)',og:null,m:['Bauch'],
+  how:['Sitz so einstellen, dass die Polster/Griffe auf Brusthöhe liegen.','Oberkörper Wirbel für Wirbel einrollen, Rippen Richtung Becken.','Langsam zurück, Spannung halten.'],
+  cues:['Einrollen, nicht nach vorn ziehen','Ausatmen beim Einrollen','Moderates Gewicht']},
+ pallof:{n:'Pallof Press am Kabel',og:null,m:['Rumpf'],m2:['Seitliche Bauchmuskeln'],
+  how:['Seitlich zum Kabel stellen, Griff auf Brusthöhe mit beiden Händen an die Brust.','Arme langsam gerade nach vorn drücken, 2 s halten – der Zug darf dich nicht verdrehen.','Kontrolliert zurück zur Brust.'],
+  cues:['Becken leicht einrollen, Po fest','Rippen runter','Hüfte zeigt gerade nach vorn']},
+ plankpt:{n:'Unterarmstütz mit eingerolltem Becken',og:null,m:['Rumpf'],m2:['Po'],
+  how:['Unterarme unter den Schultern, Beine lang (leichter: Knie am Boden).','Becken leicht einrollen (Steißbein Richtung Fersen), Po und Bauch fest.','Halten, ruhig weiteratmen.'],
+  cues:['Kein Hohlkreuz, kein Po nach oben','Rippen runter','Lieber kürzer und sauber']},
+ revcrunch:{n:'Reverse Crunch',og:null,m:['Bauch'],
+  how:['Rückenlage, Hände neben dem Körper, Knie gebeugt angehoben.','Knie zur Brust ziehen und das Becken leicht vom Boden einrollen.','Langsam Wirbel für Wirbel ablassen, Füße nicht ablegen.'],
+  cues:['Unterer Rücken kommt zum Boden','Kein Schwung','Ausatmen beim Einrollen']},
+ quadstretch:{n:'Oberschenkel-Dehnung (vorn)',og:null,m:['Mobilität'],
+  how:['Seitlich liegen oder stehen (an der Wand festhalten).','Fuß zum Po ziehen, Knie zeigt nach unten.','Becken leicht einrollen und den Po anspannen – dann dehnt es vorn an Hüfte und Oberschenkel.'],
+  cues:['Kein Hohlkreuz','Knie nah beieinander','Ruhig atmen']},
 };
 EX.kickbackpo=EX.kickback;
 
@@ -392,10 +448,10 @@ function migrateData(){if(!S||!S.days)return;S.mig=S.mig||{};if(S.mig.row1_1023)
     dy.sets.row1=dy.sets.row.map(z=>{if(!z)return z;const c={...z};delete c.dev;delete c.adj;return c});delete dy.sets.row}
   S.mig.row1_1023=1;save()}
 function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00';TYPE_LABEL.cardio='Incline Walk'}
-function load(){try{const t=localStorage.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){}
-  if(!S||!S.plan){if(EMBED){applyData(EMBED);return}if(!S)S=emptyState()}
+function load(){try{const t=LS.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){}
+  if(!S||!S.plan){if(EMBED&&UID==='tino'){applyData(EMBED);return}if(!S)S=emptyState()}
   bindData();migrateData()}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Speichern fehlgeschlagen')}}
+function save(){try{LS.setItem(KEY,JSON.stringify(S))}catch(e){toast('Speichern fehlgeschlagen')}}
 function day(d){return S.days[d]||(S.days[d]={})}
 function peek(d){return S.days[d]||{}}
 
@@ -411,6 +467,7 @@ function lastStrengthBefore(d){
 function hasDone(dy){return dy.sets&&Object.values(dy.sets).some(a=>a.some(s=>s&&s.done))}
 function defaultType(d){
   const wd=parse(d).getDay();
+  if(PLAN&&PLAN.schedule){const x=PLAN.schedule[wd]||'rest';if(x==='AB'){const l=lastStrengthBefore(d);return l?(l.type==='A'?'B':'A'):'A'}return x}
   if(wd===1||wd===3||wd===5){const l=lastStrengthBefore(d);return l?(l.type==='A'?'B':'A'):'A'}
   if(wd===2||wd===4)return 'cardio';
   if(wd===6)return 'interval';
@@ -623,7 +680,7 @@ function gearUndo(exId){const d=devCur(exId);if(!d)return;const r=(S.devReq||[])
 // Foto: auf ~1024 px verkleinern (JPEG), nur lokal speichern; Upload nur wenn sportify-logs privat ist
 function gearPhotoPick(exId,file){const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{try{const s=Math.min(1,1024/Math.max(img.width,img.height));const cv=document.createElement('canvas');cv.width=Math.round(img.width*s);cv.height=Math.round(img.height*s);
   cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);const data=cv.toDataURL('image/jpeg',0.78);URL.revokeObjectURL(url);
-  const key='sportify.photo.'+Date.now().toString(36);try{localStorage.setItem(key,data)}catch(e){toast('Foto zu groß zum Speichern – nur Text-Anfrage');gearApply(exId,'photo',null,null,null);return}
+  const key='sportify.photo.'+Date.now().toString(36);try{LS.setItem(key,data)}catch(e){toast('Foto zu groß zum Speichern – nur Text-Anfrage');gearApply(exId,'photo',null,null,null);return}
   gearApply(exId,'photo',null,null,key)}catch(e){toast('Foto konnte nicht gelesen werden')}};img.onerror=()=>toast('Foto konnte nicht gelesen werden');img.src=url}
 // ----- Sync mit sportify-logs: Anfragen hoch, Zuordnungen von Sporty runter -----
 let DEV_BUSY=false,REPO_PRIVATE=null;
@@ -638,7 +695,7 @@ function devReqPayload(r){const ex=EX[r.exId]||{n:r.exId};const it=Object.entrie
     photo:r.photo?{path:r.photoPath||null,uploaded:!!r.photoPath,note:r.photoPath?null:'nur lokal (Repo nicht privat oder Upload fehlgeschlagen)'}:null,app:APP_VER}}
 async function devSync(){const c=hookCfg();if(!c||c.mode!=='gh'||DEV_BUSY||!S||!S.plan)return;DEV_BUSY=true;
   try{for(const r of (S.devReq||[]).filter(x=>!x.sent)){
-      if(r.photo&&!r.photoPath&&r.status!=='undone'){const data=localStorage.getItem(r.photo);
+      if(r.photo&&!r.photoPath&&r.status!=='undone'){const data=LS.getItem(r.photo);
         if(data&&await repoIsPrivate(c)){const p='devices/photos/'+r.id+'.jpg';try{await ghPutB64(p,data.split(',')[1],'Sportify Gerätefoto '+r.id,c);r.photoPath=p}catch(e){}}}
       await ghPut('devices/requests/'+r.id+'.json',devReqPayload(r),'Sportify Gerätewechsel '+r.id,c);r.sent=true;save()}
     await devLoadAssignments(c)}catch(e){}finally{DEV_BUSY=false}}
@@ -663,8 +720,8 @@ setTimeout(()=>devSync(),2000);
 // Verlassen der App, Sperren oder Anrufen „interrupted“/„suspended“. Darum bei JEDER Geste wieder aufwecken.
 let AC=null;
 const SOUND_KEY='sportify-ton';
-function soundOn(){try{return localStorage.getItem(SOUND_KEY)!=='0'}catch(e){return true}}
-function setSound(on){try{localStorage.setItem(SOUND_KEY,on?'1':'0')}catch(e){}}
+function soundOn(){try{return LS.getItem(SOUND_KEY)!=='0'}catch(e){return true}}
+function setSound(on){try{LS.setItem(SOUND_KEY,on?'1':'0')}catch(e){}}
 // Audio-Sitzung (iOS 16.4+/Safari 17, navigator.audioSession): immer 'ambient' = mischt sich mit Musik/Hörbuch,
 // nie 'playback'/'transient' → andere Apps werden nicht angehalten. Keine Sprachausgabe, kein <audio>, keine Media-Session.
 // Ein einziger AudioContext, erst in einer Nutzer-Geste erzeugt und danach wiederverwendet; nur sehr kurze Sinustöne.
@@ -693,7 +750,7 @@ async function wake(on){try{if(on&&'wakeLock' in navigator&&!WL){WL=await naviga
 // Zeiten hängen nur an Zeitstempeln (Date.now), nicht an Ticks – stimmt also auch nach Hintergrund/Sperre.
 let RUN=null; // {phases:[{label,sec,kind}],i,end,paused,rem,onDone,title,lastSec,done,missed}
 const RUN_KEY='sportify-run';
-function persistRun(){try{if(RUN&&!RUN.done&&!RUN.onDone&&RUN.phases.length===1)localStorage.setItem(RUN_KEY,JSON.stringify({title:RUN.title,phases:RUN.phases,end:RUN.end,paused:RUN.paused,rem:RUN.rem,src:RUN.src||null}));else localStorage.removeItem(RUN_KEY)}catch(e){}}
+function persistRun(){try{if(RUN&&!RUN.done&&!RUN.onDone&&RUN.phases.length===1)LS.setItem(RUN_KEY,JSON.stringify({title:RUN.title,phases:RUN.phases,end:RUN.end,paused:RUN.paused,rem:RUN.rem,src:RUN.src||null}));else LS.removeItem(RUN_KEY)}catch(e){}}
 // src = Kennung des Start-Knopfs (z. B. 'ivtimer'), damit dieser Knopf den laufenden Timer anzeigt statt neu zu starten
 function startRunner(title,phases,onDone,src){
   audioUnlock();clearTimeout(END_T);RUN={title,phases,i:0,end:Date.now()+phases[0].sec*1000,paused:false,rem:0,onDone,lastSec:null,done:false,missed:false,src:src||null};
@@ -761,16 +818,16 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState!==
   if(RUN)wake(true);audioWake();runStep(); // abgelaufen? → Ende-Zustand + Ton/Blinken
   if(RUN&&RUN.done&&RUN.missed){const el=$('#timer');el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');drawTimer()}});
 // Pausen-Timer überlebt einen Neustart der App (iOS beendet Home-Bildschirm-Apps im Hintergrund gern)
-function restoreRun(){try{const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null');if(!o||!o.phases||!o.phases.length)return;
-  if(!o.paused&&Date.now()-o.end>10*60*1000){localStorage.removeItem(RUN_KEY);return}
+function restoreRun(){try{const o=JSON.parse(LS.getItem(RUN_KEY)||'null');if(!o||!o.phases||!o.phases.length)return;
+  if(!o.paused&&Date.now()-o.end>10*60*1000){LS.removeItem(RUN_KEY);return}
   RUN={title:o.title,phases:o.phases,i:0,end:o.end,paused:!!o.paused,rem:o.rem||0,onDone:null,lastSec:null,done:false,missed:false,src:o.src||null};
   $('#timer').classList.add('show');wake(true);runStep();drawTimer()}catch(e){}}
 
 // ===== Coach: automatische Satz-Auswertung → Anpassung des nächsten Satzes (Hinweise als Text) =====
 // Keine Extra-Eingabe: ausgewertet werden Gewicht, geschaffte Wdh. und RIR (Reserve) des Satzes. Ohne RIR-Eingabe gilt 2 (Standard).
 const AUTO_KEY='sportify-auto';
-const flag=(k,def)=>{try{const v=localStorage.getItem(k);return v==null?def:v==='1'}catch(e){return def}};
-const setFlag=(k,on)=>{try{localStorage.setItem(k,on?'1':'0')}catch(e){}};
+const flag=(k,def)=>{try{const v=LS.getItem(k);return v==null?def:v==='1'}catch(e){return def}};
+const setFlag=(k,on)=>{try{LS.setItem(k,on?'1':'0')}catch(e){}};
 function autoOn(){return flag(AUTO_KEY,true)}
 
 // --- Regeln (reine Funktion, testbar) ---
@@ -925,6 +982,7 @@ function renderTraining(){
   h+=`<div class="row sp" style="margin-top:4px"><button class="iconbtn" data-act="day" data-d="-1" aria-label="Vortag">‹</button><div style="text-align:center"><b>${WDL[wd]}, ${de(d)}</b><div class="mut small">Woche ${weekNo(d)} seit Planstart${isDeload(d)?' · <b>Deload</b>':''}${d===TODAY?' · heute':''}</div></div><button class="iconbtn" data-act="day" data-d="1" aria-label="Nächster Tag">›</button></div>`;
   if(d!==TODAY)h+=`<div style="text-align:center;margin-top:6px"><button class="chip sm" data-act="today">Zu heute springen</button></div>`;
   // Check-in
+  if(uGarmin()){   // Waage, Schlaf und Schritte kommen von Garmin – nur für Profile mit Garmin
   const sc=scaleFor(d),lsc=lastScale(d);
   h+=`<div class="card checkin"><div class="mut small ci-w">${sc?`Waage heute: <b>${nf(sc.kg,1)} kg</b>${sc.fat!=null?' · '+nf(sc.fat,1)+' % Fett':''}`:lsc?`Waage zuletzt ${de(lsc.date,false)}: ${nf(lsc.kg,1)} kg`:'Gewicht kommt automatisch von der Garmin-Waage.'}</div></div>`;
   // Schlaf & Schritte
@@ -938,6 +996,7 @@ function renderTraining(){
   if(st){const pct=Math.min(100,st.steps/goal*100);h+=`<div class="lbl" style="margin-top:10px">Schritte ${st.is_partial?'(bis Snapshot, Tag läuft noch)':''}</div><div class="row sp"><b>${st.steps.toLocaleString('de-DE')}</b><span class="mut small">Ziel 9.000–10.000</span></div><div style="height:8px;background:var(--chip);border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:${st.steps>=goal?'var(--acc)':'#d9a441'}"></i></div>${st.steps<goal?`<div class="hint">Noch ${(goal-st.steps).toLocaleString('de-DE')} Schritte: 20–30 Min Abendspaziergang einplanen.</div>`:'<div class="hint">Schrittziel erreicht 👍</div>'}`}
   else h+=`<div class="mut small" style="margin-top:8px">Schrittziel 9.000–10.000. Unter 9.000? 20–30 Min Abendspaziergang. (Garmin-Schritte im Snapshot nur bis ${GARMIN?de(GARMIN.snapshot):'–'}.)</div>`;
   h+=`</div>`;
+  }
   // Banner
   if(m.notes.length)h+=m.notes.map(n=>`<div class="banner ${n.startsWith('Deload')?'info':'warn'}">${esc(n)}</div>`).join('');
   if(!isDeload(d)){const nd=nextDeload(d);const dd=diffDays(d,nd);if(dd>0&&dd<=7)h+=`<div class="banner info">Deload-Woche ab ${de(nd)}.</div>`}
@@ -998,6 +1057,7 @@ function exCard(it,d,idx){
 // Fester Aufwärmblock (ca. 8 Min) vor jeder Krafteinheit – abhaken oder mit Timer durchgehen
 function warmSteps(t,d){const it=(PLAN.sessions[t].items||[]).find(x=>!x.bw&&x.unit!=='s'&&!x.noRamp)||null;let ramp='Rampensatz vor der ersten schweren Übung: ca. 50 % × 10';
   if(it){const p=planned(it,d),ws=(p&&p.sets||[]).map(x=>x&&x[0]).filter(x=>x!=null),w=ws.length?Math.max(...ws):null;ramp=`Rampensatz ${EX[it.ex]?EX[it.ex].n:''}: ca. 50 %${w?' ('+nf(roundW(w/2))+' kg)':''} × 10`}
+  if(Array.isArray(PLAN.warmSteps))return PLAN.warmSteps.map(x=>({...x})).concat([{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]);   // Plan-eigenes Aufwärmen (Profil ohne Standard-Aufwärmen)
   return[{t:'Locker Cardio',l:'3 Min locker Cardio (Laufband oder Rad)',sec:180},{t:'Mobilität',l:'Mobilität: Katze-Kuh 8×, Hüftkreisen 8 je Seite, Armkreisen 10 je Richtung',sec:120,ex:'catcow'},
     {t:'Jefferson Curls 2 × 6–8',l:'Jefferson Curls 2 × 6–8 auf der Bank, leichte Kettlebell (8–12 kg), 3 s runter / 3 s hoch. Stopp bei Kribbeln/Taubheit im Bein, an schlechten Rücken-Tagen weglassen.',sec:90},
     {t:'Aktivierung',l:'Aktivierung: Glute Bridge 12×, Band Pull-Apart oder leichte Face Pulls 12×',sec:60,ex:'bridge1'},{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]}
@@ -1022,7 +1082,7 @@ function renderExtras(d,t){
     if(b.days&&!b.days.includes(wd)&&!sel.includes(k))continue;
     h+=`<button class="chip ${sel.includes(k)?'on':''}" data-act="extra" data-v="${k}">${esc(b.name)} · ${b.min} Min${b.isNew?' ✦':''}</button>`;
   }
-  h+=`</div>${!PLAN.extras.peloton.days.includes(wd)?'<div class="mut small">Peloton locker (Zone 2) nur an Nicht-Krafttagen (Di/Do/Sa/So).</div>':''}</div>`;
+  h+=`</div>${PLAN.extras.peloton&&!PLAN.extras.peloton.days.includes(wd)?'<div class="mut small">Peloton locker (Zone 2) nur an Nicht-Krafttagen (Di/Do/Sa/So).</div>':''}</div>`;
   for(const k of sel){const b=PLAN.extras[k];if(!b)continue;
     h+=`<div class="kicker" style="font-weight:700;color:var(--acc);letter-spacing:.5px">＋ ${esc(b.name.toUpperCase())}${b.isNew?' <span class="badge new">neu, von Sporty</span>':''}</div>`;
     if(b.free)h+=renderFree(k,d);
@@ -1276,6 +1336,7 @@ function renderFortschritt(){
 function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn" style="margin-top:8px" data-act="paste">⇩ Update von Sporty einfügen</button><button class="btn sec" style="margin-top:8px" data-act="hookcfg">📡 Sporty-Empfang einrichten${hookCfg()?" ✓":""}</button><div class="mut small" style="margin-top:4px">Sporty schickt dir im Chat einen Update-Code (Garmin: Waage, Schlaf, Schritte, Aktivitäten). Code kopieren, hier tippen – fertig.${S&&S.lastUpdate?' Letztes Update: '+de(S.lastUpdate,false)+'.':''}</div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
 // ===== Garmin =====
 function renderGarmin(){
+  if(!GARMIN&&!uGarmin()){$('#view').innerHTML='<div class="card">Für dieses Profil ist (noch) keine Garmin-Uhr verbunden. Puls, Schlaf und Gewicht kannst du bei Bedarf selbst eintragen.</div>'+dataCard();return}
   if(!GARMIN){$('#view').innerHTML=badgeCard()+'<div class="card">Keine Garmin-Daten importiert.</div>'+dataCard();loadBadges();return}
   const G=GARMIN,sl=G.sleep.filter(x=>x.sleep_score!=null).slice(-14),days=G.days.slice(-14);
   let h=gsyncTime()?`<div class="mut small" style="margin:6px 2px">Garmin aktualisiert: ${gsyncTime()} · kommt automatisch von Sporty</div>`:`<div class="banner info small">Garmin-Snapshot vom ${de(G.snapshot)}. Neue Daten kommen automatisch, sobald der Sporty-Empfang (⋯) eingerichtet ist – sonst per Update-Code.</div>`;
@@ -1328,7 +1389,7 @@ function credits(){const seen=new Set(),rows=[];
   for(const[id,m] of Object.entries(typeof MEDIA!=='undefined'?MEDIA:{})){if(!m||m.none||!EX[id])continue;const k=m.f[0];if(seen.has(k))continue;seen.add(k);
     rows.push(`<li>${esc(EX[id].n)}: ${m.src==='wger.de'?`„${esc(m.title)}“ von ${esc(m.by)}, <a href="${m.url}" target="_blank" rel="noopener">wger.de</a>, <a href="${m.licUrl}" target="_blank" rel="noopener">${esc(m.lic)}</a> (verkleinert, WebP)`:`<a href="${m.url}" target="_blank" rel="noopener">free-exercise-db</a>, Public Domain`}</li>`)}
   openSheet(`<h2>Info / Bildquellen</h2><div class="mut small">Übungsbilder überwiegend aus <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener">free-exercise-db</a> (yuhonas, Public Domain/Unlicense), verkleinert und als WebP. „Bird Dog“: Settebello via wger.de, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; die bearbeitete Datei steht ebenfalls unter CC BY-SA 4.0. Muskelzuordnung teils nach dem <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">openGym</a>-Katalog (AGPL-3.0 / ExerciseDB MIT), Texte von Sporty.</div><ul class="small" style="padding-left:18px">${rows.join('')}</ul>`)}
-function menu(){openSheet(`<h2>Menü</h2>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Piep im Pausen-Timer</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><label class="tgl"><input type="checkbox" data-act="auto" ${autoOn()?'checked':''}><span>Automatisch anpassen (nächster Satz)</span></label><div class="mut small" style="margin:4px 0 8px">🎧 Musik und Hörbücher laufen weiter: Pausen-Timer piept nur kurz (1× bei 10 s, dann 3 – 2 – 1), keine Sprachausgabe. Töne folgen dem Stummschalter und sind nur zu hören, solange Sportify im Vordergrund offen ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div>${PLAN?wstepsOverview():''}<button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
+function menu(){openSheet(`<h2>Menü</h2><div class="card"><h3>Profil: ${esc(uName())}</h3><div class="grid2" style="margin-top:8px">${Object.entries(USERS).map(([k,x])=>`<button class="btn ${k===UID?'':'sec'}" data-act="user" data-v="${k}">${x.name}${k===UID?' ✓':''}</button>`).join('')}</div><div class="mut small" style="margin-top:6px">Jedes Profil hat eigenen Plan, eigenes Log und eigenen Verlauf.</div></div>${dataCard()}<div class="card"><h3>Hinweise</h3><div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:15px"><label style="display:flex;align-items:center;gap:8px;flex:1;margin:0"><input type="checkbox" data-act="sound" style="width:20px;height:20px;flex:none;margin:0" ${soundOn()?'checked':''}><span>Piep im Pausen-Timer</span></label><button class="chip sm" style="flex:none;white-space:nowrap" data-act="soundtest">🔊 Test</button></div><label class="tgl"><input type="checkbox" data-act="auto" ${autoOn()?'checked':''}><span>Automatisch anpassen (nächster Satz)</span></label><div class="mut small" style="margin:4px 0 8px">🎧 Musik und Hörbücher laufen weiter: Pausen-Timer piept nur kurz (1× bei 10 s, dann 3 – 2 – 1), keine Sprachausgabe. Töne folgen dem Stummschalter und sind nur zu hören, solange Sportify im Vordergrund offen ist. Zum Installieren in Safari „Teilen → Zum Home-Bildschirm“. Querformat: Sportify bleibt am Handy hochkant, auch wenn du es drehst. Am ruhigsten ist es mit der Ausrichtungssperre im Kontrollzentrum.</div><label style="display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px"><input type="checkbox" data-act="rotflip" style="width:20px;height:20px;flex:none;margin:0" ${rotFlip()?'checked':''}><span>Querformat steht Kopf? Drehrichtung umkehren</span></label><button class="btn sec" style="margin-top:8px" data-act="credits">ⓘ Info / Bildquellen</button></div>${PLAN?wstepsOverview():''}<button class="btn sec" style="margin-top:8px;color:var(--bad)" data-act="reset">Alle Daten auf diesem Gerät löschen</button>`)}
 // ===== Export / Import =====
 function doExport(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sportify-backup-'+TODAY+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Export erstellt')}
 function doImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(data.v===1&&data.days&&S&&S.plan&&!confirm('Backup einspielen? Aktuelle Daten auf diesem Gerät werden ersetzt.'))return;applyData(data);toast('Import erfolgreich');closeSheet();render()}catch(e){alert('Import fehlgeschlagen: '+e.message)}};r.readAsText(f)};i.click()}
@@ -1371,8 +1432,13 @@ function renderCard(exId){
   const y=getY();els[0].outerHTML=exCard(it,d,idx);if(Math.abs(getY()-y)>1)setY(y);
 }
 function renderView(){
-  $('#hdrSub').textContent=WDL[parse(TODAY).getDay()]+', '+parse(TODAY).getDate()+'. '+MON[parse(TODAY).getMonth()];
+  $('#hdrSub').textContent=(UID!=='tino'?uName()+' · ':'')+WDL[parse(TODAY).getDay()]+', '+parse(TODAY).getDate()+'. '+MON[parse(TODAY).getMonth()];
+  if(!USER){$('#view').innerHTML=userPicker();return}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.tab===TAB;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  if(!PLAN&&UID!=='tino'){$('#view').innerHTML=`<div class="card"><h2>Hallo ${esc(uName())} 👋</h2><div class="banner info small" style="margin:8px 0"><b>Fragebogen ausstehend</b> – Sporty stellt deinen Plan gerade zusammen. Sobald er fertig ist, erscheint er hier automatisch (Plan, Log und Verlauf nur für dein Profil).</div>
+    <p class="mut small">${hookCfg()?'✓ Sporty-Empfang ist eingerichtet. Der Plan wird beim Öffnen der App geprüft.':'Einmalig: Sporty-Empfang mit dem GitHub-Schlüssel einrichten – dann kommt dein Plan von selbst und deine Einheiten gehen an Sporty.'}</p>
+    <button class="btn big" data-act="${hookCfg()?'plancheck':'hookcfg'}">${hookCfg()?'↻ Jetzt nach Plan suchen':'📡 Sporty-Empfang einrichten'}</button>
+    <div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="import">⤒ Datei importieren</button><button class="btn sec" data-act="menu">👤 Profil wechseln</button></div></div>`;return}
   if(!PLAN){$('#view').innerHTML=`<div class="card"><h2>Willkommen bei Sportify</h2><p>Diese App enthält keine persönlichen Daten. Importiere einmalig deine Datei <b>sportify-daten.json</b> (Plan, Log, Gewicht, Garmin-Snapshot) – sie bleibt nur auf diesem Gerät gespeichert.</p><button class="btn big" data-act="import">⤒ Datei importieren</button><p class="mut small">Du hast die Datei von Sporty im Chat bekommen. In der Dateien-App speichern, dann hier auswählen.</p></div>`;return}
   ({training:renderTraining,kalender:renderKalender,fortschritt:renderFortschritt,garmin:renderGarmin,ernaehrung:renderErnaehrung})[TAB]();
 }
@@ -1438,7 +1504,7 @@ document.addEventListener('click',e=>{
         const r=coachApply(ex,i,d);if(r&&(r.applied||r.suggest)){toast('Nächster Satz angepasst');say(coachLine(r,EX[ex],{}).filter(x=>/^(Nächster Satz|Vorschlag)/.test(x)),r.mood==='rekord'?'stark':r.mood)}}
       renderCard(ex);break}
     case 'adjundo':{const ex=t.dataset.ex,i=+t.dataset.i;if(coachUndo(ex,i,d))toast('Anpassung zurückgenommen');renderCard(ex);break}
-    case 'rotflip':localStorage.setItem('sportify.rotflip',t.checked?'1':'0');applyRot();break;
+    case 'rotflip':LS.setItem('sportify.rotflip',t.checked?'1':'0');applyRot();break;
     case 'auto':setFlag(AUTO_KEY,t.checked);toast(t.checked?'Nächster Satz wird automatisch angepasst':'Nur Vorschläge, keine automatische Anpassung');break;
     case 'musik':break;
     case 'wsopen':wstepsSheet(v);break;
@@ -1476,8 +1542,10 @@ document.addEventListener('click',e=>{
     case 'copy':copyText(sessionText(d));break;
     case 'export':doExport();break;
     case 'import':doImport();break;
-    case 'reset':if(confirm('Wirklich alle Sportify-Daten auf diesem Gerät löschen?')){localStorage.removeItem(KEY);S=null;load();closeSheet();render()}break;
+    case 'reset':if(confirm('Wirklich alle Sportify-Daten auf diesem Gerät löschen?')){LS.removeItem(KEY);S=null;load();closeSheet();render()}break;
     case 'menu':menu();break;
+    case 'user':if(v!==USER)setUser(v);else closeSheet();break;
+    case 'plancheck':toast('Suche Plan …');loadPlan(true).then(()=>{if(!PLAN)toast('Noch kein Plan da')});break;
     case 'credits':credits();break;
     case 'closesheet':closeSheet();break;
     case 'cal':{const[y,m]=CALM.split('-').map(Number);const n=new Date(y,m-1+(+dd),1,12);CALM=iso(n).slice(0,7);render();break}
@@ -1510,7 +1578,7 @@ document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.pre
 // im Querformat wird die Oberfläche per CSS um ±90° zurückgedreht (html.rot), Scrollen läuft dann in #scr.
 function lockPortrait(){try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{})}catch(e){}}
 const ROT_MQ=matchMedia('(orientation:landscape) and (max-height:500px) and (hover:none) and (pointer:coarse)');
-function rotFlip(){return localStorage.getItem('sportify.rotflip')==='1'}
+function rotFlip(){return LS.getItem('sportify.rotflip')==='1'}
 function devAngle(){let a=typeof window.orientation==='number'?window.orientation:(screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:90);a=((a%360)+360)%360;return a===270?270:90}
 function applyRot(){
   let r=ROT_MQ.matches?devAngle():0;if(r&&rotFlip())r=r===90?270:90;
@@ -1547,12 +1615,12 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261030-0620';
+const APP_VER='20261030-0650';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
-function hookCfg(){try{const c=JSON.parse(localStorage.getItem(HOOK_KEY)||'null');if(!c)return null;if(c.mode==='gh')return c.token?c:null;return c.url?c:null}catch(e){return null}}
-function setHookCfg(c){if(c)localStorage.setItem(HOOK_KEY,JSON.stringify(c));else localStorage.removeItem(HOOK_KEY)}
+function hookCfg(){try{const c=JSON.parse(LS.getItem(HOOK_KEY)||'null');if(!c)return null;if(c.mode==='gh')return c.token?c:null;return c.url?c:null}catch(e){return null}}
+function setHookCfg(c){if(c)LS.setItem(HOOK_KEY,JSON.stringify(c));else LS.removeItem(HOOK_KEY)}
 function hookHeaders(c){const h={};
   if(c.headers&&Object.keys(c.headers).length)Object.assign(h,c.headers);
   else if(c.key){if(c.style==='custom'&&c.hname)h[c.hname]=c.key;else h['Authorization']='Bearer '+c.key}
@@ -1576,7 +1644,7 @@ async function postHook(payload,c){c=c||hookCfg();if(!c)throw new Error('Sporty-
 function b64utf8(str){const u=new TextEncoder().encode(str);let bin='';for(let i=0;i<u.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(bin)}
 function ghErr(st,txt){const m={401:'Schlüssel falsch oder abgelaufen (HTTP 401).',403:'Schlüssel hat keinen Zugriff auf sportify-logs (HTTP 403). Bei „Repository access“ sportify-logs wählen und „Contents: Read and write“ geben.',404:'Schlüssel hat keinen Zugriff auf sportify-logs (HTTP 404). Bei „Repository access“ sportify-logs wählen und „Contents: Read and write“ geben.',409:'Konflikt beim Speichern (HTTP 409) – bitte nochmal versuchen.',422:'GitHub hat die Datei abgelehnt (HTTP 422).'}[st];
   const e=new Error(m||('GitHub-Fehler HTTP '+st+(txt?' – '+txt:'')));e.status=st;return e}
-async function ghFetch(c,path,opt,q){const url='https://api.github.com/repos/'+GH_REPO+'/contents/'+path.split('/').map(encodeURIComponent).join('/')+(q||'');
+async function ghFetch(c,path,opt,q){const url='https://api.github.com/repos/'+GH_REPO+'/contents/'+uPath(path).split('/').map(encodeURIComponent).join('/')+(q||'');
   try{return await fetch(url,{...opt,cache:'no-store',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',...(opt&&opt.body?{'Content-Type':'application/json'}:{})}})}
   catch(e){const err=new Error('Keine Verbindung zu GitHub ('+(e&&e.message||e)+').');err.net=true;throw err}}
 async function ghPut(path,obj,message,c){c=c||hookCfg();
@@ -1610,8 +1678,8 @@ function sessionPayload(d){
   if(dy.cardio)s.cardio=dy.cardio;if(dy.interval)s.interval=dy.interval;if(dy.free)s.free=dy.free;
   const sl=sleepInfo(d);if(sl.score!=null||sl.hrv!=null)s.schlaf={score:sl.score??null,hrv:sl.hrv??null};
   return{app:'sportify',version:APP_VER,sentAt:new Date().toISOString(),kind:s.revision>1?'update':'new',session:s,text:sessionText(d)}}
-function outbox(){try{return JSON.parse(localStorage.getItem(OUTBOX_KEY)||'{}')}catch(e){return{}}}
-function setOutbox(o){Object.keys(o).length?localStorage.setItem(OUTBOX_KEY,JSON.stringify(o)):localStorage.removeItem(OUTBOX_KEY)}
+function outbox(){try{return JSON.parse(LS.getItem(OUTBOX_KEY)||'{}')}catch(e){return{}}}
+function setOutbox(o){Object.keys(o).length?LS.setItem(OUTBOX_KEY,JSON.stringify(o)):LS.removeItem(OUTBOX_KEY)}
 let FLUSHING=false;
 async function flushOutbox(quiet){if(FLUSHING||!hookCfg())return;const o=outbox();const ids=Object.keys(o);if(!ids.length)return;FLUSHING=true;let ok=0;
   try{for(const id of ids){try{await sendPayload({...o[id],sentAt:new Date().toISOString(),retry:true});const q=outbox();delete q[id];setOutbox(q);ok++;const ss=o[id].session;if(ss&&S.days[ss.date]&&S.days[ss.date].sid===id){S.days[ss.date].sentRev=ss.revision;S.days[ss.date].sentAt=new Date().toISOString();save()}}catch(e){if(e.net)break}}}finally{FLUSHING=false}
@@ -1679,7 +1747,7 @@ const VAPID_PUB='BMfI4p_wwPpIP7pWWXq00xOakHjvR1ZH1fs2dx9NjM4t9H7D4ukGptCWFvX4JHF
 const PUSH_KEY='sportify.push';
 function pushSupported(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window}
 function isStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
-function pushState(){try{return JSON.parse(localStorage.getItem(PUSH_KEY)||'null')}catch(e){return null}}
+function pushState(){try{return JSON.parse(LS.getItem(PUSH_KEY)||'null')}catch(e){return null}}
 function pushBlock(){const ps=pushState(),on=ps&&ps.on&&window.Notification&&Notification.permission==='granted';
   let hint='';if(!pushSupported())hint=isStandalone()?'Push braucht iOS 16.4 oder neuer.':'Push geht nur in der App vom Home-Bildschirm (nicht im Safari-Tab).';
   else if(Notification.permission==='denied')hint='Mitteilungen sind blockiert: iPhone-Einstellungen → Mitteilungen → Sportify → Erlauben.';
@@ -1696,22 +1764,22 @@ async function pushEnable(){const r=$('#pushRes'),say=(m,bad)=>{if(r)r.innerHTML
     if(!sub)sub=await withTO(reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8key(VAPID_PUB)}),20000,'Apple-Push antwortet nicht – bitte später nochmal tippen.');
     const js=sub.toJSON(),id=await subId(js.endpoint);
     await ghPut('push/subscriptions/'+id+'.json',{app:'sportify',version:APP_VER,created:new Date().toISOString(),ua:navigator.userAgent,subscription:js},'Sportify Push-Abo '+id);
-    localStorage.setItem(PUSH_KEY,JSON.stringify({on:true,id,at:new Date().toISOString()}));
+    LS.setItem(PUSH_KEY,JSON.stringify({on:true,id,at:new Date().toISOString()}));
     try{reg.showNotification('Sportify 🔔',{body:'Push ist aktiv – Sporty meldet sich hier.',icon:'icon-192.png',badge:'icon-192.png',tag:'sportify-test'})}catch(e){}
     hookSheet('<div class="banner info small"><b>✓ Push aktiv</b> – Sporty kann dir jetzt Nachrichten schicken.</div>')}
   catch(e){say(esc(e.message||String(e)),true)}}
 async function pushDisable(){try{const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();if(sub)await sub.unsubscribe()}catch(e){}
-  localStorage.removeItem(PUSH_KEY);hookSheet('<div class="banner info small">Push ausgeschaltet.</div>')}
+  LS.removeItem(PUSH_KEY);hookSheet('<div class="banner info small">Push ausgeschaltet.</div>')}
 // Abo still auffrischen, falls iOS es erneuert hat
 setTimeout(async()=>{const ps=pushState();if(!ps||!ps.on||!hookCfg()||!pushSupported()||Notification.permission!=='granted')return;
   try{const reg=await navigator.serviceWorker.ready;const sub=await reg.pushManager.getSubscription();
     if(!sub){const s2=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8key(VAPID_PUB)});const js=s2.toJSON(),id=await subId(js.endpoint);
-      await ghPut('push/subscriptions/'+id+'.json',{app:'sportify',version:APP_VER,created:new Date().toISOString(),ua:navigator.userAgent,subscription:js},'Sportify Push-Abo '+id);localStorage.setItem(PUSH_KEY,JSON.stringify({on:true,id,at:new Date().toISOString()}))}}catch(e){console.warn('push refresh',e)}},4000);
+      await ghPut('push/subscriptions/'+id+'.json',{app:'sportify',version:APP_VER,created:new Date().toISOString(),ua:navigator.userAgent,subscription:js},'Sportify Push-Abo '+id);LS.setItem(PUSH_KEY,JSON.stringify({on:true,id,at:new Date().toISOString()}))}}catch(e){console.warn('push refresh',e)}},4000);
 
 // ===== 🏅 Badges (Garmin-Challenges aus dem privaten Repo sportify-logs/badges/badges.json) =====
 // Liest mit demselben GitHub-Schlüssel wie der Sporty-Empfang. Daten nur im localStorage.
 const BADGE_KEY='sportify.badges',BADGE_SEEN='sportify.badges.seen';let BADGE_BUSY=false,BADGE_ERR=null;
-function badgeData(){try{return JSON.parse(localStorage.getItem(BADGE_KEY)||'null')}catch(e){return null}}
+function badgeData(){try{return JSON.parse(LS.getItem(BADGE_KEY)||'null')}catch(e){return null}}
 function b64dec(s){const bin=atob(String(s).replace(/\s/g,''));const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u)}
 function bKey(b){return b.name+'|'+(b.date||'')}
 function bRow(x){const p=Math.max(0,Math.min(100,x.percent||0));
@@ -1738,19 +1806,19 @@ function confetti(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)ret
   const col=['#2f6b4f','#7ee2a8','#e0b341','#5b3fd1','#e86a5c'];
   for(let i=0;i<36;i++){const s=document.createElement('i');s.style.left=(Math.random()*100)+'%';s.style.background=col[i%col.length];s.style.animationDelay=(Math.random()*.4)+'s';s.style.setProperty('--dx',(Math.random()*80-40)+'px');s.style.transform='rotate('+(Math.random()*360)+'deg)';w.appendChild(s)}
   ($('#app')||document.body).appendChild(w);setTimeout(()=>w.remove(),2600)}
-function celebrate(D){const rec=(D.earned&&D.earned.recent)||[];let seen=null;try{seen=JSON.parse(localStorage.getItem(BADGE_SEEN)||'null')}catch(e){}
+function celebrate(D){const rec=(D.earned&&D.earned.recent)||[];let seen=null;try{seen=JSON.parse(LS.getItem(BADGE_SEEN)||'null')}catch(e){}
   const keys=rec.map(bKey);
-  if(!seen){localStorage.setItem(BADGE_SEEN,JSON.stringify(keys));return}   // erstes Mal: still übernehmen
+  if(!seen){LS.setItem(BADGE_SEEN,JSON.stringify(keys));return}   // erstes Mal: still übernehmen
   const nu=rec.filter(b=>!seen.includes(bKey(b)));
-  localStorage.setItem(BADGE_SEEN,JSON.stringify([...new Set([...seen,...keys])].slice(-300)));
+  LS.setItem(BADGE_SEEN,JSON.stringify([...new Set([...seen,...keys])].slice(-300)));
   if(nu.length){confetti();toast(nu.length===1?'🏅 Neues Badge: '+nu[0].name+'!':'🏅 '+nu.length+' neue Badges!')}}
-async function loadBadges(force){const c=hookCfg();if(!c||c.mode!=='gh'||BADGE_BUSY)return;
-  const last=+localStorage.getItem(BADGE_KEY+'.at')||0;if(!force&&Date.now()-last<15*60e3)return;
+async function loadBadges(force){if(!uGarmin())return;const c=hookCfg();if(!c||c.mode!=='gh'||BADGE_BUSY)return;
+  const last=+LS.getItem(BADGE_KEY+'.at')||0;if(!force&&Date.now()-last<15*60e3)return;
   BADGE_BUSY=true;BADGE_ERR=null;redrawBadgeCard();
   try{const r=await ghFetch(c,'badges/badges.json',{method:'GET'},'?ref=main');
     if(r.status===404)throw new Error('Noch keine Badge-Daten von Sporty.');
     if(!r.ok){let t='';try{t=(await r.json()).message||''}catch(e){}throw ghErr(r.status,t)}
-    const D=JSON.parse(b64dec((await r.json()).content));localStorage.setItem(BADGE_KEY,JSON.stringify(D));localStorage.setItem(BADGE_KEY+'.at',String(Date.now()));celebrate(D)}
+    const D=JSON.parse(b64dec((await r.json()).content));LS.setItem(BADGE_KEY,JSON.stringify(D));LS.setItem(BADGE_KEY+'.at',String(Date.now()));celebrate(D)}
   catch(e){BADGE_ERR=e.net?'Offline – zeige letzten Stand.':e.message}
   finally{BADGE_BUSY=false;redrawBadgeCard()}}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-act="badgeload"]');if(t)loadBadges(true)});
@@ -1761,23 +1829,23 @@ setTimeout(()=>loadBadges(),2500);
 // Holt Schlaf, Waage, Schritte, Aktivitäten und nachgetragene Garmin-Trainings beim Start und beim Zurückkehren in die App.
 // Ohne GitHub-Schlüssel passiert nichts (dann wie bisher per Update-Code). Trainings füllen nur leere Tage (applyData).
 const GSYNC_KEY='sportify.gsync';let GSYNC_BUSY=false;
-function gsyncInfo(){try{return JSON.parse(localStorage.getItem(GSYNC_KEY)||'null')}catch(e){return null}}
+function gsyncInfo(){try{return JSON.parse(LS.getItem(GSYNC_KEY)||'null')}catch(e){return null}}
 function gsyncTime(){const i=gsyncInfo();if(!i||!i.updatedAt)return null;const d=new Date(i.updatedAt);if(isNaN(d))return null;
   const same=iso(d)===TODAY;return same?d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}):d.toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}
 function gsyncHint(){const t=gsyncTime();return t?`<div class="mut small" id="gsyncHint" style="margin-top:4px">Garmin aktualisiert: ${t}</div>`:''}
 function gsyncBusyUI(){const a=document.activeElement;return RUN||$('#sheet').classList.contains('show')||(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))}
-async function loadGarmin(force){const c=hookCfg();if(!c||c.mode!=='gh'||GSYNC_BUSY||!S||!S.plan)return;
+async function loadGarmin(force){if(!uGarmin())return;const c=hookCfg();if(!c||c.mode!=='gh'||GSYNC_BUSY||!S||!S.plan)return;
   const i=gsyncInfo()||{};if(!force&&i.checkedAt&&Date.now()-i.checkedAt<3*60e3)return;
   GSYNC_BUSY=true;
   try{const r=await ghFetch(c,'garmin/latest.json',{method:'GET'},'?ref=main');if(!r.ok)return;   // 404/kein Zugriff: still bleiben
     const j=await r.json();
-    if(j.sha&&j.sha===i.sha){i.checkedAt=Date.now();localStorage.setItem(GSYNC_KEY,JSON.stringify(i));return}
+    if(j.sha&&j.sha===i.sha){i.checkedAt=Date.now();LS.setItem(GSYNC_KEY,JSON.stringify(i));return}
     let txt=j.content?b64dec(j.content):null;
     if(!txt)return;   // Datei > 1 MB liefert die Contents-API ohne Inhalt – push-garmin.py hält sie klein (60 Tage)
     const data=JSON.parse(txt);if(!data||data.kind!=='sportify-update')return;
     applyData(data);
     try{if(garminHrFill())toast('⌚ Puls von Garmin ins Log übernommen')}catch(e){console.warn('garminHrFill',e)}
-    localStorage.setItem(GSYNC_KEY,JSON.stringify({sha:j.sha||null,updatedAt:data.updatedAt||data.exported||null,checkedAt:Date.now()}));
+    LS.setItem(GSYNC_KEY,JSON.stringify({sha:j.sha||null,updatedAt:data.updatedAt||data.exported||null,checkedAt:Date.now()}));
     if(!gsyncBusyUI())render();else{const h=$('#gsyncHint');if(h)h.outerHTML=gsyncHint()}
   }catch(e){/* offline o. ä.: still, letzter Stand bleibt */}
   finally{GSYNC_BUSY=false}}
@@ -1787,20 +1855,21 @@ setTimeout(()=>{try{if(garminHrFill()&&!gsyncBusyUI())render()}catch(e){}loadGar
 // Neuer als der Plan auf dem Handy (plan._ver, gilt auch für Pläne aus dem Update-Code)? → übernehmen wie beim Code-Import:
 // nur der Plan wird ersetzt, Verlauf, Geräte und Einstellungen bleiben. Ohne GitHub-Schlüssel: weiter per Update-Code.
 const PSYNC_KEY='sportify.psync';let PSYNC_BUSY=false;
-async function loadPlan(force){const c=hookCfg();if(!c||c.mode!=='gh'||PSYNC_BUSY||!S||!S.plan)return;
-  let i={};try{i=JSON.parse(localStorage.getItem(PSYNC_KEY)||'{}')||{}}catch(e){}
+async function loadPlan(force){const c=hookCfg();if(!c||c.mode!=='gh'||PSYNC_BUSY||!S||(!S.plan&&UID==='tino'))return;
+  let i={};try{i=JSON.parse(LS.getItem(PSYNC_KEY)||'{}')||{}}catch(e){}
   if(!force&&i.checkedAt&&Date.now()-i.checkedAt<3*60e3)return;
   PSYNC_BUSY=true;
   try{const r=await ghFetch(c,'plan/current.json',{method:'GET'},'?ref=main');if(!r.ok)return;
     const j=await r.json();i.checkedAt=Date.now();
-    if(j.sha&&j.sha===i.sha){localStorage.setItem(PSYNC_KEY,JSON.stringify(i));return}
+    if(j.sha&&j.sha===i.sha){LS.setItem(PSYNC_KEY,JSON.stringify(i));return}
     const txt=j.content?b64dec(j.content):null;if(!txt)return;
     const data=JSON.parse(txt);if(!data||data.kind!=='sportify-plan'||!data.plan||!data.plan.sessions||!data.version)return;
-    i.sha=j.sha||null;localStorage.setItem(PSYNC_KEY,JSON.stringify(i));
+    i.sha=j.sha||null;LS.setItem(PSYNC_KEY,JSON.stringify(i));
     const have=String((S.plan&&S.plan._ver)||'');
     if(String(data.version)<=have)return;
     data.plan._ver=String(data.version);
-    applyData({kind:'sportify-update',v:1,exported:(data.updatedAt||'').slice(0,10)||TODAY,plan:data.plan});
+    if(!S.plan)applyData({kind:'sportify-daten',version:1,exported:(data.updatedAt||'').slice(0,10)||TODAY,seedDate:'0000-00-00',plan:data.plan});   // erster Plan eines neuen Profils
+    else applyData({kind:'sportify-update',v:1,exported:(data.updatedAt||'').slice(0,10)||TODAY,plan:data.plan});
     toast('Neuer Plan von Sporty übernommen');
     if(!gsyncBusyUI())render();
   }catch(e){/* offline o. ä.: alter Plan bleibt */}
