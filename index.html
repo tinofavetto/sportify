@@ -207,6 +207,7 @@ html.rot.r270{--sat:env(safe-area-inset-right);--sab:12px;--sal:0px;--sar:env(sa
 <div class="numdlg" id="numdlg"><form class="in" id="numForm" autocomplete="off"><div class="lbl" id="numLbl"></div><input id="numIn" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false"><div class="row"><button type="button" class="btn sec" id="numCancel">Abbrechen</button><button type="submit" class="btn">OK</button></div></form></div>
 <nav class="tabs" aria-label="Bereiche"><button data-tab="training"><b aria-hidden="true">🏋️</b>Training</button><button data-tab="kalender"><b aria-hidden="true">📅</b>Kalender</button><button data-tab="fortschritt"><b aria-hidden="true">📈</b>Fortschritt</button><button data-tab="garmin"><b aria-hidden="true">⌚</b>Garmin</button><button data-tab="ernaehrung"><b aria-hidden="true">🥗</b>Ernährung</button></nav>
 </div>
+<script src="plan-phase.js"></script>
 <script>
 const MEDIA={"bss": {"f": ["img/bss-0.webp", "img/bss-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Split_Squat_with_Dumbbells"}, "legcurl": {"f": ["img/legcurl-0.webp", "img/legcurl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Lying_Leg_Curls"}, "kickback": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}, "row": {"f": ["img/row-0.webp", "img/row-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Incline_Row", "note": "Bild: Kurzhanteln auf der Schrägbank – gleiche Bewegung wie am Gerät mit Brustauflage."}, "arnold": {"f": ["img/arnold-0.webp", "img/arnold-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Arnold_Dumbbell_Press"}, "ohtri": {"f": ["img/ohtri-0.webp", "img/ohtri-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rope_Overhead_Triceps_Extension"}, "latraise": {"f": ["img/latraise-0.webp", "img/latraise-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Side_Lateral_Raise"}, "calf": {"f": ["img/calf-0.webp", "img/calf-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Standing_Dumbbell_Calf_Raise", "note": "Bild zeigt die beidbeinige Variante – du machst sie einbeinig."}, "toes": {"none": "Kein passendes freies Bild für „Fußspitzen heben an der Wand“ gefunden."}, "legpress": {"f": ["img/legpress-0.webp", "img/legpress-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Press"}, "hipthrust": {"f": ["img/hipthrust-0.webp", "img/hipthrust-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust"}, "benchdb": {"f": ["img/benchdb-0.webp", "img/benchdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bench_Press", "note": "Bild zeigt die Kurzhantel-Variante – du machst die Bewegung an der geführten Maschine."}, "row1": {"f": ["img/row1-0.webp", "img/row1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Arm_Dumbbell_Row"}, "cablefly": {"f": ["img/cablefly-0.webp", "img/cablefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Crossover", "note": "Bild zeigt die Rollen oben – du stellst sie auf Brusthöhe."}, "cableflylow": {"f": ["img/cableflylow-0.webp", "img/cableflylow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Low_Cable_Crossover"}, "revfly": {"f": ["img/revfly-0.webp", "img/revfly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Rear_Delt_Fly", "note": "Bild zeigt die beidarmige Kabel-Variante – einarmig geht genauso."}, "inclinefly": {"f": ["img/inclinefly-0.webp", "img/inclinefly-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Flyes"}, "latpull": {"f": ["img/latpull-0.webp", "img/latpull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Wide-Grip_Lat_Pulldown"}, "shoulderdb": {"f": ["img/shoulderdb-0.webp", "img/shoulderdb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Dumbbell_Press"}, "pushdown": {"f": ["img/pushdown-0.webp", "img/pushdown-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Triceps_Pushdown"}, "balance": {"f": ["img/balance-0.webp", "img/balance-1.webp"], "w": 360, "h": 540, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Balance_Board", "note": "Bild zeigt den beidbeinigen Stand – du stehst einbeinig."}, "dips": {"f": ["img/dips-0.webp", "img/dips-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dip_Machine", "note": "Bild zeigt die Maschine; auf der Bank gleiche Ellbogen-Regel (max. 90°)."}, "curl": {"f": ["img/curl-0.webp", "img/curl-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dumbbell_Bicep_Curl"}, "facepull": {"f": ["img/facepull-0.webp", "img/facepull-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Face_Pull"}, "cablelat": {"f": ["img/cablelat-0.webp", "img/cablelat-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cable_Seated_Lateral_Raise", "note": "Bild zeigt sitzend und beidarmig – du machst es stehend, einarmig."}, "abductor": {"f": ["img/abductor-0.webp", "img/abductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Abductor"}, "bridge1": {"f": ["img/bridge1-0.webp", "img/bridge1-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Single_Leg_Glute_Bridge", "note": "Bild zeigt das freie Bein gestreckt – bei dir angewinkelt."}, "catcow": {"f": ["img/catcow-0.webp", "img/catcow-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Cat_Stretch"}, "birddog": {"f": ["img/birddog-0.webp"], "w": 360, "h": 240, "src": "wger.de", "lic": "CC-BY-SA 4.0", "licUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "by": "Settebello", "title": "Bird Dog", "url": "https://wger.de/de/exercise/1572/view/"}, "deadbug": {"f": ["img/deadbug-0.webp", "img/deadbug-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Dead_Bug"}, "hipflex": {"f": ["img/hipflex-0.webp", "img/hipflex-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Kneeling_Hip_Flexor"}, "child": {"f": ["img/child-0.webp", "img/child-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Childs_Pose"}, "walk": {"f": ["img/walk-0.webp", "img/walk-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Walking_Treadmill", "note": "Bild zeigt Gehen ohne erkennbare Steigung – Steigung laut deinem Plan einstellen."}, "ct": {"f": ["img/ct-0.webp", "img/ct-1.webp"], "w": 360, "h": 241, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Elliptical_Trainer"}, "legcurls": {"f": ["img/legcurls-0.webp", "img/legcurls-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Leg_Curl"}, "legext": {"f": ["img/legext-0.webp", "img/legext-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Leg_Extensions"}, "adductor": {"f": ["img/adductor-0.webp", "img/adductor-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Thigh_Adductor"}, "hipthrustm": {"f": ["img/hipthrustm-0.webp", "img/hipthrustm-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Barbell_Hip_Thrust", "note": "Bild zeigt die Langhantel-Variante – du machst die gleiche Bewegung an der Hip-Thrust-Maschine."}, "rowm": {"f": ["img/rowm-0.webp", "img/rowm-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Seated_Cable_Rows"}, "abcrunch": {"f": ["img/abcrunch-0.webp", "img/abcrunch-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Ab_Crunch_Machine"}, "pallof": {"f": ["img/pallof-0.webp", "img/pallof-1.webp"], "w": 360, "h": 202, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Pallof_Press"}, "plankpt": {"f": ["img/plankpt-0.webp", "img/plankpt-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Plank", "note": "Becken zusätzlich leicht einrollen (Steißbein Richtung Fersen)."}, "revcrunch": {"f": ["img/revcrunch-0.webp", "img/revcrunch-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Reverse_Crunch"}, "quadstretch": {"f": ["img/quadstretch-0.webp", "img/quadstretch-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/On_Your_Side_Quad_Stretch"}, "kickbackpo": {"f": ["img/kickback-0.webp", "img/kickback-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/One-Legged_Cable_Kickback"}, "inclinedb30": {"f": ["img/inclinedb-0.webp", "img/inclinedb-1.webp"], "w": 360, "h": 240, "src": "free-exercise-db", "lic": "Public Domain (Unlicense)", "url": "https://github.com/yuhonas/free-exercise-db/tree/main/exercises/Incline_Dumbbell_Press"}};
 
@@ -380,6 +381,7 @@ const EX={
   cues:['Kein Hohlkreuz','Knie nah beieinander','Ruhig atmen']},
 };
 EX.kickbackpo=EX.kickback;
+const EX_BASE=JSON.parse(JSON.stringify(EX));
 
 // ===== Helpers =====
 const $=s=>document.querySelector(s);
@@ -447,7 +449,15 @@ function migrateData(){if(!S||!S.days)return;S.mig=S.mig||{};if(S.mig.row1_1023)
   if(dy&&dy.sets&&dy.sets.row&&!dy.sets.row1&&dy.sets.row.some(z=>z&&z.dev&&devs[z.dev]&&/einarmig/i.test(devs[z.dev].name||''))){
     dy.sets.row1=dy.sets.row.map(z=>{if(!z)return z;const c={...z};delete c.dev;delete c.adj;return c});delete dy.sets.row}
   S.mig.row1_1023=1;save()}
-function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00';TYPE_LABEL.cardio='Incline Walk'}
+function bindData(){PLAN=S&&S.plan||null;GARMIN=S&&S.garmin||null;SEED=S&&S.seedRef||{days:{}};SEED_DATE=S&&S.seedDate||'0000-00-00';TYPE_LABEL.cardio='Incline Walk';installPlanExercises()}
+function installPlanExercises(){if(typeof EX_BASE==='undefined')return;
+  for(const k of Object.keys(EX))if(!Object.prototype.hasOwnProperty.call(EX_BASE,k))delete EX[k];
+  for(const[k,v] of Object.entries(EX_BASE))EX[k]=v;
+  if(!PLAN)return;const bag={};
+  Object.assign(bag,PLAN.exercises||{});
+  for(const p of PLAN.phases||[])if(p&&p.exercises)Object.assign(bag,p.exercises);
+  for(const x of Object.values(PLAN.exceptions||PLAN.dayOverrides||{}))if(x&&x.exercises)Object.assign(bag,x.exercises);
+  for(const[id,def] of Object.entries(bag)){if(id==='__proto__'||id==='constructor'||id==='prototype')continue;EX[id]=Object.assign({},EX[id]||{n:id,m:[],how:[],cues:[]},def)}}
 function load(){try{const t=LS.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){}
   if(!S||!S.plan){if(EMBED&&UID==='tino'){applyData(EMBED);return}if(!S)S=emptyState()}
   bindData();migrateData()}
@@ -456,9 +466,16 @@ function day(d){return S.days[d]||(S.days[d]={})}
 function peek(d){return S.days[d]||{}}
 
 // ===== Plan logic =====
+// „Heute“ ist das Kalenderdatum Europe/Berlin, auch offline aus dem Cache und über Mitternacht.
+// Phasen (plan.phases) und Tagesausnahmen (plan.exceptions) legt plan-phase.js auf den Basisplan.
+// Gespeicherte Tage und Gewichte bleiben; A/B läuft über die konfigurierten Krafttage weiter.
 const urlDate=new URLSearchParams(location.search).get('date');
-const TODAY=urlDate||iso(new Date());
+function berlinToday(){try{if(typeof SportifyPhase!=='undefined')return SportifyPhase.berlinISO(new Date())}catch(e){}return iso(new Date())}
+let TODAY=urlDate||berlinToday();
 let CUR=TODAY;
+function syncBerlinToday(){if(urlDate)return false;const t=berlinToday();if(t===TODAY)return false;const prev=TODAY;TODAY=t;if(CUR===prev)CUR=t;return true}
+function planOn(d){if(!PLAN)return null;if(typeof SportifyPhase==='undefined')return PLAN;try{return SportifyPhase.resolvePlan(PLAN,d||TODAY)}catch(e){return PLAN}}
+function exOf(id,d){const base=EX_BASE[id]||EX[id]||null;const p=d?planOn(d):null;const o=p&&p.exercises&&p.exercises[id];if(!o)return base;return Object.assign({},base||{n:id,m:[],how:[],cues:[]},o)}
 function isStrength(t){return t==='A'||t==='B'}
 function lastStrengthBefore(d){
   const ks=Object.keys(S.days).filter(k=>k<d&&isStrength(S.days[k].type)&&(S.days[k].seed||hasDone(S.days[k]))).sort();
@@ -466,6 +483,7 @@ function lastStrengthBefore(d){
 }
 function hasDone(dy){return dy.sets&&Object.values(dy.sets).some(a=>a.some(s=>s&&s.done))}
 function defaultType(d){
+  if(PLAN&&typeof SportifyPhase!=='undefined'){try{return SportifyPhase.plannedType(PLAN,d,S&&S.days||{})}catch(e){}}
   const wd=parse(d).getDay();
   if(PLAN&&PLAN.schedule){const x=PLAN.schedule[wd]||'rest';if(x==='AB'){const l=lastStrengthBefore(d);return l?(l.type==='A'?'B':'A'):'A'}return x}
   if(wd===1||wd===3||wd===5){const l=lastStrengthBefore(d);return l?(l.type==='A'?'B':'A'):'A'}
@@ -474,22 +492,41 @@ function defaultType(d){
   return 'rest';
 }
 function typeOf(d){return peek(d).type||defaultType(d)}
-function isDeload(d){const n=diffDays(PLAN.deload.start,d);return n>=0&&Math.floor(n/7)%PLAN.deload.cycleWeeks===0}
-function weekNo(d){return Math.floor((diffDays(PLAN.planStart,d)+1)/7)+1} // so gezählt wie im Export: 18.10. = Woche 5
-function nextDeload(d){let s=PLAN.deload.start;while(addDays(s,6)<d)s=addDays(s,PLAN.deload.cycleWeeks*7);return s}
+function ses(d,t){const p=planOn(d);return p&&p.sessions&&p.sessions[t]||null}
+function kindOf(t,d){
+  if(isStrength(t))return 'strength';
+  if(t==='cardio'||t==='interval'||t==='rest')return t;
+  const s=ses(d,t);if(!s)return 'rest';
+  if(s.kind==='strength'||s.kind==='cardio'||s.kind==='interval'||s.kind==='rest')return s.kind==='strength'?'strength':s.kind;
+  if(Array.isArray(s.items))return 'strength';
+  if(s.rec&&(s.rounds!=null||s.warm!=null||s.hard!=null))return 'interval';
+  if(s.rec||s.walkOnly)return 'cardio';
+  return 'rest';
+}
+function typeLabel(t,d){const P=planOn(d);if(P&&P._dayTitle&&(!peek(d).type||peek(d).type===P._dayType))return P._dayTitle;const s=ses(d,t);return (s&&s.name)||TYPE_LABEL[t]||t}
+function typeShort(t,d){if(TYPE_SHORT[t])return TYPE_SHORT[t];const s=ses(d,t);if(s&&s.short)return s.short;return TYPE_SHORT[kindOf(t,d)]||String(t||'?').slice(0,1).toUpperCase()}
+function typeCls(t,d){if(TYPE_CLS[t])return TYPE_CLS[t];return TYPE_CLS[kindOf(t,d)]||'tR'}
+function isDeload(d){const P=planOn(d)||PLAN;if(!P||!P.deload||!P.deload.start)return false;const n=diffDays(P.deload.start,d);return n>=0&&Math.floor(n/7)%P.deload.cycleWeeks===0}
+function weekNo(d){const P=planOn(d)||PLAN;return Math.floor((diffDays(P.planStart,d)+1)/7)+1} // so gezählt wie im Export: 18.10. = Woche 5
+function nextDeload(d){const P=planOn(d)||PLAN;if(!P||!P.deload)return d;let s=P.deload.start;while(addDays(s,6)<d)s=addDays(s,P.deload.cycleWeeks*7);return s}
 function sleepFor(d){if(!GARMIN)return null;return GARMIN.sleep.find(x=>x.date===d&&x.sleep_score!=null)||null}
 function sleepInfo(d){
-  const dy=peek(d);const g=sleepFor(d);
+  const dy=peek(d);const g=sleepFor(d);const P=planOn(d)||PLAN;const slp=P&&P.sleep||{};
   const score=dy.sleepScore??g?.sleep_score??null, hrv=dy.hrv??g?.avg_overnight_hrv??null;
-  const low=(hrv!=null&&hrv<PLAN.sleep.hrvLow)||(score!=null&&score<PLAN.sleep.scoreLow);
+  const low=(hrv!=null&&slp.hrvLow!=null&&hrv<slp.hrvLow)||(score!=null&&slp.scoreLow!=null&&score<slp.scoreLow);
   return {score,hrv,low,src:dy.sleepScore!=null||dy.hrv!=null?'manuell':(g?'Garmin':null),g};
 }
-// Modifikatoren des Tages
+// Modifikatoren des Tages. Phasen- und Ausnahmetexte sind Hinweise, keine Warnung und kein Logeintrag.
 function mods(d){
-  const dy=peek(d);const m={factor:1,setDelta:0,setFactor:1,skipLegs:false,notes:[],tags:[]};
-  if(isDeload(d)){m.setFactor=PLAN.deload.setFactor;m.factor*=PLAN.deload.weightFactor;m.tags.push('Deload');m.notes.push('Deload-Woche: etwa 60 % der Sätze, Gewichte 10 % leichter.')}
+  const dy=peek(d);const P=planOn(d)||PLAN;const m={factor:1,setDelta:0,setFactor:1,skipLegs:false,upper:1,notes:[],infos:[],tags:[]};
+  if(P&&P.deload&&isDeload(d)){m.setFactor=P.deload.setFactor;m.factor*=P.deload.weightFactor;m.tags.push('Deload');m.notes.push('Deload-Woche: etwa 60 % der Sätze, Gewichte 10 % leichter.')}
   const sl=sleepInfo(d);
   if(sl.low&&dy.sleepLight!==false){m.factor*=0.9;m.tags.push('Schlaf/HRV');m.notes.push('Schlaf/HRV niedrig (neu, von Sporty): heute leichter, Gewichte 10 % leichter.')}
+  if(P&&P._skipLegs){m.skipLegs=true;m.infos.push('Heute kein automatisches schweres Beintraining.')}
+  if(P&&P._factor!=null&&P._factor!==1){m.factor*=P._factor;m.tags.push('Anpassung')}
+  if(P&&P._setFactor!=null&&P._setFactor!==1)m.setFactor*=P._setFactor;
+  if(P&&P._phaseNote)m.infos.push(P._phaseNote);
+  if(P&&P._dayNote)m.infos.push(P._dayNote);
   return m;
 }
 // Progression aus dem letzten in der App geloggten Satzblock
@@ -519,7 +556,7 @@ function exHistory(exId,before,dv){if(dv===undefined)dv=devId(exId);
 }
 function e1rm(w,r){return w&&r?w*(1+r/30):0}
 function recFor(it,d){
-  const ex=EX[it.ex];
+  const ex=exOf(it.ex,d)||EX[it.ex];
   // recFrom (Plan-Item): Einheiten bis einschließlich dieses Datums nicht für die Progression nutzen (z. B. RIR nicht erfasst, neue Übungsreihenfolge) → Plan-Empfehlung gilt
   const h=exHistory(it.ex,d).filter(x=>!x.dy.seed&&!x.dy.modded&&x.date>SEED_DATE&&!(it.recFrom&&x.date<=it.recFrom));
   let base=it.rec.map(a=>a.slice()),src='plan';
@@ -535,7 +572,7 @@ function recFor(it,d){
   return{sets:base,src};
 }
 function planned(it,d){
-  const m=mods(d);const ex=EX[it.ex];const r=recFor(it,d);
+  const m=mods(d);const ex=exOf(it.ex,d)||EX[it.ex];const r=recFor(it,d);
   let n=it.sets;
   if(m.setFactor<1)n=Math.max(1,Math.round(n*m.setFactor));
   let f=m.factor;let skip=false;
@@ -544,9 +581,11 @@ function planned(it,d){
   return{sets,skip,src:r.src,mod:f!==1||n!==it.sets};
 }
 function sessionItems(t,d){
-  const dy=peek(d);let items=[];
-  if(isStrength(t))items=PLAN.sessions[t].items.map(it=>({...it,block:t}));
-  for(const x of(dy.extras||[])){const b=PLAN.extras[x];if(b)for(const it of b.items)items.push({...it,block:x})}
+  const dy=peek(d);const P=planOn(d)||PLAN;let items=[];
+  const s=P&&P.sessions&&P.sessions[t];
+  if(s&&Array.isArray(s.items)&&(isStrength(t)||kindOf(t,d)==='strength'))items=s.items.map(it=>({...it,block:t}));
+  for(const it of (P&&P._optionalItems)||[])items.push({...it,optional:true,block:it.block||'optional'});
+  for(const x of(dy.extras||[])){const b=P&&P.extras&&P.extras[x];if(b&&b.items)for(const it of b.items)items.push({...it,block:x})}
   return items;
 }
 
@@ -627,7 +666,7 @@ function wstepsSheet(exId){WS_EX=exId;const c=stepCfg(exId);WS_TMP=c?JSON.parse(
 function wstepsDraw(){const exId=WS_EX,c=WS_TMP,pre=gearPresetFor(exId),d=devCur(exId);
   const L=gearList(c).filter(x=>x>0).slice(0,12);
   const presets=[['Steckgewicht 10 kg',{step:10,start:10}],['Steckgewicht 5 kg',{step:5,start:5}],['Scheiben 2,5 kg',{step:2.5,start:0}],['Langhantel 20 + 2,5',{step:2.5,start:20}],['Kabel 1,25 kg',{step:1.25,start:1.25}],['Kurzhantel 2 kg',{step:2,start:2}],['Kurzhantel 1 kg',{step:1,start:1}]];
-  openSheet(`<h2>⚙︎ Gewichtsschritte</h2><div class="mut small">${esc(EX[exId].n)}${d?' · Gerät: <b>'+esc(d.name)+'</b>':''}</div>
+  openSheet(`<h2>⚙︎ Gewichtsschritte</h2><div class="mut small">${esc((exOf(exId,TODAY)||{n:exId}).n)}${d?' · Gerät: <b>'+esc(d.name)+'</b>':''}</div>
   <div class="card"><div class="lbl">Aktuell</div><b>${esc(stepsText(c))}</b><div class="mut small" style="margin-top:4px">Verfügbar: ${L.map(x=>nf(x)).join(' · ')} …</div>
   <div class="grid2" style="margin-top:10px"><div><div class="lbl">Schrittweite (kg)</div>${stepper('wsf',c&&c.step?nf(c.step):'–','kg','data-f="step"')}</div><div><div class="lbl">Start / Offset (kg)</div>${stepper('wsf',c&&c.step?nf(c.start||0):'–','kg','data-f="start"')}</div></div>
   <div class="lbl" style="margin-top:10px">Eigene Liste (für krumme Stapel, optional)</div><input id="wsList" inputmode="decimal" placeholder="z. B. 11,25; 13,75; 16,25" value="${c&&c.list?c.list.map(x=>nf(x)).join('; '):''}">
@@ -638,22 +677,22 @@ function wstepsSave(){const raw=($('#wsList')||{}).value||'';const list=raw.spli
   S.wsteps=S.wsteps||{};const k=devKey(WS_EX);
   if(list.length)S.wsteps[k]={list:[...new Set(list)].sort((a,b)=>a-b),step:0,start:0};else if(WS_TMP&&WS_TMP.step>0)S.wsteps[k]={step:WS_TMP.step,start:WS_TMP.start||0};else delete S.wsteps[k];
   save();closeSheet();render();toast('Gewichtsschritte gespeichert')}
-function wstepsOverview(){const items=[];const seen=new Set();
-  for(const t of ['A','B'])for(const it of (PLAN.sessions[t]||{items:[]}).items||[]){if(seen.has(it.ex)||it.bw||it.unit==='s')continue;seen.add(it.ex);items.push(it.ex)}
-  for(const b of Object.values(PLAN.extras||{}))for(const it of b.items||[]){if(seen.has(it.ex)||it.bw||it.unit==='s')continue;seen.add(it.ex);items.push(it.ex)}
-  return `<div class="card"><h3>⚙︎ Gewichtsschritte je Gerät</h3><div class="mut small">Welche Gewichte gibt es am Gerät? Vorschläge, Anpassungen und +/- runden darauf.</div>${items.map(ex=>{const d=devCur(ex);return `<div class="kv" data-act="wsopen" data-v="${ex}"><span>${esc(EX[ex].n)}${d?'<div class="mut small">'+esc(d.name)+'</div>':''}</span><span class="mut small" style="text-align:right">${esc(stepsText(stepCfg(ex)))} ›</span></div>`}).join('')}</div>`}
+function wstepsOverview(){const items=[];const seen=new Set();const P=planOn(TODAY)||PLAN;
+  for(const t of ['A','B'])for(const it of ((P.sessions&&P.sessions[t])||{items:[]}).items||[]){if(seen.has(it.ex)||it.bw||it.unit==='s')continue;seen.add(it.ex);items.push(it.ex)}
+  for(const b of Object.values(P.extras||{}))for(const it of b.items||[]){if(seen.has(it.ex)||it.bw||it.unit==='s')continue;seen.add(it.ex);items.push(it.ex)}
+  return `<div class="card"><h3>⚙︎ Gewichtsschritte je Gerät</h3><div class="mut small">Welche Gewichte gibt es am Gerät? Vorschläge, Anpassungen und +/- runden darauf.</div>${items.map(ex=>{const d=devCur(ex);return `<div class="kv" data-act="wsopen" data-v="${ex}"><span>${esc((exOf(ex,TODAY)||{n:ex}).n)}${d?'<div class="mut small">'+esc(d.name)+'</div>':''}</span><span class="mut small" style="text-align:right">${esc(stepsText(stepCfg(ex)))} ›</span></div>`}).join('')}</div>`}
 
 // ----- Gerät wechseln -----
 function workW(exId,d){const h=exHistory(exId,d);if(h.length){const ws=h[h.length-1].sets.filter(s=>s&&s.done&&s.w!=null).map(s=>s.w);if(ws.length)return Math.max(...ws)}
-  const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId)||Object.values(PLAN.sessions).flatMap(s=>s.items||[]).find(x=>x.ex===exId);
+  const it=sessionItems(typeOf(d),d).find(x=>x.ex===exId)||Object.values((planOn(d)||PLAN).sessions||{}).flatMap(s=>s.items||[]).find(x=>x.ex===exId);
   if(!it)return null;const ws=planned(it,d).sets.map(s=>s[0]).filter(x=>x!=null);return ws.length?Math.max(...ws):null}
 // Startgewicht fürs neue Gerät: gleiche Familie → Lastindex-Verhältnis (gleiche Geräteart ×0,9), sonst/unklar 70 %; dann am neuen Gerät abrunden
 function gearConvert(fromCat,toCat,W){if(W==null)return{w:null,factor:null};
   const a=gearCat(fromCat),b=gearCat(toCat);let f=0.7;
   if(a&&b&&a.fam===b.fam){f=b.idx/a.idx;if(a.id===b.id||Math.abs(a.idx-b.idx)<0.15)f*=0.9}
   f=Math.min(f,1);const L=gearList(b?b.steps:{step:2.5,start:0});let w=snapList(L,W*f,'down');if(w<=0)w=L.find(x=>x>0)||w;return{w,factor:Math.round(f*100)/100}}
-function gearSheet(exId){const d=devCur(exId),cur=d?d.name:(gearCat(GEAR_BASE[exId])||{n:EX[exId].n}).n;
-  openSheet(`<h2>⇄ Gerät wechseln</h2><div class="mut small">${esc(EX[exId].n)} · jetzt: <b>${esc(cur)}</b></div>
+function gearSheet(exId){const d=devCur(exId),nm=(exOf(exId,TODAY)||EX[exId]||{n:exId}).n,cur=d?d.name:(gearCat(GEAR_BASE[exId])||{n:nm}).n;
+  openSheet(`<h2>⇄ Gerät wechseln</h2><div class="mut small">${esc(nm)} · jetzt: <b>${esc(cur)}</b></div>
   <div class="card"><div class="lbl">1 · Name (mit Vorschlägen)</div><input id="gearName" list="gearCatList" placeholder="z. B. Back Squat Langhantel" autocomplete="off"><datalist id="gearCatList">${GEAR_CAT.map(c=>`<option value="${esc(c.n)}">`).join('')}</datalist>
   <button class="btn" style="margin-top:8px" data-act="gearname" data-v="${exId}">Übernehmen</button></div>
   <div class="card"><div class="lbl">2 · Foto vom Gerät (Sporty ordnet es zu)</div><label class="btn sec" style="display:block;text-align:center">📷 Foto aufnehmen/wählen<input id="gearPhoto" data-v="${exId}" type="file" accept="image/*" capture="environment" style="display:none"></label></div>
@@ -688,7 +727,7 @@ async function repoIsPrivate(c){if(REPO_PRIVATE!=null)return REPO_PRIVATE;try{co
   if(!r.ok)return false;const j=await r.json();REPO_PRIVATE=j.private===true;return REPO_PRIVATE}catch(e){return false}}
 async function ghPutB64(path,b64,message,c){let sha;const g=await ghFetch(c,path,{method:'GET'},'?ref=main');if(g.ok){try{sha=(await g.json()).sha}catch(e){}}
   const r=await ghFetch(c,path,{method:'PUT',body:JSON.stringify({message,content:b64,branch:'main',...(sha?{sha}:{})})});if(!r.ok)throw ghErr(r.status,'');return r.status}
-function devReqPayload(r){const ex=EX[r.exId]||{n:r.exId};const it=Object.entries(PLAN.sessions).find(([k,s])=>(s.items||[]).some(x=>x.ex===r.exId));
+function devReqPayload(r){const ex=exOf(r.exId,TODAY)||EX[r.exId]||{n:r.exId};const it=Object.entries((planOn(TODAY)||PLAN).sessions||{}).find(([k,s])=>(s.items||[]).some(x=>x.ex===r.exId));
   return{kind:'sportify-device-request',v:1,id:r.id,status:r.status,createdAt:r.createdAt,date:r.date,mode:r.mode,
     exercise:{id:r.exId,name:ex.n,block:it?it[0]:null},from:r.from,
     to:{deviceId:r.devId,name:r.name,catalogId:r.cat,steps:(S.wsteps||{})[r.exId+'@'+r.devId]||null,startW:r.startW,basedOnW:r.basedOnW,factor:r.factor,testFirst:true},
@@ -973,11 +1012,11 @@ function scrollFocus(mode){
 // Gewichtsangabe: Kurzhanteln immer pro Hand (jede Hantel einzeln), Kabel einarmig je Seite
 const wUnit=it=>it.wu||(EX[it.ex]&&EX[it.ex].ph?'kg pro Hand':'kg');
 const stepper=(act,val,sub,extra='')=>`<div class="stp"><button data-act="${act}" data-d="-1" ${extra} aria-label="${sub?esc(String(sub))+' ':''}weniger">−</button><div class="v" role="button" tabindex="0" data-act="${act}" data-d="edit" ${extra}>${val}${sub?`<small>${sub}</small>`:''}</div><button data-act="${act}" data-d="1" ${extra} aria-label="${sub?esc(String(sub))+' ':''}mehr">+</button></div>`;
-function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:PLAN.goal.start}
+function lastWeight(before){const W=weightSeries().filter(([k])=>k<=before);return W.length?W[W.length-1][1]:(planOn(before)||PLAN).goal.start}
 function stepsFor(d){return GARMIN?GARMIN.days.find(x=>x.date===d):null}
 
 function renderTraining(){
-  const d=CUR,dy=peek(d),t=typeOf(d),m=mods(d),wd=parse(d).getDay();
+  const d=CUR,dy=peek(d),t=typeOf(d),m=mods(d),wd=parse(d).getDay(),P=planOn(d)||PLAN,slp=P.sleep||{},goal=(P.steps&&P.steps.min)!=null?P.steps.min:PLAN.steps.min;
   let h='';
   h+=`<div class="row sp" style="margin-top:4px"><button class="iconbtn" data-act="day" data-d="-1" aria-label="Vortag">‹</button><div style="text-align:center"><b>${WDL[wd]}, ${de(d)}</b><div class="mut small">Woche ${weekNo(d)} seit Planstart${isDeload(d)?' · <b>Deload</b>':''}${d===TODAY?' · heute':''}</div></div><button class="iconbtn" data-act="day" data-d="1" aria-label="Nächster Tag">›</button></div>`;
   if(d!==TODAY)h+=`<div style="text-align:center;margin-top:6px"><button class="chip sm" data-act="today">Zu heute springen</button></div>`;
@@ -988,27 +1027,29 @@ function renderTraining(){
   // Schlaf & Schritte
   const sl=sleepInfo(d),st=stepsFor(d);
   h+=`<div class="card"><div class="row sp"><h3>Schlaf & Erholung</h3><span class="badge new">neu, von Sporty</span></div>`;
-  h+=`<div class="grid2"><div><div class="lbl">Schlafwert letzte Nacht</div><div class="title" style="font-size:24px;${sl.score!=null&&sl.score<PLAN.sleep.scoreLow?'color:var(--warn)':''}">${sl.score??'–'}</div></div><div><div class="lbl">HRV (Basis ~${PLAN.sleep.hrvBase})</div><div class="title" style="font-size:24px;${sl.hrv!=null&&sl.hrv<PLAN.sleep.hrvLow?'color:var(--warn)':''}">${sl.hrv!=null?nf(sl.hrv,0)+' ms':'–'}</div></div></div>`;
+  h+=`<div class="grid2"><div><div class="lbl">Schlafwert letzte Nacht</div><div class="title" style="font-size:24px;${sl.score!=null&&slp.scoreLow!=null&&sl.score<slp.scoreLow?'color:var(--warn)':''}">${sl.score??'–'}</div></div><div><div class="lbl">HRV (Basis ~${slp.hrvBase??'–'})</div><div class="title" style="font-size:24px;${sl.hrv!=null&&slp.hrvLow!=null&&sl.hrv<slp.hrvLow?'color:var(--warn)':''}">${sl.hrv!=null?nf(sl.hrv,0)+' ms':'–'}</div></div></div>`;
   h+=`<div class="mut small">${sl.src?('Quelle: '+sl.src+(sl.g&&sl.g.sleep_hours?' · '+nf(sl.g.sleep_hours,1)+' h':'')):'Keine Garmin-Daten für diese Nacht im Snapshot.'} <a href="#" data-act="sleepedit">eintragen</a></div>${d===TODAY?gsyncHint():''}`;
   if(sl.low){const off=dy.sleepLight===false;h+=`<div class="banner warn">Schlaf/HRV deutlich unter deiner Basis → heute <b>leichter trainieren</b> (Gewichte 10 % leichter).<div class="chips"><button class="chip sm ${!off?'on':''}" data-act="sleeplight" data-v="1">leichter (−10 %)</button><button class="chip sm ${off?'on':''}" data-act="sleeplight" data-v="0">trotzdem normal</button></div></div>`}
-  h+=`<div class="mut small">Für 5 Uhr Training: Licht aus gegen <b>${PLAN.sleep.bedtime}</b>.</div>`;
-  const goal=PLAN.steps.min;
+  h+=`<div class="mut small">Für 5 Uhr Training: Licht aus gegen <b>${slp.bedtime||''}</b>.</div>`;
   if(st){const pct=Math.min(100,st.steps/goal*100);h+=`<div class="lbl" style="margin-top:10px">Schritte ${st.is_partial?'(bis Snapshot, Tag läuft noch)':''}</div><div class="row sp"><b>${st.steps.toLocaleString('de-DE')}</b><span class="mut small">Ziel 9.000–10.000</span></div><div style="height:8px;background:var(--chip);border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:${st.steps>=goal?'var(--acc)':'#d9a441'}"></i></div>${st.steps<goal?`<div class="hint">Noch ${(goal-st.steps).toLocaleString('de-DE')} Schritte: 20–30 Min Abendspaziergang einplanen.</div>`:'<div class="hint">Schrittziel erreicht 👍</div>'}`}
   else h+=`<div class="mut small" style="margin-top:8px">Schrittziel 9.000–10.000. Unter 9.000? 20–30 Min Abendspaziergang. (Garmin-Schritte im Snapshot nur bis ${GARMIN?de(GARMIN.snapshot):'–'}.)</div>`;
   h+=`</div>`;
   }
   // Banner
   if(m.notes.length)h+=m.notes.map(n=>`<div class="banner ${n.startsWith('Deload')?'info':'warn'}">${esc(n)}</div>`).join('');
-  if(!isDeload(d)){const nd=nextDeload(d);const dd=diffDays(d,nd);if(dd>0&&dd<=7)h+=`<div class="banner info">Deload-Woche ab ${de(nd)}.</div>`}
+  if(m.infos&&m.infos.length)h+=m.infos.map(n=>`<div class="banner info">${esc(n)}</div>`).join('');
+  if(P.deload&&!isDeload(d)){const nd=nextDeload(d);const dd=diffDays(d,nd);if(dd>0&&dd<=7)h+=`<div class="banner info">Deload-Woche ab ${de(nd)}.</div>`}
   // Session
-  h+=`<div class="kicker">${dy.type?'Heute':'Heute dran'}</div><div class="title" id="sesTitle">${TYPE_LABEL[t]}</div>`;
+  const kind=kindOf(t,d);
+  h+=`<div class="kicker">${dy.type?'Heute':'Heute dran'}</div><div class="title" id="sesTitle">${esc(typeLabel(t,d))}</div>`;
   h+=`<div class="chips">${['A','B','cardio','interval','rest'].map(k=>`<button class="chip sm ${k===t?'on':''}" data-act="type" data-v="${k}">${TYPE_LABEL[k]}</button>`).join('')}</div>`;
   {
-    if(isStrength(t))h+=renderStrength(t,d);
-    else if(t==='cardio')h+=renderCardio(d);
-    else if(t==='interval')h+=renderInterval(d);
-    else h+=`<div class="card"><h3>Ruhetag</h3><div class="mut">${PLAN.sessions.rest.desc}</div>${PLAN.supplements?`<div class="mut small" style="margin-top:6px">${esc(PLAN.supplements.daily)}</div>`:''}</div>`;
-    if(PLAN.supplements&&t!=='rest')h+=`<div class="card small"><b>Morgenroutine</b><div class="mut">Vorher: ${esc(PLAN.supplements.pre)}<br>Danach: ${esc(PLAN.supplements.post)}<br>${esc(PLAN.supplements.daily)}</div></div>`;
+    if(kind==='strength')h+=renderStrength(t,d);
+    else if(kind==='cardio')h+=renderCardio(d);
+    else if(kind==='interval')h+=renderInterval(d);
+    else {const rs=ses(d,t)||(P.sessions&&P.sessions.rest)||{desc:''};h+=`<div class="card"><h3>${esc(rs.name||'Ruhetag')}</h3><div class="mut">${esc(rs.desc||'')}</div>${P.supplements?`<div class="mut small" style="margin-top:6px">${esc(P.supplements.daily)}</div>`:''}</div>`}
+    if(P.supplements&&kind!=='rest')h+=`<div class="card small"><b>Morgenroutine</b><div class="mut">Vorher: ${esc(P.supplements.pre)}<br>Danach: ${esc(P.supplements.post)}<br>${esc(P.supplements.daily)}</div></div>`;
+    const opt=(P._optionalItems)||[];if(opt.length)opt.forEach((it,i)=>h+=exCard(Object.assign({optional:true},it),d,i));
     h+=renderExtras(d,t);
   }
   // Notiz + Feedback
@@ -1019,7 +1060,7 @@ function renderTraining(){
   if(SCROLL_FOCUS){const m=SCROLL_FOCUS===true?'set':SCROLL_FOCUS;SCROLL_FOCUS=false;PENDING_SCROLL=()=>scrollFocus(m)}
 }
 function exCard(it,d,idx){
-  const ex=EX[it.ex],dy=peek(d),p=planned(it,d),stored=(dy.sets&&dy.sets[it.ex])||[];
+  const ex=exOf(it.ex,d)||{n:it.ex,m:[],how:[],cues:[]},dy=peek(d),p=planned(it,d),stored=(dy.sets&&dy.sets[it.ex])||[];
   const isS=it.unit==='s',noW=isS||it.bw;
   const rng=it.lo===it.hi?it.lo:it.lo+'–'+it.hi;
   let badges='';
@@ -1055,35 +1096,36 @@ function exCard(it,d,idx){
   return h+`</div>`;
 }
 // Fester Aufwärmblock (ca. 8 Min) vor jeder Krafteinheit – abhaken oder mit Timer durchgehen
-function warmSteps(t,d){const it=(PLAN.sessions[t].items||[]).find(x=>!x.bw&&x.unit!=='s'&&!x.noRamp)||null;let ramp='Rampensatz vor der ersten schweren Übung: ca. 50 % × 10';
-  if(it){const p=planned(it,d),ws=(p&&p.sets||[]).map(x=>x&&x[0]).filter(x=>x!=null),w=ws.length?Math.max(...ws):null;ramp=`Rampensatz ${EX[it.ex]?EX[it.ex].n:''}: ca. 50 %${w?' ('+nf(roundW(w/2))+' kg)':''} × 10`}
-  if(Array.isArray(PLAN.warmSteps))return PLAN.warmSteps.map(x=>({...x})).concat([{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]);   // Plan-eigenes Aufwärmen (Profil ohne Standard-Aufwärmen)
+function warmSteps(t,d){const P=planOn(d)||PLAN;const it=((P.sessions&&P.sessions[t]&&P.sessions[t].items)||[]).find(x=>!x.bw&&x.unit!=='s'&&!x.noRamp)||null;let ramp='Rampensatz vor der ersten schweren Übung: ca. 50 % × 10';
+  if(it){const p=planned(it,d),ws=(p&&p.sets||[]).map(x=>x&&x[0]).filter(x=>x!=null),w=ws.length?Math.max(...ws):null;const en=exOf(it.ex,d);ramp=`Rampensatz ${en?en.n:''}: ca. 50 %${w?' ('+nf(roundW(w/2))+' kg)':''} × 10`}
+  if(Array.isArray(P.warmSteps))return P.warmSteps.map(x=>({...x})).concat([{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]);   // Plan-eigenes Aufwärmen (Profil ohne Standard-Aufwärmen)
   return[{t:'Locker Cardio',l:'3 Min locker Cardio (Laufband oder Rad)',sec:180},{t:'Mobilität',l:'Mobilität: Katze-Kuh 8×, Hüftkreisen 8 je Seite, Armkreisen 10 je Richtung',sec:120,ex:'catcow'},
     {t:'Jefferson Curls 2 × 6–8',l:'Jefferson Curls 2 × 6–8 auf der Bank, leichte Kettlebell (8–12 kg), 3 s runter / 3 s hoch. Stopp bei Kribbeln/Taubheit im Bein, an schlechten Rücken-Tagen weglassen.',sec:90},
     {t:'Aktivierung',l:'Aktivierung: Glute Bridge 12×, Band Pull-Apart oder leichte Face Pulls 12×',sec:60,ex:'bridge1'},{t:'Rampensatz 50 % × 10',l:ramp,sec:60}]}
 function warmCard(t,d){const dy=peek(d),w=dy.warm||[],st=warmSteps(t,d),n=st.filter((x,i)=>w[i]).length;
   return `<div class="card"><div class="exhead"><div><h3>Aufwärmen (ca. 8 Min)</h3><div class="meta">${n}/${st.length} erledigt</div></div><button class="abl" data-act="warmtimer" data-tsrc>▶ Timer</button></div>`+
-  st.map((x,i)=>`<label class="tgl" style="align-items:flex-start"><input type="checkbox" data-act="warmck" data-v="${i}" ${w[i]?'checked':''}><span>${esc(x.l)}${x.ex&&EX[x.ex]?` <a href="#" data-act="abl" data-v="${x.ex}">Ablauf</a>`:''}</span></label>`).join('')+
-  (PLAN.warmup?`<div class="mut small">${esc(PLAN.warmup)}</div>`:'')+`</div>`}
+  st.map((x,i)=>`<label class="tgl" style="align-items:flex-start"><input type="checkbox" data-act="warmck" data-v="${i}" ${w[i]?'checked':''}><span>${esc(x.l)}${x.ex&&exOf(x.ex,d)?` <a href="#" data-act="abl" data-v="${x.ex}">Ablauf</a>`:''}</span></label>`).join('')+
+  ((planOn(d)||PLAN).warmup?`<div class="mut small">${esc((planOn(d)||PLAN).warmup)}</div>`:'')+`</div>`}
 function renderStrength(t,d){
-  const ses=PLAN.sessions[t];let h='';
+  const P=planOn(d)||PLAN;const ses=P.sessions&&P.sessions[t];let h='';
   const dy=peek(d);
+  if(!ses||!ses.items)return '<div class="card">Keine Übungen für diesen Tag im Plan.</div>';
   if(ses.why)h+=`<div class="coach"><b>Begründung der Empfehlungen:</b> ${esc(ses.why)}</div>`;
   h+=warmCard(t,d);
-  h+=`<div class="small" style="margin:8px 0"><div class="mut">${esc(PLAN.supersetNote||'')}</div><button class="chip sm ${dy.noSS?'on':''}" data-act="noss" style="margin-top:6px">${dy.noSS?'Supersätze: aus (antippen zum Einschalten)':'Supersätze: an (antippen zum Ausschalten)'}</button></div>`;
+  h+=`<div class="small" style="margin:8px 0"><div class="mut">${esc(P.supersetNote||'')}</div><button class="chip sm ${dy.noSS?'on':''}" data-act="noss" style="margin-top:6px">${dy.noSS?'Supersätze: aus (antippen zum Einschalten)':'Supersätze: an (antippen zum Ausschalten)'}</button></div>`;
   ses.items.forEach((it,i)=>h+=exCard(it,d,i));
   return h;
 }
 function renderExtras(d,t){
-  const dy=peek(d),wd=parse(d).getDay(),sel=dy.extras||[];
+  const dy=peek(d),wd=parse(d).getDay(),sel=dy.extras||[],P=planOn(d)||PLAN;
   const tomorrow=defaultType(addDays(d,1));
   let h=`<div class="card"><h3>Mehr Zeit?</h3><div class="mut small">Zusatzblöcke zum Plan dazu. Antippen zum Hinzufügen oder Entfernen.${isStrength(tomorrow)?' Morgen ist Krafttag: Arme- und Po-Extra nur leicht, nicht bis zum Muskelversagen.':''}</div><div class="chips">`;
-  for(const[k,b] of Object.entries(PLAN.extras)){
+  for(const[k,b] of Object.entries(P.extras||{})){
     if(b.days&&!b.days.includes(wd)&&!sel.includes(k))continue;
     h+=`<button class="chip ${sel.includes(k)?'on':''}" data-act="extra" data-v="${k}">${esc(b.name)} · ${b.min} Min${b.isNew?' ✦':''}</button>`;
   }
-  h+=`</div>${PLAN.extras.peloton&&!PLAN.extras.peloton.days.includes(wd)?'<div class="mut small">Peloton locker (Zone 2) nur an Nicht-Krafttagen (Di/Do/Sa/So).</div>':''}</div>`;
-  for(const k of sel){const b=PLAN.extras[k];if(!b)continue;
+  h+=`</div>${P.extras&&P.extras.peloton&&P.extras.peloton.days&&!P.extras.peloton.days.includes(wd)?'<div class="mut small">Peloton locker (Zone 2) nur an den im Plan vorgesehenen Tagen.</div>':''}</div>`;
+  for(const k of sel){const b=P.extras&&P.extras[k];if(!b)continue;
     h+=`<div class="kicker" style="font-weight:700;color:var(--acc);letter-spacing:.5px">＋ ${esc(b.name.toUpperCase())}${b.isNew?' <span class="badge new">neu, von Sporty</span>':''}</div>`;
     if(b.free)h+=renderFree(k,d);
     else b.items.forEach((it,i)=>h+=exCard(it,d,i));
@@ -1091,7 +1133,7 @@ function renderExtras(d,t){
   return h;
 }
 function renderFree(k,d){
-  const b=PLAN.extras[k],dy=peek(d),p=(dy.free&&dy.free[k])||{},z=b.zone2&&GARMIN&&GARMIN.hrZones?GARMIN.hrZones.cycling:null;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);
+  const b=(planOn(d)||PLAN).extras[k],dy=peek(d),p=(dy.free&&dy.free[k])||{},z=b.zone2&&GARMIN&&GARMIN.hrZones?GARMIN.hrZones.cycling:null;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);
   return `<div class="card"><div class="mut">${esc(b.desc||'')}</div>${z?`<div class="banner info small">Zone 2 (deine Garmin-Radzonen): <b>${z.z2}–${z.z3-1} bpm</b>. Darüber: Tempo raus.</div>`:''}
   <div class="lbl">Dauer (Min)</div>${stepper('free',p.min??def,'Min',`data-k="${k}" data-f="min"`)}
   <div class="grid2"><div><div class="lbl">Puls Ø</div>${stepper('free',p.hr??'–','bpm',`data-k="${k}" data-f="hr"`)}</div><div><div class="lbl">HF max</div>${stepper('free',p.hrMax??'–','bpm',`data-k="${k}" data-f="hrMax"`)}</div></div>${garminHrNote(p)}
@@ -1106,23 +1148,27 @@ function lastOf(key,d){const ks=Object.keys(S.days).filter(k=>k<d&&k>SEED_DATE&&
 const CARDIO_DEFAULT={name:'Incline Walk',kind:'cardio',walkOnly:true,since:'2026-10-22',desc:'30 Min Incline Walk bei 5 km/h. Erste 3 Min 7 % zum Aufwärmen, danach Steigung an jeder 5-Min-Marke wechseln: 8 % / 10 % (Start 8 %). Puls unter ca. 135 (Zone 2).',
   rec:{walkMin:30,incline:8,kmh:5},segments:{warm:3,warmDrop:1,every:5,step:2},
   coach:'30 Min bei 5 km/h, Steigung 8 % und 10 % im 5-Minuten-Wechsel, erste 3 Min 7 %. Der Timer piept bei jedem Wechsel. Puls unter ca. 135 halten, sonst 1 % Steigung rausnehmen. Nicht am Geländer festhalten.'};
-function cardioSes(){const C=PLAN&&PLAN.sessions&&PLAN.sessions.cardio;
+function cardioSes(d){const P=d?planOn(d):PLAN;const t=d?typeOf(d):'cardio';
+  let C=P&&P.sessions&&P.sessions[t];
+  if(!C||!(C.walkOnly||C.kind==='cardio'||C.rec))C=P&&P.sessions&&P.sessions.cardio;
   if(!C||!C.walkOnly||/crosstrainer/i.test((C.name||'')))return CARDIO_DEFAULT; // alter Plan (Walk + Crosstrainer) → neuer Standard
   return{...CARDIO_DEFAULT,...C,rec:{...CARDIO_DEFAULT.rec,...(C.rec||{})},segments:{...CARDIO_DEFAULT.segments,...(C.segments||{})}}}
 function walkOnly(){return true}
-function cardioRec(d){const C=cardioSes(),r=C.rec;
+function cardioRec(d){const C=cardioSes(d),r=C.rec;
   // Dauer immer laut Plan; Steigung/Tempo nur aus Einheiten seit Planwechsel (C.since).
   const ks=Object.keys(S.days).filter(k=>k<d&&k>SEED_DATE&&k>=(C.since||'')&&S.days[k].cardio&&S.days[k].cardio.done).sort();const l=ks.length?S.days[ks[ks.length-1]].cardio:null;
   return{walkMin:r.walkMin,incline:l&&l.incline!=null?l.incline:r.incline,kmh:l&&l.kmh!=null?l.kmh:r.kmh}}
+function intervalSes(d){const P=planOn(d)||PLAN;const t=d?typeOf(d):'interval';const s=P&&P.sessions&&P.sessions[t];
+  if(s&&(s.kind==='interval'||s.rounds!=null||s.hard!=null))return s;return P&&P.sessions&&P.sessions.interval}
 function intervalRec(d){
-  const l=lastOf('interval',d),r=PLAN.sessions.interval.rec;
+  const l=lastOf('interval',d),r=intervalSes(d).rec;
   if(l&&l.rounds){const last=l.rounds[l.rounds.length-1];const up=last&&last.hr!=null&&last.hr<165&&l.rpe!=null&&l.rpe<=7;return{incline:l.rounds.map(x=>(x.incline??12)+(up?1:0)),kmh:l.rounds[0].kmh??5,src:up?'up':'same'}}
   return{incline:r.incline.slice(),kmh:r.kmh,src:'plan'};
 }
 function rpeChips(act,val){return `<div class="chips">${[1,2,3,4,5,6,7,8,9,10].map(i=>`<button class="chip sm ${val===i?'on':''}" data-act="${act}" data-v="${i}">${i}</button>`).join('')}</div>`}
 function renderCardio(d){
   const dy=peek(d),c=dy.cardio||{},r=cardioRec(d),v=k=>c[k]!==undefined?c[k]:r[k];
-  const ses=cardioSes();
+  const ses=cardioSes(d);
   let h=`<div class="card"><div class="exhead"><div><h3>${ses.name}</h3><div class="meta">${ses.desc}</div></div><button class="abl" data-act="abl" data-v="walk">▶ Ablauf</button></div><div class="coach">Coach: ${esc(ses.coach)}</div>
   <div class="lbl">Incline Walk</div><div class="grid3">${stepper('cd',v('walkMin'),'Min','data-f="walkMin"')}${stepper('cd',nf(v('incline')),'% Basis','data-f="incline"')}${stepper('cd',nf(v('kmh')),'km/h','data-f="kmh"')}</div>
   <div class="lbl">Ablauf (Signalton bei jedem Wechsel)</div>${phaseList(cardioPhases(d))}
@@ -1132,19 +1178,19 @@ function renderCardio(d){
   return h;
 }
 // Incline Walk: Aufwärmen (erste Minuten flacher), danach Wechsel an jeder vollen 5-Min-Marke zwischen Basis- und Hoch-Steigung.
-function cardioPhases(d){const C=cardioSes(),sg=C.segments,dy=peek(d),c=dy.cardio||{},r=cardioRec(d);
+function cardioPhases(d){const C=cardioSes(d),sg=C.segments,dy=peek(d),c=dy.cardio||{},r=cardioRec(d);
   const total=Math.max(5,c.walkMin??r.walkMin)*60,base=c.incline??r.incline,kmh=c.kmh??r.kmh,hi=base+sg.step,ev=sg.every*60;const ph=[];
   if(sg.warm>0)ph.push({label:`Aufwärmen ${nf(base-sg.warmDrop)} % · ${nf(kmh)} km/h`,sec:Math.min(sg.warm*60,total),pct:base-sg.warmDrop});
-  let t=sg.warm*60,k=0;while(t<total){const end=Math.min(total,(Math.floor(t/ev)+1)*ev);const inc=k%2?hi:base;ph.push({label:`${nf(inc)} % · ${nf(kmh)} km/h`,sec:end-t,pct:inc,kind:inc===hi?'hard':undefined});t=end;k++}
+  let t=sg.warm*60,k=0;while(t<total){const end=Math.min(total,(Math.floor(t/ev)+1)*ev);const inc=k%2?hi:base;ph.push({label:`${nf(inc)} % · ${nf(kmh)} km/h`,sec:end-t,pct:inc,kind:inc>base+1e-9?'hard':undefined});t=end;k++}
   return ph}
 function intervalPhases(d){
-  const s=PLAN.sessions.interval,r=intervalRec(d),dy=peek(d),iv=dy.interval||{};const ph=[{label:'Aufwärmen locker',sec:s.warm*60}];
+  const s=intervalSes(d),r=intervalRec(d),dy=peek(d),iv=dy.interval||{};const ph=[{label:'Aufwärmen locker',sec:s.warm*60}];
   for(let i=0;i<s.rounds;i++){const inc=iv.rounds&&iv.rounds[i]&&iv.rounds[i].incline!=null?iv.rounds[i].incline:r.incline[i];
     ph.push({label:`Runde ${i+1} HART · ${nf(inc)} %`,sec:s.hard*60,kind:'hard'});if(i<s.rounds-1)ph.push({label:`Runde ${i+1} locker`,sec:s.easy*60})}
   ph.push({label:'Cool-down locker',sec:s.cool*60});return ph;
 }
 function renderInterval(d){
-  const s=PLAN.sessions.interval,dy=peek(d),iv=dy.interval||{},r=intervalRec(d);
+  const s=intervalSes(d),dy=peek(d),iv=dy.interval||{},r=intervalRec(d);
   const rounds=[];for(let i=0;i<s.rounds;i++){const x=(iv.rounds&&iv.rounds[i])||{};rounds.push({incline:x.incline??r.incline[i],kmh:x.kmh??r.kmh,hr:x.hr??null})}
   const pk=Object.keys(S.days).filter(k=>k<d&&S.days[k].interval&&S.days[k].interval.rounds).sort().pop();const prev=pk?S.days[pk].interval.rounds:[];
   let h=`<div class="card"><div class="exhead"><div><h3>${s.name}</h3><div class="meta">${s.desc} · ${s.warm} Min Aufwärmen / ${s.cool} Min Cool-down</div></div><button class="abl" data-act="abl" data-v="walk">▶ Ablauf</button></div>
@@ -1199,20 +1245,21 @@ function setStr(s,unit){if(unit==='s')return s.r+' s';if(s.w==null)return s.r+(s
 function sessionText(d){
   const dy=peek(d),t=typeOf(d),wd=parse(d).getDay(),m=mods(d),sl=sleepInfo(d);
   const L=[];
-  L.push(`Sportify ${WD[wd]} ${de(d)} · ${TYPE_LABEL[t]}${m.tags.length?' ['+m.tags.join(', ')+']':''}`);
+  const P=planOn(d)||PLAN;
+  L.push(`Sportify ${WD[wd]} ${de(d)} · ${typeLabel(t,d)}${m.tags.length?' ['+m.tags.join(', ')+']':''}`);
   const a=[];const sc=scaleFor(d);if(sc)a.push('Waage '+nf(sc.kg,1)+' kg'+(sc.fat!=null?' / '+nf(sc.fat,1)+' % Fett':''));else if(dy.weight!=null)a.push('Gewicht '+nf(dy.weight,1)+' kg');
   if(sl.score!=null||sl.hrv!=null)a.push('Schlaf '+(sl.score??'–')+' / HRV '+(sl.hrv!=null?nf(sl.hrv,0):'–'));
   const st=stepsFor(d);if(st)a.push('Schritte '+st.steps.toLocaleString('de-DE')+(st.is_partial?' (bisher)':''));
   if(a.length)L.push(a.join(' · '));
   const items=sessionItems(t,d);let cur=null;
   for(const it of items){const arr=(dy.sets&&dy.sets[it.ex]||[]).filter(s=>s&&s.done);if(!arr.length)continue;
-    if(it.block!==cur&&PLAN.extras[it.block]){L.push('+ '+PLAN.extras[it.block].name);}cur=it.block;
-    L.push(`${EX[it.ex].n}: ${arr.map(s=>setStr(s,it.unit)).join(' · ')}`)}
-  if(t==='cardio'&&dy.cardio&&dy.cardio.ctMin==null){const c={...cardioRec(d),...dy.cardio},sg=cardioSes().segments;L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.kmh)} km/h · Steigung ${nf(c.incline)}/${nf(c.incline+sg.step)} % im Wechsel (Aufwärmen ${nf(c.incline-sg.warmDrop)} %)${c.hr!=null?' | Puls Ø '+c.hr:''}${c.hrMax!=null?' · max '+c.hrMax:''}${c.rpe?' | RPE '+c.rpe:''}`)}
-  else if(t==='cardio'&&dy.cardio){const c={...dy.cardio}; // alter Eintrag (bis 15.10. evtl. mit Crosstrainer) – nur lesen
+    if(it.block!==cur&&P.extras&&P.extras[it.block]){L.push('+ '+P.extras[it.block].name);}cur=it.block;
+    L.push(`${(exOf(it.ex,d)||{n:it.ex}).n}: ${arr.map(s=>setStr(s,it.unit)).join(' · ')}`)}
+  if(kindOf(t,d)==='cardio'&&dy.cardio&&dy.cardio.ctMin==null){const c={...cardioRec(d),...dy.cardio},sg=cardioSes(d).segments;L.push(`${cardioSes(d).name||'Incline Walk'} ${c.walkMin} Min · ${nf(c.kmh)} km/h · Steigung ${nf(c.incline)}/${nf(c.incline+sg.step)} % im Wechsel (Aufwärmen ${nf(c.incline-sg.warmDrop)} %)${c.hr!=null?' | Puls Ø '+c.hr:''}${c.hrMax!=null?' · max '+c.hrMax:''}${c.rpe?' | RPE '+c.rpe:''}`)}
+  else if(kindOf(t,d)==='cardio'&&dy.cardio){const c={...dy.cardio}; // alter Eintrag (bis 15.10. evtl. mit Crosstrainer) – nur lesen
     L.push(`Incline Walk ${c.walkMin} Min · ${nf(c.incline)} % · ${nf(c.kmh)} km/h${c.ctMin!=null?` | Crosstrainer ${c.ctMin} Min${c.ctLevel!=null?' · Widerstand '+c.ctLevel:''}${c.rpm!=null?' · '+c.rpm+' U/min':''}`:''}${c.hr!=null?' | Puls Ø '+c.hr:''}${c.hrMax!=null?' · max '+c.hrMax:''}${c.rpe?' | RPE '+c.rpe:''}`)}
-  if(t==='interval'&&dy.interval){const iv=dy.interval,r=intervalRec(d);L.push('Intervall: '+[0,1,2,3].map(i=>{const x=(iv.rounds&&iv.rounds[i])||{};return `R${i+1} ${nf(x.incline??r.incline[i])} % · ${nf(x.kmh??r.kmh)} km/h${x.hr!=null?' · Puls '+x.hr:''}`}).join(' | ')+(iv.hr!=null?' · Puls Ø '+iv.hr:'')+(iv.hrMax!=null?' · max '+iv.hrMax:'')+(iv.rpe?' · RPE '+iv.rpe:''))}
-  for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;L.push(`${PLAN.extras[k]?PLAN.extras[k].name:k}: ${p.min??''} Min${p.hr!=null?' · Puls Ø '+p.hr:''}${p.hrMax!=null?' · max '+p.hrMax:''}${p.note?' · '+p.note:''}${p.done?' ✓':''}`)}
+  if(kindOf(t,d)==='interval'&&dy.interval){const iv=dy.interval,r=intervalRec(d);L.push('Intervall: '+[0,1,2,3].map(i=>{const x=(iv.rounds&&iv.rounds[i])||{};return `R${i+1} ${nf(x.incline??r.incline[i])} % · ${nf(x.kmh??r.kmh)} km/h${x.hr!=null?' · Puls '+x.hr:''}`}).join(' | ')+(iv.hr!=null?' · Puls Ø '+iv.hr:'')+(iv.hrMax!=null?' · max '+iv.hrMax:'')+(iv.rpe?' · RPE '+iv.rpe:''))}
+  for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;L.push(`${P.extras&&P.extras[k]?P.extras[k].name:k}: ${p.min??''} Min${p.hr!=null?' · Puls Ø '+p.hr:''}${p.hrMax!=null?' · max '+p.hrMax:''}${p.note?' · '+p.note:''}${p.done?' ✓':''}`)}
   if(dy.note)L.push('Notiz: '+dy.note);
   const f=dy.feedback||{};const fb=[];if(f.feel)fb.push('Gefühl '+f.feel+'/5 ('+FEEL[f.feel]+')');if(f.energy)fb.push('Energie '+ENERGY[f.energy]);if(f.note)fb.push(f.note);
   if(fb.length)L.push('Feedback: '+fb.join(' · '));
@@ -1239,7 +1286,7 @@ function renderKalender(){
   const first=new Date(y,mo-1,1,12);const off=(first.getDay()+6)%7;const start=iso(new Date(y,mo-1,1-off,12));
   let h=`<div class="card"><div class="row sp"><button class="iconbtn" data-act="cal" data-d="-1">‹</button><b>${MON[mo-1]} ${y}</b><button class="iconbtn" data-act="cal" data-d="1">›</button></div><div class="cal" style="margin-top:10px">${['Mo','Di','Mi','Do','Fr','Sa','So'].map(x=>`<div class="h">${x}</div>`).join('')}`;
   for(let i=0;i<42;i++){const k=addDays(start,i),dt=parse(k);const lab=dayLabel(k);const plan=!lab&&k>=TODAY?typeOf(k):null;const g=GARMIN?GARMIN.activities.filter(a=>a.date===k):[];
-    h+=`<button class="d ${dt.getMonth()!==mo-1?'out':''} ${k===TODAY?'today':''} ${k===CALSEL?'sel':''} ${isDeload(k)?'dl':''}" data-act="calday" data-v="${k}">${dt.getDate()}${lab?`<i class="${TYPE_CLS[lab]}">${TYPE_SHORT[lab]} ✓</i>`:plan?`<i class="${TYPE_CLS[plan]}" style="opacity:.45">${TYPE_SHORT[plan]}</i>`:''}${S.weights[k]!=null?'<span class="dot" style="background:#2f6b4f"></span>':''}${g.length?'<span class="dot" style="background:#1f5f9e"></span>':''}</button>`}
+    h+=`<button class="d ${dt.getMonth()!==mo-1?'out':''} ${k===TODAY?'today':''} ${k===CALSEL?'sel':''} ${isDeload(k)?'dl':''}" data-act="calday" data-v="${k}">${dt.getDate()}${lab?`<i class="${typeCls(lab,k)}">${typeShort(lab,k)} ✓</i>`:plan?`<i class="${typeCls(plan,k)}" style="opacity:.45">${typeShort(plan,k)}</i>`:''}${S.weights[k]!=null?'<span class="dot" style="background:#2f6b4f"></span>':''}${g.length?'<span class="dot" style="background:#1f5f9e"></span>':''}</button>`}
   h+=`</div><div class="mut small" style="margin-top:8px">A/B = Ganzkörper · C = Cardio · I = Intervall · R = Ruhetag · ✓ erledigt, blass = geplant · <span class="dot" style="background:#2f6b4f"></span>Gewicht <span class="dot" style="background:#1f5f9e"></span>Garmin · grauer Strich = Deload</div></div>`;
   if(CALSEL)h+=dayDetail(CALSEL);
   h+=renderPlanView();
@@ -1247,7 +1294,7 @@ function renderKalender(){
 }
 function dayDetail(k){
   const dy=peek(k),t=typeOf(k);let h=`<div class="card"><div class="row sp"><h3>${WDL[parse(k).getDay()]}, ${de(k)}</h3><button class="chip sm" data-act="goto" data-v="${k}">Öffnen</button></div>`;
-  h+=`<div class="mut">${TYPE_LABEL[t]}${dayLabel(k)?'':' (geplant)'}${isDeload(k)?' · Deload':''}</div>`;
+  h+=`<div class="mut">${esc(typeLabel(t,k))}${dayLabel(k)?'':' (geplant)'}${isDeload(k)?' · Deload':''}</div>`;
   const txt=sessionText(k).split('\n').slice(1).join('\n');if(txt)h+=`<pre style="white-space:pre-wrap;font:inherit;font-size:14px;margin:8px 0">${esc(txt)}</pre>`;
   if(dy.gap)h+=`<div class="mut small">⚠︎ ${esc(dy.gap)}</div>`;
   if(dy.coach)h+=`<div class="coach" style="white-space:pre-wrap"><b>Coach-Feedback</b>\n${esc(dy.coach)}</div>`;
@@ -1256,15 +1303,15 @@ function dayDetail(k){
   return h+`</div>`;
 }
 function renderPlanView(){
-  const P=PLAN;let h=`<div class="card"><h2>Plan</h2><div class="mut small">Ziel: ${esc(P.goal.text)}<br>Schwerpunkte: ${esc(P.goal.focus)}<br>Einschränkungen: ${esc(P.goal.limits)}<br>Training: ${esc(P.goal.time)} · Ernährung: ${esc(P.goal.food)}</div>
-  <div class="lbl">Wochenplan</div>${[1,2,3,4,5,6,0].map(i=>`<div class="kv"><span>${WDL[i]}</span><span style="text-align:right;max-width:65%">${esc((i===2||i===4)&&/crosstrainer|cardio-mix/i.test(P.week[i]||'')?'Incline Walk 30 Min, 5 km/h, 8 % / 10 % im 5-Min-Wechsel (Aufwärmen 3 Min 7 %), Puls unter ca. 135':P.week[i])}${[2,4,6,0].includes(i)?' <span class="badge new">+ Peloton Z2 optional</span>':''}</span></div>`).join('')}
+  const P=planOn(TODAY)||PLAN;let h=`<div class="card"><h2>Plan</h2><div class="mut small">Ziel: ${esc(P.goal.text)}<br>Schwerpunkte: ${esc(P.goal.focus)}<br>Einschränkungen: ${esc(P.goal.limits)}<br>Training: ${esc(P.goal.time)} · Ernährung: ${esc(P.goal.food)}</div>
+  <div class="lbl">Wochenplan</div>${[1,2,3,4,5,6,0].map(i=>{const slot=P.schedule&&P.schedule[String(i)];const strength=slot==='AB'||slot==='A'||slot==='B';return `<div class="kv"><span>${WDL[i]}</span><span style="text-align:right;max-width:65%">${esc((i===2||i===4)&&/crosstrainer|cardio-mix/i.test(P.week[i]||'')?'Incline Walk 30 Min, 5 km/h, 8 % / 10 % im 5-Min-Wechsel (Aufwärmen 3 Min 7 %), Puls unter ca. 135':P.week[i])}${[2,4,6,0].includes(i)&&!strength?' <span class="badge new">+ Peloton Z2 optional</span>':''}</span></div>`}).join('')}
   <div class="lbl">Regeln</div>${Object.entries({Progression:P.rules.progression,Intensität:P.rules.intensity,Deload:P.rules.deload}).map(([k,v])=>`<div class="small" style="margin:6px 0"><b>${k}:</b> ${esc(v)}</div>`).join('')}
   ${P.warmup?`<div class="small" style="margin:6px 0"><b>Aufwärmen:</b> ${esc(P.warmup)}</div><div class="small" style="margin:6px 0">${esc(P.supersetNote)}</div><div class="small" style="margin:6px 0">${esc(P.notInPlan)}</div>`:''}
   <div class="small" style="margin:6px 0"><span class="badge new">neu, von Sporty</span> <b>Schritte:</b> 9.000–10.000 pro Tag, darunter 20–30 Min Abendspaziergang.</div>
   <div class="small" style="margin:6px 0"><span class="badge new">neu, von Sporty</span> <b>Schlaf:</b> Schlafenszeit ca. ${P.sleep.bedtime} für 5 Uhr Training. HRV unter ~${P.sleep.hrvLow} (Basis ~${P.sleep.hrvBase}) oder Schlafwert unter ${P.sleep.scoreLow} → Gewichte 10 % leichter.</div>
   <div class="small" style="margin:6px 0"><span class="badge new">neu, von Sporty</span> <b>Peloton/Rad:</b> optional abends nur locker Zone 2, 20–30 Min, nur Di/Do/Sa/So, nie harte Kurse.</div></div>`;
-  for(const k of['A','B']){const s=P.sessions[k];h+=`<div class="card"><h3>${s.name}</h3><table><tr><th>Übung</th><th>Sätze×Wdh.</th><th>Pause</th></tr>${s.items.map(it=>`<tr><td><a href="#" data-act="abl" data-v="${it.ex}">${esc(EX[it.ex].n)}</a>${it.isNew?' <span class="badge new">neu, von Sporty</span>':''}${it.ss||it.ssOf?' <span class="badge ss">SS</span>':''}</td><td>${it.sets} × ${it.lo===it.hi?it.lo:it.lo+'–'+it.hi}${it.unit==='s'?' s':''}</td><td>${it.rest} s</td></tr>`).join('')}</table>${s.gap?`<div class="mut small" style="margin-top:6px">⚠︎ ${esc(s.gap)}</div>`:''}</div>`}
-  h+=`<div class="card"><h3>Zusatzblöcke</h3>${Object.values(P.extras).map(b=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><div class="row sp"><b>${esc(b.name)}${b.isNew?' <span class="badge new">neu, von Sporty</span>':''}</b><span class="mut small">${b.min} Min</span></div><div class="mut small">${b.items.length?b.items.map(it=>`${esc(EX[it.ex].n)} ${it.sets}×${it.lo}${it.unit==='s'?' s':''}${it.side?' '+it.side:''}${it.rest&&!it.restStd?' ('+it.rest+' s)':''}`).join(' · '):esc(b.desc||'')}</div></div>`).join('')}<div class="mut small" style="margin-top:6px">Am Tag vor einem Krafttag Arme- und Po-Extra nur leicht.</div></div>`;
+  for(const k of['A','B']){const s=P.sessions[k];if(!s)continue;h+=`<div class="card"><h3>${esc(s.name)}</h3><table><tr><th>Übung</th><th>Sätze×Wdh.</th><th>Pause</th></tr>${s.items.map(it=>`<tr><td><a href="#" data-act="abl" data-v="${it.ex}">${esc((exOf(it.ex,TODAY)||{n:it.ex}).n)}</a>${it.isNew?' <span class="badge new">neu, von Sporty</span>':''}${it.ss||it.ssOf?' <span class="badge ss">SS</span>':''}</td><td>${it.sets} × ${it.lo===it.hi?it.lo:it.lo+'–'+it.hi}${it.unit==='s'?' s':''}</td><td>${it.rest} s</td></tr>`).join('')}</table>${s.gap?`<div class="mut small" style="margin-top:6px">⚠︎ ${esc(s.gap)}</div>`:''}</div>`}
+  h+=`<div class="card"><h3>Zusatzblöcke</h3>${Object.values(P.extras||{}).map(b=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><div class="row sp"><b>${esc(b.name)}${b.isNew?' <span class="badge new">neu, von Sporty</span>':''}</b><span class="mut small">${b.min} Min</span></div><div class="mut small">${b.items&&b.items.length?b.items.map(it=>`${esc((exOf(it.ex,TODAY)||{n:it.ex}).n)} ${it.sets}×${it.lo}${it.unit==='s'?' s':''}${it.side?' '+it.side:''}${it.rest&&!it.restStd?' ('+it.rest+' s)':''}`).join(' · '):esc(b.desc||'')}</div></div>`).join('')}<div class="mut small" style="margin-top:6px">Am Tag vor einem Krafttag Arme- und Po-Extra nur leicht.</div></div>`;
   if(P.supplements)h+=`<div class="card"><h3>Supplements & Morgenroutine</h3><div class="small"><b>Vorher:</b> ${esc(P.supplements.pre)}<br><b>Danach:</b> ${esc(P.supplements.post)}<br>${esc(P.supplements.daily)}<br><span class="mut">${esc(P.supplements.skip)}</span></div></div>`;
   if(P.notes)h+=`<div class="card"><h3>Auffälligkeiten</h3>${P.notes.map(n=>`<div class="small" style="margin:4px 0">• ${esc(n)}</div>`).join('')}</div>`;
   return h;
@@ -1333,7 +1380,7 @@ function renderFortschritt(){
   h+=dataCard();
   $('#view').innerHTML=h;
 }
-function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn" style="margin-top:8px" data-act="paste">⇩ Update von Sporty einfügen</button><button class="btn sec" style="margin-top:8px" data-act="hookcfg">📡 Sporty-Empfang einrichten${hookCfg()?" ✓":""}</button><div class="mut small" style="margin-top:4px">Sporty schickt dir im Chat einen Update-Code (Garmin: Waage, Schlaf, Schritte, Aktivitäten). Code kopieren, hier tippen – fertig.${S&&S.lastUpdate?' Letztes Update: '+de(S.lastUpdate,false)+'.':''}</div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
+function dataCard(){return `<div class="card"><h3>Daten</h3><div class="mut small">App ${APP_VER}. Alles bleibt auf diesem Gerät (localStorage). Sicherung als Datei:</div><div class="grid2" style="margin-top:8px"><button class="btn sec" data-act="export">⤓ Export JSON</button><button class="btn sec" data-act="import">⤒ Import JSON</button></div><button class="btn" style="margin-top:8px" data-act="paste">⇩ Update von Sporty einfügen</button><button class="btn sec" style="margin-top:8px" data-act="hookcfg">📡 Sporty-Empfang einrichten${hookCfg()?" ✓":""}</button><div class="mut small" style="margin-top:4px">Sporty schickt dir im Chat einen Update-Code (Garmin: Waage, Schlaf, Schritte, Aktivitäten). Code kopieren, hier tippen – fertig.${S&&S.lastUpdate?' Letztes Update: '+de(S.lastUpdate,false)+'.':''}</div><button class="btn sec" style="margin-top:8px" data-act="copy">Für Sporty kopieren (heute)</button></div>`}
 // ===== Garmin =====
 function renderGarmin(){
   if(!GARMIN&&!uGarmin()){$('#view').innerHTML='<div class="card">Für dieses Profil ist (noch) keine Garmin-Uhr verbunden. Puls, Schlaf und Gewicht kannst du bei Bedarf selbst eintragen.</div>'+dataCard();return}
@@ -1426,8 +1473,10 @@ function renderCard(exId){
   const d=CUR,t=typeOf(d);if(TAB!=='training')return render();
   const els=document.querySelectorAll('#ex-'+CSS.escape(exId));if(els.length!==1)return render();
   let it=null,idx=0;
-  if(isStrength(t)){const k=PLAN.sessions[t].items.findIndex(x=>x.ex===exId);if(k>=0){it=PLAN.sessions[t].items[k];idx=k}}
-  if(!it)for(const x of(peek(d).extras||[])){const b=PLAN.extras[x];if(!b||!b.items)continue;const k=b.items.findIndex(z=>z.ex===exId);if(k>=0){it=b.items[k];idx=k;break}}
+  const P=planOn(d)||PLAN;
+  if(kindOf(t,d)==='strength'&&P.sessions&&P.sessions[t]&&P.sessions[t].items){const k=P.sessions[t].items.findIndex(x=>x.ex===exId);if(k>=0){it=P.sessions[t].items[k];idx=k}}
+  if(!it)for(const x of(peek(d).extras||[])){const b=P.extras&&P.extras[x];if(!b||!b.items)continue;const k=b.items.findIndex(z=>z.ex===exId);if(k>=0){it=b.items[k];idx=k;break}}
+  if(!it&&P._optionalItems){const k=P._optionalItems.findIndex(z=>z.ex===exId);if(k>=0){it=Object.assign({optional:true},P._optionalItems[k]);idx=k}}
   if(!it)return render();
   const y=getY();els[0].outerHTML=exCard(it,d,idx);if(Math.abs(getY()-y)>1)setY(y);
 }
@@ -1529,13 +1578,13 @@ document.addEventListener('click',e=>{
       x=Math.round(((x??(f==='hr'?120:f==='hrMax'?135:f==='ctLevel'?8:f==='rpm'?100:0))+st*(+dd))*10)/10;ap(x);break}
     case 'cdrpe':{const c=day(d).cardio=day(d).cardio||{};c.rpe=+v;save();render();break}
     case 'cddone':{const dy=day(d);const c=dy.cardio=dy.cardio||{};const r=cardioRec(d);for(const k of['walkMin','incline','kmh'])if(c[k]===undefined)c[k]=r[k];c.done=!c.done;dy.type=dy.type||'cardio';save();render();if(c.done)toast('Gespeichert – Feedback an Sporty nicht vergessen');break}
-    case 'cdtimer':{startRunner(cardioSes().name||'Incline Walk',cardioPhases(d),()=>toast('Incline Walk fertig! Puls & RPE eintragen'),'cdtimer');onPhase(true);break}
+    case 'cdtimer':{startRunner(cardioSes(d).name||'Incline Walk',cardioPhases(d),()=>toast((cardioSes(d).name||'Incline Walk')+' fertig! Puls & RPE eintragen'),'cdtimer');onPhase(true);break}
     case 'ivtimer':startRunner('Intervall',intervalPhases(d),()=>toast('Intervall fertig! Werte & RPE eintragen'),'ivtimer');onPhase(true);break;
     case 'ivrpe':{const iv=day(d).interval=day(d).interval||{};iv.rpe=+v;save();render();break}
     case 'ivdone':{const dy=day(d);const iv=dy.interval=dy.interval||{};const r=intervalRec(d);iv.rounds=[0,1,2,3].map(i=>({incline:iv.rounds?.[i]?.incline??r.incline[i],kmh:iv.rounds?.[i]?.kmh??r.kmh,hr:iv.rounds?.[i]?.hr??null}));iv.done=!iv.done;dy.type=dy.type||'interval';save();render();break}
-    case 'free':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:f==='hrMax'?145:130);const ap=x=>{if(f==='min')x=Math.max(5,x);p[f]=x;save();render()};if(dd==='edit'){numEdit(f==='min'?'Dauer (Min)':f==='hrMax'?'HF max (bpm)':'Puls Ø (bpm)',x,false,ap);break}x+=(+dd)*(f==='min'?5:1);ap(x);break}
-    case 'freetimer':{const k=t.dataset.k,b=PLAN.extras[k];const p=(peek(d).free||{})[k]||{};const m=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));startRunner(b.name,[{label:b.name,sec:m*60}],null,'freetimer:'+k);break}
-    case 'freedone':{const k=t.dataset.k,b=PLAN.extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};p.min=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));p.done=!p.done;save();render();break}
+    case 'free':{const k=t.dataset.k,b=(planOn(d)||PLAN).extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};const f=t.dataset.f;const def=b.zone2?25:(typeof b.min==='number'?b.min:30);let x=p[f]??(f==='min'?def:f==='hrMax'?145:130);const ap=x=>{if(f==='min')x=Math.max(5,x);p[f]=x;save();render()};if(dd==='edit'){numEdit(f==='min'?'Dauer (Min)':f==='hrMax'?'HF max (bpm)':'Puls Ø (bpm)',x,false,ap);break}x+=(+dd)*(f==='min'?5:1);ap(x);break}
+    case 'freetimer':{const k=t.dataset.k,b=(planOn(d)||PLAN).extras[k];const p=(peek(d).free||{})[k]||{};const m=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));startRunner(b.name,[{label:b.name,sec:m*60}],null,'freetimer:'+k);break}
+    case 'freedone':{const k=t.dataset.k,b=(planOn(d)||PLAN).extras[k],dy=day(d);dy.free=dy.free||{};const p=dy.free[k]=dy.free[k]||{};p.min=p.min??(b.zone2?25:(typeof b.min==='number'?b.min:30));p.done=!p.done;save();render();break}
     case 'noss':{const dy=day(d);dy.noSS=!dy.noSS;save();render();break}
     case 'fb':{const dy=day(d);const f=dy.feedback=dy.feedback||{};const k=t.dataset.f;const val=k==='feel'?+v:v;f[k]=f[k]===val?undefined:val;save();render();break}
     case 'share':shareText(sessionText(d));break;
@@ -1609,13 +1658,14 @@ document.addEventListener('touchmove',e=>{if(!ROT||!TS||e.touches.length!==1)ret
   TS.el.scrollTop-=d;const dt=Math.max(1,now-TS.tl);TS.v=.8*(d/dt)+.2*TS.v;TS.last=u;TS.tl=now},{passive:false});
 document.addEventListener('touchend',e=>{if(!ROT||!TS)return;const el=TS.el;let v=TS.moved&&performance.now()-TS.tl<80?TS.v:0;TS=null;if(Math.abs(v)<.05)return;
   let t0=performance.now();const step=now=>{const dt=now-t0;t0=now;el.scrollTop-=v*dt;v*=Math.pow(.995,dt);if(Math.abs(v)>.02)MOM=requestAnimationFrame(step)};MOM=requestAnimationFrame(step)},{passive:true});
-lockPortrait();applyRot();document.addEventListener('visibilitychange',()=>{if(!document.hidden){lockPortrait();rotSoon()}});
+lockPortrait();applyRot();document.addEventListener('visibilitychange',()=>{if(!document.hidden){lockPortrait();rotSoon();if(syncBerlinToday())render()}});
+setInterval(()=>{if(!document.hidden&&syncBerlinToday())render()},60000);
 load();render();restoreRun();requestAnimationFrame(loop);hashUpdate();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 // ===== Sporty-Empfang (Webhook) =====
 // URL + Schlüssel nur in localStorage (eigener Key, nicht im Export/Backup, nie im Repo).
-const APP_VER='20261030-0650';
+const APP_VER='20261108-1415';
 const HOOK_KEY='sportify.hook',OUTBOX_KEY='sportify.outbox';
 // Modus „gh“ (Standard): Einheit als Datei ins private Repo tinofavetto/sportify-logs. Modus „hook“: Webhook (unter „Erweitert“).
 const GH_REPO='tinofavetto/sportify-logs';
@@ -1665,13 +1715,13 @@ async function sendPayload(p,c){c=c||hookCfg();if(!c)throw new Error('Sporty-Emp
   return postHook(p,c)}
 function sessionId(d){const dy=day(d);if(!dy.sid){dy.sid='sportify-'+d+'-'+Math.random().toString(36).slice(2,8);save()}return dy.sid}
 function sessionPayload(d){
-  const dy=peek(d),t=typeOf(d),items=isStrength(t)||(dy.extras||[]).length?sessionItems(t,d):[];
+  const dy=peek(d),t=typeOf(d),P=planOn(d)||PLAN,items=(isStrength(t)||kindOf(t,d)==='strength'||(dy.extras||[]).length||(P._optionalItems||[]).length)?sessionItems(t,d):[];
   const ex=[];let t0=null,t1=null;
   for(const it of items){const arr=(dy.sets&&dy.sets[it.ex])||[];const sets=arr.filter(s=>s&&s.done).map(s=>{if(s.at){t0=t0==null?s.at:Math.min(t0,s.at);t1=t1==null?s.at:Math.max(t1,s.at)}return{weight:s.w??null,reps:s.r??null,rir:s.rir??null,rirDefault:!!s.rirDef,mood:s.mood||null,unit:it.unit==='s'?'s':'reps',device:s.dev||null}});
     if(sets.length){const dv=devCur(it.ex);const adj=arr.map((s,j)=>s&&s.adj?{set:j+1,from:s.adj.from,to:{w:s.w,r:s.r},why:s.adj.v,kept:!!s.done}:null).filter(Boolean);
-      ex.push({id:it.ex,name:EX[it.ex]?EX[it.ex].n:it.ex,block:it.block,plannedSets:planned(it,d).sets.length,sets,device:dv?{id:dv.id,name:dv.name,catalogId:dv.cat,pending:!!dv.pending,requestId:dv.reqId}:null,weightSteps:stepCfg(it.ex),autoAdjust:adj.length?adj:undefined})}}
+      ex.push({id:it.ex,name:(exOf(it.ex,d)||EX[it.ex]||{n:it.ex}).n,block:it.block,plannedSets:planned(it,d).sets.length,sets,device:dv?{id:dv.id,name:dv.name,catalogId:dv.cat,pending:!!dv.pending,requestId:dv.reqId}:null,weightSteps:stepCfg(it.ex),autoAdjust:adj.length?adj:undefined})}}
   const f=dy.feedback||{};
-  const s={id:sessionId(d),revision:(dy.sentRev||0)+1,date:d,type:t,name:TYPE_LABEL[t]||t,exercises:ex,
+  const s={id:sessionId(d),revision:(dy.sentRev||0)+1,date:d,type:t,name:typeLabel(t,d),exercises:ex,
     feedback:{gefuehl:f.feel??null,energie:f.energy?ENERGY[f.energy]:null,notiz:f.note||null},
     notiz:dy.note||null,durationMin:t0!=null&&t1>t0?Math.round((t1-t0)/60000):null,
     modified:!!dy.modded,supersaetze:!dy.noSS,extras:dy.extras||[]};
@@ -1831,7 +1881,7 @@ setTimeout(()=>loadBadges(),2500);
 const GSYNC_KEY='sportify.gsync';let GSYNC_BUSY=false;
 function gsyncInfo(){try{return JSON.parse(LS.getItem(GSYNC_KEY)||'null')}catch(e){return null}}
 function gsyncTime(){const i=gsyncInfo();if(!i||!i.updatedAt)return null;const d=new Date(i.updatedAt);if(isNaN(d))return null;
-  const same=iso(d)===TODAY;return same?d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}):d.toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}
+  const same=(typeof SportifyPhase!=='undefined'?SportifyPhase.berlinISO(d):iso(d))===TODAY;const tz={timeZone:'Europe/Berlin'};return same?d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit',...tz}):d.toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',...tz})}
 function gsyncHint(){const t=gsyncTime();return t?`<div class="mut small" id="gsyncHint" style="margin-top:4px">Garmin aktualisiert: ${t}</div>`:''}
 function gsyncBusyUI(){const a=document.activeElement;return RUN||$('#sheet').classList.contains('show')||(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))}
 async function loadGarmin(force){if(!uGarmin())return;const c=hookCfg();if(!c||c.mode!=='gh'||GSYNC_BUSY||!S||!S.plan)return;
@@ -1897,15 +1947,15 @@ function garminHrFill(){if(!S||!S.days||!GARMIN||!GARMIN.activities||!PLAN)retur
     const used=new Set(),before=JSON.stringify(dy);
     const put=(o,a)=>{let n=0;if(o.hr==null&&a.hr){o.hr=Math.round(a.hr);n++}if(o.hrMax==null&&a.hrmax){o.hrMax=Math.round(a.hrmax);n++}
       if(n||(o.garminHr&&o.garminHr.id===a.id))o.garminHr={id:a.id,time:a.time||null,min:a.min||null};used.add(a.id);return n};
-    if(dy.interval){const s=PLAN.sessions&&PLAN.sessions.interval,iv=dy.interval;
+    if(dy.interval){const s=intervalSes(d),iv=dy.interval;
       const a=pickAct(acts,{kind:'walk',min:s?(s.warm+s.rounds*s.hard+(s.rounds-1)*s.easy+s.cool):35},used);
       if(a){put(iv,a);const hl=hardLaps(a.laps,s);
         if(hl){const r=intervalRec(d);iv.rounds=iv.rounds||[];let n=0;
           for(let i=0;i<hl.length;i++){const x=iv.rounds[i]=iv.rounds[i]||{};if(x.incline==null)x.incline=r.incline[i];if(x.kmh==null)x.kmh=r.kmh;
             if(x.hr==null&&hl[i].hrmax){x.hr=Math.round(hl[i].hrmax);n++}}
           if(n){iv.lapsHr=true;iv.garminHr=iv.garminHr||{id:a.id,time:a.time||null,min:a.min||null}}}}}
-    if(dy.cardio){const a=pickAct(acts,{kind:'walk',min:dy.cardio.walkMin||cardioSes().rec.walkMin||30},used);if(a)put(dy.cardio,a)}
-    for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;const nm=(PLAN.extras&&PLAN.extras[k]&&PLAN.extras[k].name)||k;
+    if(dy.cardio){const a=pickAct(acts,{kind:'walk',min:dy.cardio.walkMin||cardioSes(d).rec.walkMin||30},used);if(a)put(dy.cardio,a)}
+    for(const[k,p] of Object.entries(dy.free||{})){if(!p||!(p.done||p.min))continue;const Px=planOn(d)||PLAN;const nm=(Px.extras&&Px.extras[k]&&Px.extras[k].name)||k;
       const kind=/peloton|rad|bike|cycl|spin/i.test(k+' '+nm)?'bike':/walk|spazier|wander|geh/i.test(k+' '+nm)?'walk':null;
       const a=pickAct(acts,{kind,min:p.min||30},used);if(a)put(p,a)}
     if(JSON.stringify(dy)!==before)changed.push(d)}

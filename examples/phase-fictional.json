@@ -1,0 +1,138 @@
+{
+  "comment": "FIKTIV — kein echter Trainingsplan, keine persönlichen Logs. Nicht nach sportify-logs schreiben. Die Datumsfolge zeigt nur das Schema (Ausnahme 2026-11-07/08, Phase ab 2026-11-09). Echte Übungen bleiben in der privaten Planquelle.",
+  "kind": "sportify-plan",
+  "version": "20990101-0000",
+  "updatedAt": "2099-01-01T00:00:00.000Z",
+  "plan": {
+    "planStart": "2026-10-18",
+    "schedule": {
+      "0": "rest",
+      "1": "AB",
+      "2": "cardio",
+      "3": "AB",
+      "4": "cardio",
+      "5": "AB",
+      "6": "interval"
+    },
+    "week": {
+      "0": "Ruhe",
+      "1": "Kraft A/B",
+      "2": "Cardio Basis",
+      "3": "Kraft A/B",
+      "4": "Cardio Basis",
+      "5": "Kraft A/B",
+      "6": "Intervall Basis"
+    },
+    "sessions": {
+      "A": {
+        "name": "Fiktiv A",
+        "items": [
+          {"ex": "fiktiv-bein", "sets": 3, "lo": 8, "hi": 10, "rest": 90, "rec": [[40, 8], [40, 8], [40, 8]]},
+          {"ex": "fiktiv-druecken", "sets": 3, "lo": 8, "hi": 10, "rest": 90, "rec": [[20, 8], [20, 8], [20, 8]]}
+        ]
+      },
+      "B": {
+        "name": "Fiktiv B",
+        "items": [
+          {"ex": "fiktiv-ziehen", "sets": 3, "lo": 8, "hi": 10, "rest": 90, "rec": [[25, 8], [25, 8], [25, 8]]}
+        ]
+      },
+      "cardio": {
+        "name": "Fiktiv Walk",
+        "kind": "cardio",
+        "walkOnly": true,
+        "since": "2026-10-22",
+        "desc": "Basis-Walk, nur als Schema-Beispiel.",
+        "rec": {"walkMin": 30, "incline": 8, "kmh": 5},
+        "segments": {"warm": 3, "warmDrop": 1, "every": 5, "step": 2},
+        "coach": "Basis, fiktiv."
+      },
+      "interval": {
+        "name": "Fiktiv Intervall",
+        "kind": "interval",
+        "desc": "Hartes Intervall, nur als Schema-Beispiel.",
+        "warm": 5,
+        "hard": 3,
+        "easy": 2,
+        "cool": 3,
+        "rounds": 4,
+        "rec": {"incline": [10, 10, 10, 10], "kmh": 5},
+        "coach": "Hart, fiktiv."
+      },
+      "rest": {"name": "Ruhetag", "desc": "Ruhe."},
+      "recovery": {
+        "name": "Fiktiv aktive Erholung",
+        "kind": "cardio",
+        "short": "E",
+        "walkOnly": true,
+        "since": "2026-11-09",
+        "desc": "Sehr locker gehen, ohne steile Intervalle.",
+        "rec": {"walkMin": 25, "incline": 1, "kmh": 4.5},
+        "segments": {"warm": 5, "warmDrop": 0, "every": 30, "step": 0},
+        "coach": "Locker. Keine steilen Intervalle."
+      }
+    },
+    "exercises": {
+      "fiktiv-bein": {"n": "Fiktive Beinpresse", "m": ["Beine"], "legs": 1, "how": ["Fiktiver Ablauf."], "cues": ["Fiktiv"]},
+      "fiktiv-druecken": {"n": "Fiktives Drücken", "m": ["Brust"], "how": ["Fiktiver Ablauf."], "cues": ["Basis-Cue"]},
+      "fiktiv-ziehen": {"n": "Fiktives Ziehen", "m": ["Rücken"], "how": ["Fiktiver Ablauf."], "cues": ["Fiktiv"]}
+    },
+    "extras": {},
+    "warmSteps": [{"t": "Basis warm", "l": "Aufwärmen der Basisphase", "sec": 60}],
+    "phases": [
+      {
+        "id": "fiktiv-ab-2026-11-09",
+        "from": "2026-11-09",
+        "note": "Fiktive Phase: Kraft Mo/Mi/Sa im durchlaufenden A/B, Freitag aktive Erholung, Sonntag Ruhe.",
+        "schedule": {"0": "rest", "1": "AB", "3": "AB", "5": "recovery", "6": "AB"},
+        "week": {"0": "Ruhe", "1": "Kraft A/B", "3": "Kraft A/B", "5": "Aktive Erholung", "6": "Kraft A/B"},
+        "sessions": {
+          "A": {
+            "name": "Fiktiv A neu",
+            "items": [
+              {"ex": "fiktiv-druecken", "sets": 3, "lo": 6, "hi": 10, "rest": 90, "rec": [[20, 8], [20, 8], [20, 8]], "note": "Gleiches Übungs-Kürzel wie in der Basis, damit Verlauf und Gewichte bleiben."},
+              {"ex": "fiktiv-technik", "sets": 2, "lo": 8, "hi": 8, "rest": 45, "bw": true, "optional": true, "rec": [[null, 8], [null, 8]]}
+            ]
+          },
+          "B": {
+            "name": "Fiktiv B neu",
+            "items": [
+              {"ex": "fiktiv-ziehen", "sets": 3, "lo": 8, "hi": 10, "rest": 90, "rec": [[25, 8], [25, 8], [25, 8]]}
+            ]
+          }
+        },
+        "exercises": {
+          "fiktiv-druecken": {"cues": ["Phase: kontrolliert, nicht bis zum Versagen."]},
+          "fiktiv-technik": {"n": "Fiktive Technik", "m": ["Technik"], "how": ["Langsam und leicht."], "cues": ["Optional."]}
+        },
+        "warmSteps": [{"t": "Phase warm", "l": "Kurzes Aufwärmen der neuen Phase", "sec": 90}]
+      }
+    ],
+    "exceptions": {
+      "2026-11-07": {
+        "type": "cardio",
+        "title": "Locker gehen",
+        "note": "Sanftes Gehen, optional kurze Technik. Keine harten Steigungsintervalle, kein automatisches schweres Beintraining.",
+        "skipLegs": true,
+        "forbid": ["interval", "A", "B"],
+        "session": {
+          "name": "Fiktiv locker gehen",
+          "kind": "cardio",
+          "walkOnly": true,
+          "since": "2026-11-07",
+          "desc": "20–40 Min sehr locker, fast ohne Steigung.",
+          "rec": {"walkMin": 30, "incline": 1, "kmh": 4.5},
+          "segments": {"warm": 5, "warmDrop": 0, "every": 30, "step": 0},
+          "coach": "Keine steilen Intervalle."
+        },
+        "optionalItems": [
+          {"ex": "fiktiv-technik", "sets": 1, "lo": 5, "hi": 5, "rest": 30, "bw": true, "optional": true, "note": "Nur wenn es sich leicht anfühlt."}
+        ],
+        "exercises": {
+          "fiktiv-technik": {"n": "Fiktive Technik", "m": ["Technik"], "how": ["Zwei langsame Wiederholungen."], "cues": ["Abbruch bei Unwohlsein."]}
+        }
+      },
+      "2026-11-08": {"type": "rest", "note": "Ruhetag."}
+    }
+  }
+}
