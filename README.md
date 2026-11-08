@@ -2,7 +2,7 @@
 
 Mobile Trainings-App (Deutsch) als installierbare PWA: Trainingsplan A/B, Pausen-Timer mit Signalton, Intervall-Timer, Kalender, Fortschritt.
 
-**Enthält keine persönlichen Daten.** Plan, Log und Werte werden einmalig per „Import“ aus einer lokalen JSON-Datei geladen und nur im Browser (localStorage) gespeichert.
+**Enthält keine persönlichen Daten.** Plan, Log und Werte werden einmalig per „Import“ aus einer lokalen JSON-Datei geladen und nur im Browser (localStorage) gespeichert. Ein Plan kann ab einem Datum eine Phase und einzelne Tagesausnahmen tragen (Wochenplan, Einheiten, Übungen). Das Format, die Berliner Datumsauflösung und die Schritte zum Veröffentlichen aus der privaten Planquelle stehen in [`docs/plan-phasen.md`](docs/plan-phasen.md). Das Beispiel [`examples/phase-fictional.json`](examples/phase-fictional.json) ist fiktiv und gehört nicht ins private Logs-Repo.
 
 Muskelzuordnung der Übungen nach dem Katalog von [openGym](https://github.com/DuarteSantos8/openGym) (AGPL-3.0; ExerciseDB-Einträge MIT). Keine openGym-Bilder/Animationen enthalten. Übungstexte selbst geschrieben.
 
